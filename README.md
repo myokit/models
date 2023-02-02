@@ -40,10 +40,9 @@ To avoid licensing complications, such comparisons are not shared in this reposi
 
 For ease & convenience, models in this repo are named as `surname-year`.
 
-The used `surname` is that of whoever appeared first in the accompanying paper's author list.
-If there are multiple "first authors", an effort is made to acknowledge this in the model meta data but not in the model or file name.
-If I have got the surname wrong (e.g. wrong part of the name, missing part of name) please let me know so that I can correct it.
-Diacritics have usually been omitted for ease of typing, but again let me know if I need to change anything.
+The used `surname` is that of whoever appeared first in the accompanying paper's author list, in lower case and without diacritics*.
+If there are multiple "first authors", an effort is made to acknowledge this in the model meta data but not in the model or file name (even if the first first author didn't do the modelling, if there were only two authors, if the authors gave their model a name, etc.).
+If I have got the surname wrong (e.g. wrong part of the name, missing part of name, *diacritics really need to be there) please let me know so that I can correct it.
 
 The used `year` is that of the accompanying journal publication, as indicated by the publisher (so not necessarily corresponding to precedence).
 
