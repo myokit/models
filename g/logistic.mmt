@@ -1,0 +1,39 @@
+[[model]]
+name: logistic
+version: 20230202
+mmt_authors: Michael Clerx
+desc: """
+    Logistic growth model, see e.g. [1].
+
+    [1] https://en.wikipedia.org/wiki/Population_dynamics
+        Accessed on 2023-02-02
+    """
+# Initial conditions
+population.size = 2
+
+[engine]
+time = 0 bind time
+
+[population]
+dot(size) = r * size * (1 - size / k)
+r = 0.015
+k = 500
+
+[[script]]
+import matplotlib.pyplot as plt
+import myokit
+
+# Get model and protocol, create simulation
+m = get_model()
+s = myokit.Simulation(m)
+
+# Run simulation
+d = s.run(1000)
+
+# Display the results
+plt.figure()
+plt.xlabel('Time')
+plt.ylabel('Population size')
+plt.plot(d.time(), d['population.size'])
+plt.show()
+
