@@ -38,7 +38,7 @@ To avoid licensing complications, such comparisons are not shared in this reposi
 
 ## Naming
 
-For ease & convenience, models in this repo are named as `surname-year`.
+For ease & convenience, (detailed cardiac electrophysiology) models in this repo are named as `surname-year`.
 
 The used `surname` is that of whoever appeared first in the accompanying paper's author list, in lower case and without diacritics*.
 If there are multiple "first authors", an effort is made to acknowledge this in the model meta data but not in the model or file name (even if the first first author didn't do the modelling, if there were only two authors, if the authors gave their model a name, etc.).
@@ -59,8 +59,8 @@ No.
 
 A future version of [PMR](https://models.physiomeproject.org) might be.
 
-(In short, each model should be in its own repository, along with meta data in some standard format.
+_(In short, each model should be in its own repository, along with meta data in some standard format.
 Depending on the use case, people can then use either the most recent version of the model (to share updates and bugfixes) or some tagged version (for replicatability).
-The central DB would simply be a list of links to those repositories, with structured search based on the meta data in the repositories, with some low-maintenance procedure for adding or removing links, and with a free-to-use read-only API that would allow people to create their own extracts, e.g. "cardiac electrophysiology models", "carefully curated electrophysiology models", or "Professor X's gallery of biased favouritism".)
+The central DB would simply be a list of links to those repositories, with structured search based on the meta data in the repositories, with some low-maintenance procedure for adding or removing links, and with a free-to-use read-only API that would allow people to create their own extracts, e.g. "cardiac electrophysiology models", "carefully curated electrophysiology models", or "Professor X's gallery of biased favouritism".)_
 
-Something like this should hopefully emerge in the next decade, but in the meantime this is my list.
+Something like this will hopefully emerge from the current PMR later in this decade, but in the meantime here is my list.
