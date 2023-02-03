@@ -1,4 +1,6 @@
-# Models
+[![Syntax tests](https://github.com/myokit/models/actions/workflows/syntax-test.yml/badge.svg)](https://github.com/myokit/models/actions/workflows/syntax-test.yml)
+
+# Michael's slightly-curated Myokit models
 
 This repository contains partially curated Myokit (`.mmt`) implementations of cardiac electrophysiology models (and a few other ones).
 It exists because I want to re-use mmt files in different projects.
