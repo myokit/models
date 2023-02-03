@@ -1,0 +1,143 @@
+[[model]]
+name: gray-2016
+version: 20230202
+mmt_authors: Michael Clerx
+display_name: Gray & Pathmanathan 2016
+desc: """
+    The 2016 "parsimonious" rabbit ventricular AP model by Gray and
+    Pathmanathan [1].
+
+    This implementation is based on the CellML implementation provided by the
+    authors as "pr-2016-with-stimulus.cellml", and with ina.h.E = -74.7 [mV],
+    as corrected in the erratum [2].
+
+    The implementation has been checked by recreating some current curves and
+    comparing them with digitised versions from the paper, as well as running
+    1 and 2d simulations.
+
+    The model consists of a novel INa component and an IK1 component re-used
+    from [3].
+
+    [1] Gray, R. A., & Pathmanathan, P. (2016).
+        A parsimonious model of the rabbit action potential elicudates the
+        minimal physiological requirements for alternans and spiral wave
+        breakup.
+        PLOS Computational Biology, 12(10), e1005087.
+        https://doi.org/10.1371/journal.pcbi.1005087.s001
+
+    [2] Gray, R. A. (2017). Erratum.
+        https://journals.plos.org/ploscompbiol/article/comment?id=10.1371/annotation/5708ffc4-345d-4c7d-8a39-7e4e8020ab18
+        Accessed in December 2022.
+
+    [3] Gray, R. A., Mashburn, D. N., Sidorov, V. Y., & Wikswo, J. P. (2013).
+        Quantification of Transmembrane Currents during Action Potential
+        Propagation in the Heart.
+        Biophysical Journal, 104(1), 268-278
+        https://doi.org/10.1016/j.bpj.2012.11.007
+
+"""
+# Initial values
+membrane.V = -83
+ina.m      = 2e-5
+ina.h      = 0.86
+
+#
+# Simulation engine
+#
+[engine]
+time = 0 [ms]
+    bind time
+    in [ms]
+pace = 0
+    bind pace
+
+#
+# Membrane potential
+#
+[membrane]
+dot(V) = -C * (i_ion + i_diff + stimulus.i_stim)
+    in [mV]
+    label membrane_potential
+C = 1
+i_ion = ina.INa + ik.IK
+    in [A/F]
+i_diff = 0 [A/F]
+    in [A/F]
+    bind diffusion_current
+
+#
+# Stimulus
+#
+[stimulus]
+i_stim = engine.pace * amplitude
+    in [A/F]
+amplitude = -40 [A/F]
+    in [A/F]
+
+#
+# INa sub-model (page 3)
+#
+[ina]
+use membrane.V
+INa = g * m^3 * h * (V - ENa)
+    in [A/F]
+ENa = 65 [mV] : Page 4
+    in [mV]
+g = 11 [mS/uF]
+    in [mS/uF]
+dot(m) = (inf - m) / tau
+    inf = 1 / (1 + exp((V - E) / k))
+    tau = 0.12 [ms]
+        in [ms]
+    E = -41 [mV]
+        in [mV]
+    k = -4 [mV]
+        in [mV]
+dot(h) = (inf - h) / tau
+    inf = 1 / (1 + exp((V - E) / k))
+    tau = 2 * t0 * exp(d * (V - E) / k) * inf
+        in [ms]
+    E = -74.7 [mV]
+        in [mV]
+        desc: The paper says -74.9 but this is changed in an erratum
+    k = 4.4 [mV]
+        in [mV]
+    t0 = 6.80738 [ms]
+        in [ms]
+    d = 0.799163
+
+#
+# IK sub-model (page 6 in [1], pages 273 and 274 in [3])
+#
+[ik]
+use membrane.V
+IK = g * exp(-b * (V - EK)) * (V - EK)
+    in [A/F]
+EK = -83 [mV]
+    in [mV]
+g = 0.3 [mS/uF]
+    in [mS/uF]
+b = 0.047 [1/mV]
+    in [1/mV]
+
+[[protocol]]
+# Level  Start    Length   Period   Multiplier
+1        10       1        500      0
+
+[[script]]
+import matplotlib.pyplot as plt
+import myokit
+
+# Get model and protocol, create simulation
+m = get_model()
+p = get_protocol()
+s = myokit.Simulation(m, p)
+
+# Run simulation
+d = s.run(2000)
+
+# Display the results
+plt.figure()
+plt.plot(d.time(), d['membrane.V'])
+plt.show()
+
