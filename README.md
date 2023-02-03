@@ -38,7 +38,7 @@ To avoid licensing complications, such comparisons are not shared in this reposi
 
 ## Naming
 
-For ease & convenience, (detailed cardiac electrophysiology) models in this repo are named as `surname-year`.
+For ease & convenience, (electrophysiology) models in this repo are named as `surname-year`.
 
 The used `surname` is that of whoever appeared first in the accompanying paper's author list, in lower case and without diacritics*.
 If there are multiple "first authors", an effort is made to acknowledge this in the model meta data but not in the model or file name (even if the first first author didn't do the modelling, if there were only two authors, if the authors gave their model a name, etc.).
