@@ -1,0 +1,502 @@
+[[model]]
+name: priebe-1998
+version: 20230206
+mmt_authors: Michael Clerx
+desc: """
+    The 1998 model of the human ventricular AP by Priebe and Beuckelmann [1].
+
+    Adapted from CellML [2].
+
+    [1] Priebe, L., & Beuckelmann, D. J. (1998) Simulation study of cellular
+        electric properties in heart failure. Circulation Research, 82,
+        1206-1223. https://doi.org/10.1161/01.res.82.11.1206
+
+    [2] https://models.cellml.org/exposure/f813f823fbdf93629f84d1b85c231444
+
+    The original CellML meta-data follows below.
+
+    ---------------------------------------------------------------------------
+
+    Simulation study of cellular electric properties in heart failure
+
+    Catherine Lloyd
+    Auckland Bioengineering Institute, The University of Auckland
+
+    This CellML model runs in both COR and PCEnv to replicate the published
+    results. The units have been checked and they are consistent.
+
+    ABSTRACT: Patients with severe heart failure are at high risk of sudden
+    cardiac death. In the majority of these patients, sudden cardiac death is
+    thought to be due to ventricular tachyarrhythmias. Alterations of the
+    electric properties of single myocytes in heart failure may favor the
+    occurrence of ventricular arrhythmias in these patients by inducing early
+    or delayed afterdepolarizations. Mathematical models of the cellular action
+    potential and its underlying ionic currents could help to elucidate
+    possible arrhythmogenic mechanisms on a cellular level. In the present
+    study, selected ionic currents based on human data are incorporated into a
+    model of the ventricular action potential for the purpose of studying the
+    cellular electrophysiological consequences of heart failure. Ionic currents
+    that are not yet sufficiently characterized in human ventricular myocytes
+    are adopted from the action potential model developed by Luo and Rudy (LR
+    model). The main results obtained from this model are as follows: The
+    action potential in ventricular myocytes from failing hearts is longer than
+    in nonfailing control hearts. The major underlying mechanisms for this
+    prolongation are the enhanced activity of the Na+-Ca2+ exchanger, the
+    slowed diastolic decay of the [Ca2+]i transient, and the reduction of the
+    inwardly rectifying K+ current and the Na+-K+ pump current in myocytes of
+    failing hearts. Furthermore, the fast and slow components of the delayed
+    rectifier K+ current (I(Kr) and I(Ks), respectively) are of utmost
+    importance in determining repolarization of the human ventricular action
+    potential. In contrast, the influence of the transient outward K+ current
+    on APD is only small in both cell groups. Inhibition of I(Kr) promotes the
+    development of early afterdepolarizations in failing, but not nonfailing,
+    myocytes. Furthermore, spontaneous Ca2+ release from the sarcoplasmic
+    reticulum triggers a premature action potential only in failing myocytes.
+    This model of the ventricular action potential and its alterations in heart
+    failure is intended to serve as a tool for investigating the effects of
+    therapeutic interventions on the electric excitability of the human
+    ventricular myocardium.
+
+    The original paper reference is cited below:
+
+    Simulation study of cellular electric properties in heart failure, Leo
+    Priebe and Dirk J. Beuckelmann, 1998, Circulation Research , 82, 1206-1223.
+    PubMed ID: 9633920
+    """
+# Initial values
+membrane.V         = -9.07796417483134945e1
+ina.m              =  5.85525582501575013e-4
+ina.h              =  9.95865529216237055e-1
+ina.j              =  9.97011204496202952e-1
+ica.d              =  2.50653215966786014e-10
+ica.f              =  9.21303768505480014e-1
+ito.r              =  1.75032478501027003e-5
+ito.t              =  9.99897251531650988e-1
+iks.xs             =  8.85658064818146962e-3
+ikr.xr             =  2.15523048438940999e-4
+irel.APtrack       = -1.37215899708899994e-136
+irel.APtrack2      = -7.58517896402760972e-136
+irel.APtrack3      =  4.82035353592763998e-5
+irel.Cainfluxtrack = -7.71120176147330993e-138
+irel.OVRLDtrack    = 1e-6
+irel.OVRLDtrack2   = 1e-6
+irel.OVRLDtrack3   = 1e-6
+sodium.Nai         = 10
+potassium.Ki       = 140
+calcium.Cai        = 0.0002
+calcium.Ca_JSR     = 2.5
+calcium.Ca_NSR     = 2.5
+
+#
+# Simulator variables
+#
+[engine]
+time = 0 [ms]
+    in [ms]
+    bind time
+pace = 0
+    bind pace
+
+#
+# Membrane potential
+#
+[membrane]
+use stimulus.i_stim
+dot(V) = -(i_ion + i_stim)
+    in [mV]
+    label membrane_potential
+i_ion = (
+            + ina.i_Na
+            + ica.i_Ca
+            + ito.i_to
+            + ikr.i_Kr
+            + iks.i_Ks
+            + ik1.i_K1
+            + inaca.i_NaCa
+            + inak.i_NaK
+            + inab.i_b_Na
+            + icab.i_b_Ca
+        )
+    in [A/F]
+    label cellular_current
+
+#
+# Stimulus current
+#
+[stimulus]
+i_stim = engine.pace * amplitude
+    in [A/F]
+amplitude = -15 [A/F]
+    in [A/F]
+
+#
+# Cell properties
+#
+[cell]
+Cm = 153.4 [pF]
+    in [pF]
+failing = 0
+V_JSR = 0.0048 * volume
+    in [um^3]
+V_NSR = 0.0552 * volume
+    in [um^3]
+V_myo = 0.68 * volume
+    in [um^3]
+preplength = 100 [um]
+    in [um]
+radius = 11 [um]
+    in [um]
+volume = 3.14159265358979312 * preplength * radius^2
+    in [um^3]
+
+#
+# External concentrations
+#
+[extra]
+Nao = 138 [mM]
+    in [mM]
+Ko = 4 [mM]
+    in [mM]
+Cao = 2 [mM]
+    in [mM]
+
+#
+# Reversal potentials
+#
+[rev]
+use phys.FRT
+use extra.Nao, extra.Ko, extra.Cao
+use sodium.Nai, potassium.Ki, calcium.Cai
+E_Na = log(Nao / Nai) / FRT
+    in [mV]
+E_K = log(Ko / Ki) / FRT
+    in [mV]
+E_Ca = log(Cao / Cai) / (2 * FRT)
+    in [mV]
+E_to = log((0.043 * Nao + Ko) / (0.043 * Nai + Ki)) / FRT
+    in [mV]
+E_Ks = log((0.01833 * Nao + Ko) / (0.01833 * Nai + Ki)) / FRT
+    in [mV]
+
+#
+# Physical constants
+#
+[phys]
+F = 96.4867 [C/mmol]
+    in [C/mmol]
+R = 8.3143 [J/mol/K]
+    in [J/mol/K]
+T = 310.15 [K]
+    in [K]
+FRT = F / (R * T)
+    in [1/mV]
+
+#
+# Fast sodium current (page 1219)
+#
+[ina]
+use membrane.V
+i_Na = g_Na * m^3 * h * j * (V - rev.E_Na)
+    in [A/F]
+g_Na = 16 [mS/uF]
+    in [mS/uF]
+dot(m) = alpha * (1 - m) - beta * m
+    alpha = if(abs(V + 47.13 [mV]) > 0.001 [mV], 0.32 [1/ms/mV] * (V + 47.13 [mV]) / (1 - exp(-0.1 [1/mV] * (V + 47.13 [mV]))), 3.2 [1/ms])
+        in [1/ms]
+    beta = 0.08 [1/ms] * exp(-V / 11 [mV])
+        in [1/ms]
+dot(h) = alpha * (1 - h) - beta * h
+    alpha = if(V < -40 [mV], 0.135 [1/ms] * exp((80 [mV] + V) / -6.8 [mV]), 0 [1/ms])
+        in [1/ms]
+    beta = if(V < -40 [mV], 3.56 [1/ms] * exp(0.079 [1/mV] * V) + 310000 [1/ms] * exp(0.35 [1/mV] * V), 1 / (0.13 [ms] * (1 + exp(-(V + 10.66 [mV]) / 11.1 [mV]))))
+        in [1/ms]
+dot(j) = alpha * (1 - j) - beta * j
+    alpha = if(V < -40 [mV], (-127140 [1/ms/mV] * exp(0.244 [1/mV] * V) - 3.474e-5 [1/ms/mV] * exp(-0.04391 [1/mV] * V)) * (V + 37.78 [mV]) / (1 + exp(0.311 [1/mV] * (V + 79.23 [mV]))), 0 [1/ms])
+        in [1/ms]
+    beta = if(V < -40 [mV], 0.1212 [1/ms] * exp(-0.01052 [1/mV] * V) / (1 + exp(-0.1378 [1/mV] * (V + 40.14 [mV]))), 0.3 [1/ms] * exp(-2.535e-7 [1/mV] * V) / (1 + exp(-0.1 [1/mV] * (V + 32 [mV]))))
+        in [1/ms]
+
+#
+# Slow inward current (page 1219)
+#
+[ica]
+use membrane.V
+i_Ca = g_Ca_max * d * f * f_Ca * (V - rev.E_Ca)
+    in [A/F]
+g_Ca_max = 0.064 [mS/uF]
+    in [mS/uF]
+Km_Ca = 0.0006 [mM]
+    in [mM]
+dot(d) = alpha * (1 - d) - beta * d
+    s2pi = sqrt(2 *  3.14159265358979312)
+    alpha = 14.9859 [1/ms] / (16.6813 * s2pi) * exp(-((V - 22.36 [mV]) / 16.6813 [mV])^2 / 2)
+        in [1/ms]
+    beta = 0.1471 [1/ms] - 5.3 [1/ms] / (14.93 * s2pi) * exp(-((V - 6.2744 [mV]) / 14.93 [mV])^2 / 2)
+        in [1/ms]
+dot(f) = alpha * (1 - f) - beta * f
+    alpha = 0.006872 [1/ms] / (1 + exp((V - 6.1546 [mV]) / 6.1223 [mV]))
+        in [1/ms]
+    beta = (0.0687 [1/ms] * exp(-0.1081 [1/mV] * (V + 9.8255 [mV])) + 0.0112 [1/ms]) / (1 + exp(-0.2779 [1/mV] * (V + 9.8255 [mV]))) + 0.0005474 [1/ms]
+        in [1/ms]
+f_Ca = Km_Ca / (Km_Ca + calcium.Cai)
+
+#
+# Transient outward current (page 1219)
+#
+[ito]
+use membrane.V
+i_to = g_to_max * r * t * (V - rev.E_to)
+    in [A/F]
+g_to_max = if(cell.failing == 0, 0.3 [mS/uF], 0.191 [mS/uF])
+    in [mS/uF]
+dot(r) = alpha * (1 - r) - beta * r
+    alpha = 0.5266 [1/ms] * exp(-0.0166 [1/mV] * (V - 42.2912 [mV])) / (1 + exp(-0.0943 [1/mV] * (V - 42.2912 [mV])))
+        in [1/ms]
+    beta = (5.186e-5 [1/ms/mV] * V + 0.5149 [1/ms] * exp(-0.1344 [1/mV] * (V - 5.0027 [mV]))) / (1 + exp(-0.1348 [1/mV] * (V - 5.186e-5 [mV])))
+        in [1/ms]
+dot(t) = alpha * (1 - t) - beta * t
+    alpha = (5.612e-5 [1/ms/mV] * V + 0.0721 [1/ms] * exp(-0.173 [1/mV] * (V + 34.2531 [mV]))) / (1 + exp(-0.1732 [1/mV] * (V + 34.2531 [mV])))
+        in [1/ms]
+    beta = (0.0001215 [1/ms/mV] * V + 0.0767 [1/ms] * exp(-1.66e-9 [1/mV] * (V + 34.0235 [mV]))) / (1 + exp(-0.1604 [1/mV] * (V + 34.0235 [mV])))
+        in [1/ms]
+
+#
+# Slowly activating delayed rectifier current (page 1219)
+#
+[iks]
+use membrane.V
+i_Ks = g_Ks_max * xs^2 * (V - rev.E_Ks)
+    in [A/F]
+g_Ks_max = 0.02 [mS/uF]
+    in [mS/uF]
+dot(xs) = alpha * (1 - xs) - beta * xs
+    alpha = 0.003013 [1/ms] / (1 + exp((7.4454 [mV] - (V + 10 [mV])) / 14.3171 [mV]))
+        in [1/ms]
+    beta = 0.00587 [1/ms] / (1 + exp((5.95 [mV] + V + 10 [mV]) / 15.82 [mV]))
+        in [1/ms]
+
+#
+# Rapidly activating delayed rectifier current (page 1220)
+#
+[ikr]
+use membrane.V
+i_Kr = g_Kr_max * xr * rik * (V - rev.E_K)
+    in [A/F]
+g_Kr_max = 0.015 [mS/uF]
+    in [mS/uF]
+dot(xr) = alpha * (1 - xr) - beta * xr
+    alpha = 0.005 [1/ms] * exp(0.0005266 [1/mV] * (V + 4.067 [mV])) / (1 + exp(-0.1262 [1/mV] * (V + 4.067 [mV])))
+        in [1/ms]
+    beta = 0.016 [1/ms] * exp(0.0016 [1/mV] * (V + 65.66 [mV])) / (1 + exp(0.0783 [1/mV] * (V + 65.66 [mV])))
+        in [1/ms]
+rik = 1 / (1 + exp((V + 26 [mV]) / 23 [mV]))
+
+#
+# Inward rectifier current (page 1220)
+#
+[ik1]
+use membrane.V, rev.E_K
+i_K1 = g_K1_max * inf * (V - E_K)
+    in [A/F]
+g_K1_max = if(cell.failing == 0, 2.5 [mS/uF], 2 [mS/uF])
+    in [mS/uF]
+inf = alpha / (alpha + beta)
+    alpha = 0.1 [1/ms] / (1 + exp(0.06 [1/mV] * (V - (E_K + 200 [mV]))))
+        in [1/ms]
+    beta = (3 [1/ms] * exp(0.0002 [1/mV] * (V + 100 [mV] + -E_K)) + 1 [1/ms] * exp(0.1 [1/mV] * (V - (10 [mV] + E_K)))) / (1 + exp(-0.5 [1/mV] * (V - E_K)))
+        in [1/ms]
+
+#
+# Ca background current (page 1220)
+#
+[icab]
+i_b_Ca = g_b_Ca_max * (membrane.V - rev.E_Ca)
+    in [A/F]
+g_b_Ca_max = if(cell.failing == 0, 0.00085 [mS/uF], 0.0013 [mS/uF])
+    in [mS/uF]
+
+#
+# Na background current (page 1220)
+#
+[inab]
+i_b_Na = g_b_Na_max * (membrane.V - rev.E_Na)
+    in [A/F]
+g_b_Na_max = if(cell.failing == 0, 0.001 [mS/uF], 0 [mS/uF])
+    in [mS/uF]
+
+#
+# NaK pump (page 1220)
+#
+[inak]
+use membrane.V
+i_NaK = I_NaK_max * f_NaK * 1 / (1 + (K_mNai / sodium.Nai)^1.5) * extra.Ko / (extra.Ko + K_mKo)
+    in [A/F]
+I_NaK_max = if(cell.failing == 0, 1.3 [A/F], 0.75 [A/F])
+    in [A/F]
+K_mKo = 1.5 [mM]
+    in [mM]
+K_mNai = 10 [mM]
+    in [mM]
+f_NaK = 1 / (1 + 0.1245 * exp(-0.1 * V * phys.FRT) + 0.0365 * sigma * exp(-V * phys.FRT))
+    in [1]
+sigma = 1 / 7 * (exp(extra.Nao / 67.3 [mM]) - 1)
+    in [1]
+
+#
+# NaCa exchanger (page 1220)
+#
+[inaca]
+use membrane.V
+i_NaCa = K_NaCa * 1 / (K_mNa^3 + extra.Nao^3) * 1 / (K_mCa + extra.Cao) * 1 / (1 + K_sat * exp((eta - 1) * V * phys.FRT)) * (exp(eta * V * phys.FRT) * sodium.Nai^3 * extra.Cao - exp((eta - 1) * V * phys.FRT) * extra.Nao^3 * calcium.Cai)
+    in [A/F]
+K_NaCa = if(cell.failing == 0, 1000 [A/F], 1650 [A/F])
+    in [A/F]
+K_mCa = 1.38 [mM]
+    in [mM]
+K_mNa = 87.5 [mM]
+    in [mM]
+K_sat = 0.1
+eta = 0.35
+
+#
+# Spontaneous Ca release of JSR (page 1220)
+#
+[irel]
+use membrane.V
+dot(APtrack) = piecewise(dot(V) > 150 [mV/ms], 100 [1/ms] * (1 - APtrack) - 0.5 [1/ms] * APtrack, -0.5 [1/ms] * APtrack)
+    in [1]
+dot(APtrack2) = piecewise(APtrack < 0.2 and APtrack > 0.18, 100 [1/ms] * (1 - APtrack2) - 0.5 [1/ms] * APtrack2, -0.5 [1/ms] * APtrack2)
+    in [1]
+dot(APtrack3) = piecewise(APtrack < 0.2 and APtrack > 0.18, 100 [1/ms] * (1 - APtrack3) - 0.5 [1/ms] * APtrack3, -0.01 [1/ms] * APtrack3)
+    in [1]
+CSQNthresh = 0.7 [mM]
+    in [mM]
+dot(Cainfluxtrack) = piecewise(APtrack > 0.2, -cell.Cm * (ica.i_Ca - inaca.i_NaCa + icab.i_b_Ca) / (2 * cell.V_myo * phys.F), APtrack2 > 0.01 and APtrack <= 0.2, 0 [mM/ms], -0.5 [1/ms] * Cainfluxtrack)
+    in [mM]
+G_rel = piecewise(Cainfluxtrack > delta_Ca_ith, 1 * G_rel_max * (Cainfluxtrack - delta_Ca_ith) / (K_mrel + Cainfluxtrack - delta_Ca_ith) * (1 - APtrack2) * APtrack2, Cainfluxtrack <= delta_Ca_ith and OVRLDtrack2 > 0, 0 * G_rel_overload * (1 - OVRLDtrack2) * OVRLDtrack2, 0 [mS/uF])
+    in [mS/uF]
+G_rel_max = 22 [mS/uF]
+    in [mS/uF]
+G_rel_overload = 3 [mS/uF]
+    in [mS/uF]
+K_mrel = 0.0008 [mM]
+    in [mM]
+Logicthresh = 0.98
+    in [1]
+dot(OVRLDtrack) = piecewise(1 [mM] / (1 + buffer_jsr.K_mCSQN / calcium.Ca_JSR) > CSQNthresh and OVRLDtrack3 < 0.37 and APtrack3 < 0.37, 0 * 50 [1/ms] * (1 - OVRLDtrack), -0 * 0.5 [1/ms] * OVRLDtrack)
+    in [1]
+dot(OVRLDtrack2) = piecewise(OVRLDtrack > Logicthresh and OVRLDtrack2 < Logicthresh, 0 * 50 [1/ms] * (1 - OVRLDtrack2), -0 * 0.5 [1/ms] * OVRLDtrack2)
+    in [1]
+dot(OVRLDtrack3) = piecewise(OVRLDtrack > Logicthresh and OVRLDtrack3 < Logicthresh, 0 * 50 [1/ms] * (1 - OVRLDtrack3), -0 * 0.01 [1/ms] * OVRLDtrack3)
+    in [1]
+delta_Ca_ith = 5e-6 [mM]
+    in [mM]
+i_rel = G_rel * (calcium.Ca_JSR - calcium.Cai)
+    in [mM/ms]
+
+#
+# Ca uptake and leakage of NSR (page 1220)
+#
+[iup]
+i_up = I_up_max * calcium.Cai / (calcium.Cai + K_mup)
+    in [mM/ms]
+I_up_max = if(cell.failing == 0, 0.0045 [mM/ms], 0.0015 [mM/ms])
+    in [mM/ms]
+K_mup = 0.00092 [mM]
+    in [mM]
+
+#
+# Ca leakage of NSR (page 1220)
+#
+[ileak]
+i_leak = K_leak * calcium.Ca_NSR
+    in [mM/ms]
+K_leak = if(cell.failing == 0, 0.00026 [mS/uF], 0.00017 [mS/uF])
+    in [mS/uF]
+
+#
+# Translocation of Ca from NSR to JSR (page 1221)
+#
+[itr]
+i_tr = (calcium.Ca_NSR - calcium.Ca_JSR) / tau_tr
+    in [mM/ms]
+tau_tr = 180 [ms]
+    in [ms]
+
+#
+# Ca buffers in the myoplasm: troponin, TRPN, and calmodulin, CMDN  (page 1221)
+#
+[buffer_myo]
+CMDN_max = 0.05 [mM]
+    in [mM]
+Cai_bufc = 1 / (1 + (CMDN_max * K_mCMDN / (K_mCMDN + calcium.Cai)^2 + Tn_max * K_mTn / (K_mTn + calcium.Cai)^2))
+    in [1]
+K_mCMDN = 0.00238 [mM]
+    in [mM]
+K_mTn = 0.0005 [mM]
+    in [mM]
+Tn_max = 0.07 [mM]
+    in [mM]
+
+#
+# Calcium buffers in the JSR (page 1221)
+#
+[buffer_jsr]
+CSQN_max = 10 [mM]
+    in [mM]
+Ca_JSR_bufc = 1 / (1 + CSQN_max * K_mCSQN / (K_mCSQN + calcium.Ca_JSR)^2)
+    in [1]
+K_mCSQN = 0.8 [mM]
+    in [mM]
+
+#
+# Sodium concentration
+#
+[sodium]
+use cell.V_myo, phys.F
+dot(Nai) = -cell.Cm * (ina.i_Na + inab.i_b_Na + inaca.i_NaCa * 3 + inak.i_NaK * 3) / (V_myo * F)
+    in [mM]
+
+#
+# Potassium concentration
+#
+[potassium]
+use cell.V_myo, phys.F
+dot(Ki) = -cell.Cm * (ito.i_to + ikr.i_Kr + ik1.i_K1 + iks.i_Ks - 2 * inak.i_NaK + stimulus.i_stim) / (V_myo * F)
+    in [mM]
+
+# Calcium concentrations
+[calcium]
+use phys.F
+use cell.V_myo, cell.V_JSR, cell.V_NSR, cell.Cm
+use itr.i_tr, irel.i_rel, iup.i_up, ileak.i_leak
+use ica.i_Ca, inaca.i_NaCa, icab.i_b_Ca
+dot(Ca_JSR) = buffer_jsr.Ca_JSR_bufc * (i_tr - i_rel)
+    in [mM]
+dot(Ca_NSR) = -1 * (i_leak + V_JSR / V_NSR * i_tr - i_up)
+    in [mM]
+dot(Cai) = buffer_myo.Cai_bufc * (-cell.Cm * (i_Ca - 2 * i_NaCa + i_b_Ca) / (2 * V_myo * F) + i_rel * V_JSR / V_myo + (i_leak - i_up) * V_NSR / V_myo)
+    in [mM]
+
+[[protocol]]
+# Level  Start    Length   Period   Multiplier
+1.0      0.0      3        1000.0   0
+
+[[script]]
+import matplotlib.pyplot as plt
+import myokit
+
+# Get model and protocol, create simulation
+m = get_model()
+p = get_protocol()
+s = myokit.Simulation(m, p)
+
+# Run simulation
+d = s.run(1000)
+
+# Display the results
+plt.figure()
+plt.plot(d.time(), d['membrane.V'])
+plt.title(var)
+plt.show()
+
