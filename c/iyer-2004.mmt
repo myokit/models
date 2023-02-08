@@ -1,0 +1,1119 @@
+[[model]]
+name: iyer-2004
+version: 20230208
+mmt_authors: Michael Clerx
+documentation: """
+    The 2004 model of the human left-ventricular AP by Iyer et al. [1].
+
+    The stimulus current was set to -100A/F for 0.5ms, as in the paper.
+
+    This implementation is based on the CellML model [2] and the original
+    fortran code. It was checked against the original code by comparing the
+    calculated derivatives, which matched to within machine precision.
+
+    The formulation for ical.y.tau used in this file is the one from the code,
+    which differs slightly from the version in the paper (which is used in the
+    updated CellML file).
+   
+    [1] Iyer, V., Mazhari, R., & Winslow, R. L. (2004). A computational model 
+        of the human left-ventricular epicardial myocyte. Biophysical Journal,
+        87, 1507-1525. https://doi.org/10.1529/biophysj.104.043299
+
+    [2] https://models.cellml.org/e/878
+
+    [3] Irvine, L. A., Jafri, M. S., & Winslow, R. L. (1999) Cardiac sodium
+        channel Markov model with temperature dependence and recovery from
+        inactivation. Biophysical Journal, 76, 1868-1885.
+        https://doi.org/10.1016/S0006-3495(99)77346-7
+
+    [4] Mazhari, R., Greenstein, J. L., Winslow, R. L., Marban, E., & Nuss,
+        H. B. (2001) Molecular interactions between two long-QT syndrome gene
+        products, HERG and KCNE2, rationalized by in vitro and in silico
+        analysis. Circulation Research, 89, 33-38.
+        https://doi.org/10.1161/hh1301.093633
+
+    [5] Nabauer, M., Beuckelmann, D. J., Uberfuhr, P., & Steinbeck, G. (1996)
+        Regional differences in current density and rate-dependent properties 
+        of the transient outward current in subepicardial and subendocardial
+        myocytes of human left ventricle. Circulation, 93, 168-177.
+        https://doi.org/10.1161/01.cir.93.1.168
+
+    [6] Winslow, R. L., Rice, J., Jafri, S., Marban, E., & O’Rourke (1999)
+        Mechanisms of altered excitation-contraction coupling in canine
+        tachycardia-induced heart failure. II. Model studies. Circulation
+        Research, 84, 571-586. https://doi.org/10.1161/01.res.84.5.571
+
+    The original CellML meta data follows below:
+
+    ---------------------------------------------------------------------------
+
+    A computational model of the human left-ventricular epicardial myocyte
+
+    Steven Niederer
+    Department of Physiology, Anatomy and Genetics, Oxford University
+
+    This CellML model runs in OpenCell and COR to reproduce the published
+    results. The units have been checked and they are consistent.
+
+    ABSTRACT: A computational model of the human left-ventricular epicardial
+    myocyte is presented. Models of each of the major ionic currents present in
+    these cells are formulated and validated using experimental data obtained
+    from studies of recombinant human ion channels and/or whole-cell recording
+    from single myocytes isolated from human left-ventricular subepicardium.
+    Continuous-time Markov chain models for the gating of the fast Na(+)
+    current, transient outward current, rapid component of the delayed
+    rectifier current, and the L-type calcium current are modified to represent
+    human data at physiological temperature. A new model for the gating of the
+    slow component of the delayed rectifier current is formulated and validated
+    against experimental data. Properties of calcium handling and exchanger
+    currents are altered to appropriately represent the dynamics of
+    intracellular ion concentrations. The model is able to both reproduce and
+    predict a wide range of behaviors observed experimentally including action
+    potential morphology, ionic currents, intracellular calcium transients,
+    frequency dependence of action-potential duration, Ca(2+)-frequency
+    relations, and extrasystolic restitution/post-extrasystolic potentiation.
+    The model therefore serves as a useful tool for investigating mechanisms of
+    arrhythmia and consequences of drug-channel interactions in the human left-
+    ventricular myocyte.
+
+    The original paper reference is cited below:
+
+    A computational model of the human left-ventricular epicardial myocyte,
+    Vivek Iyer, Reza Mazhari and Raimond L. Winslow, 2004, Biophysical Journal,
+    87, 1507-1525. PubMed ID: 15345532
+    """
+# Initial values (table 4, 1Hz)
+membrane.V    = -9.06575592899999947e1
+sodium.Nai    =  9.79830416200000087
+potassium.Ki  =  1.25558943200000002e2
+calcium.Cai   =  8.60119201599999941e-5
+calcium.CaNSR =  2.85529491500000010e-1
+calcium.CaSS  =  1.42021524500000006e-4
+calcium.CaJSR =  2.85223944600000001e-1
+ryr.C1        =  4.44803894600000027e-1
+ryr.O1        =  6.60178328700000033e-4
+ryr.C2        =  5.54535923999999958e-1
+ryr.O2        =  3.97392005999999971e-9
+ical.C0       =  8.62193405400000001e-1
+ical.C1       =  1.14139821100000000e-2
+ical.C2       =  5.66632522499999978e-5
+ical.C3       =  1.25021356999999990e-7
+ical.C4       =  1.03442674800000000e-10
+ical.O        =  7.75798156300000011e-12
+ical.CCa0     =  1.19854708099999999e-1
+ical.CCa1     =  6.34679430199999988e-3
+ical.CCa2     =  1.26032648799999987e-4
+ical.CCa3     =  1.11231523799999993e-6
+ical.CCa4     =  3.68131589199999984e-9
+ical.y        =  9.99715707400000042e-1
+troponin.H    =  9.77215248100000045e-1
+troponin.L    =  8.04658497299999970e-2
+itof.C0       =  9.51372135099999960e-1
+itof.C1       =  2.66828808899999999e-2
+itof.C2       =  2.80638035800000001e-4
+itof.C3       =  1.31183757899999993e-6
+itof.O        =  2.29955624000000007e-9
+itof.CI0      =  1.51302520400000001e-2
+itof.CI1      =  5.44296460100000042e-3
+itof.CI2      =  9.91837335900000059e-4
+itof.CI3      =  9.51438605700000064e-5
+itof.OI       =  2.74267738199999992e-6
+itos.C0       =  5.97709976500000018e-1
+itos.C1       =  1.73099052799999986e-1
+itos.C2       =  1.88107238599999997e-2
+itos.C3       =  9.16070134999999951e-4
+itos.O        =  1.97554135699999997e-5
+itos.CI0      =  3.53908434600000016e-2
+itos.CI1      =  5.42882435300000039e-3
+itos.CI2      =  2.28785886899999999e-2
+itos.CI3      =  3.23380000300000012e-2
+itos.OI       =  1.13408205799999995e-1
+ikr.C1        =  9.96697338000000044e-1
+ikr.C2        =  4.34087964799999976e-4
+ikr.C3        =  7.63409975500000055e-5
+ikr.O         =  9.51178911299999993e-6
+ikr.I         =  1.53334700699999995e-6
+iks.C0        =  9.64560629499999989e-1
+iks.C1        =  3.54261356799999982e-2
+iks.O1        =  2.49171069599999984e-7
+iks.O2        =  1.29854782200000006e-5
+ina.na1       =  1.43757564899999996e-1
+ina.na2       =  4.17776207999999982e-2
+ina.na3       =  4.55289836399999995e-3
+ina.na4       =  2.20520742999999995e-4
+ina.na5       =  4.00526648400000040e-6
+ina.O1        =  1.57442748999999985e-8
+ina.O2        =  2.85660717899999982e-9
+ina.na8       =  4.74995000800000011e-1
+ina.na9       =  2.70721409700000026e-1
+ina.na10      =  5.78612005700000001e-2
+ina.na11      =  5.49629227900000003e-3
+ina.na12      =  1.95787451900000006e-4
+ina.na13      =  4.17679396000000000e-4
+
+[engine]
+time = 0 [ms]
+    in [ms]
+    bind time
+pace = 0
+    bind pace
+
+#
+# Membrane potential
+# Page 1523
+#
+[membrane]
+use stimulus.i_stim
+dot(V) = -(i_ion + i_stim)
+    in [mV]
+    label membrane_potential
+i_ion = (
+        + ina.INa
+        + ical.ICa
+        + ical.ICaK
+        + ikr.IKr
+        + iks.IKs
+        + ik1.IK1
+        + inaca.INaCa
+        + inak.INaK
+        + ito.Ito1
+        + ipca.IpCa
+        + icab.ICaB
+        + inab.INaB
+        )
+    in [A/F]
+    label cellular_current
+
+#
+# Stimulus
+#
+[stimulus]
+i_stim = engine.pace * amplitude
+    in [A/F]
+amplitude = -100 [A/F]
+    in [A/F]
+
+#
+# Physical constants (table 1)
+#
+[phys]
+R = 8.315 [J/mol/K]
+    in [J/mol/K]
+T = 310 [K]
+    in [K]
+F = 96.5 [C/mmol]
+    in [C/mmol]
+k = 1.381e-23 [J/K]
+    in [J/K]
+    desc: Boltzmann constant
+h = 6.626e-31 [J*ms]
+    in [J*ms]
+    desc: Planck's constant
+RTF = R * T / F
+    in [mV]
+VFRT = membrane.V * F / (R * T)
+
+#
+# Cell properties (table 2)
+#
+[cell]
+Acap = 0.0001534 [cm^2]
+    in [cm^2]
+    desc: Capacitative area
+C = Acap * 0.001 [mF/cm^2]
+    in [mF]
+    desc: Cell capacitance
+Vmyo = 25.84e-6 [uL]
+    in [uL]
+    desc: Myoplasm volume
+VJSR = 0.16e-6 [uL]
+    in [uL]
+    desc: junctional SR volume
+VNSR = 2.1e-6 [uL]
+    in [uL]
+    desc: Network SR volume
+VSS = 1.2e-9 [uL]
+    in [uL]
+    desc: Subspace volume
+
+#
+# External ion concentrations (table 3)
+#
+[extra]
+Cao = 2 [mM]
+    in [mM]
+Ko = 4 [mM]
+    in [mM]
+Nao = 138 [mM]
+    in [mM]
+
+#
+# Reversal potentials
+#
+[rev]
+use phys.RTF
+ENa = RTF * log(extra.Nao / sodium.Nai)
+    in [mV]
+EK = RTF * log(extra.Ko / potassium.Ki)
+    in [mV]
+ECa = 0.5 * RTF * log(extra.Cao / calcium.Cai)
+    in [mV]
+
+#
+# Sodium current INa
+# Page 1507, 1517, and Table 6
+# Based on Irvine et al. [3]
+#
+[ina]
+use membrane.V
+use phys.R, phys.F, phys.k, phys.h
+INa = GNa * (O1 + O2) * (V - rev.ENa)
+    in [A/F]
+GNa = 56.32 [mS/uF]
+    in [mS/uF]
+# Scaling
+a = 1.40042625477401
+    desc: scaling factor
+Q = 1.38862291252871
+    desc: temperature scaling factor
+# Common terms
+KTH = phys.k * T / phys.h
+    in [1/ms]
+T = 294.16 [K]
+    in [K]
+RT = R * T
+    in [J/mol]
+RTF = R * T / F
+    in [mV]
+# Transition rate symbols
+alpha = Q * KTH * exp(-114007.462700232 [J/mol] / RT + 224.114 [J/mol/K] / R + 0.286374268596235 * V / RTF)
+    in [1/ms]
+beta = Q * KTH * exp(-272470.273489681 [J/mol] / RT + 708.146 [J/mol/K] / R + -2.28528417586424 * V / RTF)
+    in [1/ms]
+gamma = Q * KTH * exp(-196336.575735923 [J/mol] / RT + 529.952 [J/mol/K] / R + 2.78084918596045 * V / RTF)
+    in [1/ms]
+delta = Q * KTH * exp(-133689.9304091 [J/mol] / RT + 229.205 [J/mol/K] / R + -1.55804214553883 * V / RTF)
+    in [1/ms]
+On = Q * KTH * exp(-62123.0784380481 [J/mol] / RT + 39.295 [J/mol/K] / R + 0.288816042743232 * V / RTF)
+    in [1/ms]
+Of = Q * KTH * exp(-97657.8497137015 [J/mol] / RT + 1.51 [J/mol/K] / R + 0.0684861993100685 * V / RTF)
+    in [1/ms]
+gamma2 = Q * KTH * exp(116431.142142348 [J/mol] / RT + -578.317 [J/mol/K] / R + 0.764126011745707 * V / RTF)
+    in [1/ms]
+delta2 = Q * KTH * exp(-55700.6624658307 [J/mol] / RT + -130.639 [J/mol/K] / R + -3.64981672927078 * V / RTF)
+    in [1/ms]
+epsilon = Q * KTH * exp(-85800.3675578326 [J/mol] / RT + 70.078 [J/mol/K] / R)
+    in [1/ms]
+omega = Q * KTH * exp(-121955.166154864 [J/mol] / RT + 225.175 [J/mol/K] / phys.R)
+    in [1/ms]
+rho = Q * KTH * exp(-147813.990005035 [J/mol] / RT + 338.915 [J/mol/K] / R + 2.1360043702126 * V / RTF)
+    in [1/ms]
+mu = Q * KTH * exp(-121322.143275242 [J/mol] / RT + 193.265 [J/mol/K] / R + -1.74290267020903 * V / RTF)
+    in [1/ms]
+Cn = Q * KTH * exp(-287913.446530953 [J/mol] / RT + 786.217 [J/mol/K] / R)
+    in [1/ms]
+Cf = Q * KTH * exp(-59565.2236284584 [J/mol] / RT + 0.00711 [J/mol/K] / R)
+    in [1/ms]
+
+# Transition rates
+k12 = 4 * alpha
+    in [1/ms]
+k23 = 3 * alpha
+    in [1/ms]
+k34 = 2 * alpha
+    in [1/ms]
+k45 = alpha
+    in [1/ms]
+k56 = gamma
+    in [1/ms]
+k67 = epsilon
+    in [1/ms]
+k89 = k12 * a
+    in [1/ms]
+k910 = k23 * a
+    in [1/ms]
+k1011 = k34 * a
+    in [1/ms]
+k1112 = k45 * a
+    in [1/ms]
+k1213 = gamma2
+    in [1/ms]
+k57 = rho
+    in [1/ms]
+    
+k21 = beta
+    in [1/ms]
+k32 = 2 * beta
+    in [1/ms]
+k43 = 3 * beta
+    in [1/ms]
+k54 = 4 * beta
+    in [1/ms]
+k65 = delta
+    in [1/ms]
+k76 = omega
+    in [1/ms]
+k98 = k21 / a
+    in [1/ms]
+k109 = k32 / a
+    in [1/ms]
+k1110 = k43 / a
+    in [1/ms]
+k1211 = k54 / a
+    in [1/ms]
+k1312 = delta2
+    in [1/ms]
+k75 = mu
+    in [1/ms]
+
+k81 = Cf
+    in [1/ms]
+k92 = k81 / a
+    in [1/ms]
+k103 = k92 / a
+    in [1/ms]
+k114 = k103 / a
+    in [1/ms]
+k125 = k114 / a
+    in [1/ms]
+k136 = Of
+    in [1/ms]
+
+k18 = Cn
+    in [1/ms]
+k29 = k18 * a
+    in [1/ms]
+k310 = k29 * a
+    in [1/ms]
+k411 = k310 * a
+    in [1/ms]
+k512 = k411 * a
+    in [1/ms]
+k613 = On
+    in [1/ms]
+
+# States
+dot(na1) = -(k18 + k12) * na1 + k21 * na2 + k81 * na8
+dot(na2)  = k12 * na1 - (k21 + k23 + k29) * na2 + k32 * na3 + k92 * na9
+dot(na3)  = k23 * na2 - (k32 + k34 + k310) * na3 + k43 * na4 + k103 * na10
+dot(na4)  = k34 * na3 - (k43 + k45 + k411) * na4 + (k54) * na5 + (k114) * na11
+dot(na5)  = k45 * na4 - (k54 + k56 + k57 + k512) * na5 + (k65) * O1 + (k75) * O2 + (k125) * na12
+dot(O1)   = k56 * na5 - (k65 + k67 + k613) * O1 + k76 * O2 + k136 * na13
+dot(O2)   = k57 * na5 + k67 * O1 - (k75 + k76) * O2
+dot(na8)  = k18 * na1 - (k81 + k89) * na8 + k98 * na9
+dot(na9)  = k29 * na2 + k89 * na8 - (k98 + k92 + k910) * na9 + k109 * na10
+dot(na10) = k310 * na3 + k910 * na9 - (k1011 + k103 + k109) * na10 + k1110 * na11
+dot(na11) = k411 * na4 + k1011 * na10 - (k1110 + k114 + k1112) * na11 + k1211 * na12
+dot(na12) = k512 * na5 + k1112 * na11 - (k1211 + k125 + k1213) * na12 + k1312 * na13
+dot(na13) = k613 * O1 + k1213 * na12 - (k1312 + k136) * na13
+
+#
+# Rapidly-activating delayed rectifier K current IKr
+# Page 1508, 1517, and Table 7
+# Based on Mazhari et al. [4]
+#
+[ikr]
+use membrane.V
+IKr = GKr * fKo * O * (V - rev.EK)
+    in [A/F]
+GKr = 0.0186 [mS/uF]
+    in [mS/uF]
+TC =  5.32000000100000037
+fKo = sqrt(extra.Ko / 4 [mM])
+# Rate parameters
+a0 = 1.71476417330859998e-2 [1/ms]
+    in [1/ms]
+b0 = 3.30460803883500034e-2 [1/mV]
+    in [1/mV]
+a1 = 3.96932838114099976e-2 [1/ms]
+    in [1/ms]
+b1 = -4.30605416397999985e-2 [1/mV]
+    in [1/mV]
+a2 = 2.05744860597700009e-2 [1/ms]
+    in [1/ms]
+b2 =  2.61741271511800010e-2 [1/mV]
+    in [1/mV]
+a3 = 1.34366604422999996e-3 [1/ms]
+    in [1/ms]
+b3 = -2.69138549839900015e-2 [1/mV]
+    in [1/mV]
+a4 = 1.06663164912879999e-1 [1/ms]
+    in [1/ms]
+b4 =  5.68908859717000021e-3 [1/mV]
+    in [1/mV]
+a5 = 6.46393910049000014e-3 [1/ms]
+    in [1/ms]
+b5 = -4.53664295954299968e-2 [1/mV]
+    in [1/mV]
+a6 = 8.03937440300000057e-5 [1/ms]
+    in [1/ms]
+b6 = 6.98089239999999969e-7 [1/mV]
+    in [1/mV]
+# Rates
+C1_C2 = TC * a0 * exp(b0 * V)
+    in [1/ms]
+C2_C1 = TC * a1 * exp(b1 * V)
+    in [1/ms]
+C2_C3 = TC * 2.60836204333700014e-2 [1/ms]
+    in [1/ms]
+C3_C2 = TC * 1.48329781321449999e-1 [1/ms]
+    in [1/ms]
+C3_O = TC * a2 * exp(b2 * V)
+    in [1/ms]
+O_C3 = TC * a3 * exp(b3 * V)
+    in [1/ms]
+O_I = TC * a4 * exp(b4 * V)
+    in [1/ms]
+I_O = TC * a5 * exp(b5 * V)
+    in [1/ms]
+C3_I = TC * a6 * exp(b6 * V)
+    in [1/ms]
+I_C3 = O_C3 * I_O * C3_I / (C3_O * O_I)
+    in [1/ms]
+# States
+dot(C1) = C2_C1 * C2 - C1_C2 * C1
+dot(C2) = C1_C2 * C1 + C3_C2 * C3 - (C2_C1 + C2_C3) * C2
+dot(C3) = C2_C3 * C2 + O_C3 * O + I_C3 * I - (C3_I + C3_O + C3_C2) * C3
+dot(I) = C3_I * C3 + O_I * O - (I_C3 + I_O) * I
+dot(O) = C3_O * C3 + I_O * I - (O_C3 + O_I) * O
+
+#
+# Slowly-activating delayed rectifier K+ current IKs
+# Page 1508, 1518, and Table 8
+# New formulation
+#
+[iks]
+use membrane.V
+IKs = GKs * (O1 + O2) * (V - rev.EK)
+    in [A/F]
+GKs = 0.0035 [mS/uF]
+    in [mS/uF]
+# Rates
+alpha = 7.95600798003999986e-3 [1/ms]
+    in [1/ms]
+beta = 2.16255758958499994e-1 [1/ms] * exp(-1.88912302100000014e-5 [1/mV] * V)
+    in [1/ms]
+gamma = 3.96672067607099985e-2 [1/ms]
+    in [1/ms]
+delta = 7.00806628929000024e-3 [1/ms] * exp(-1.49997547002850007e-1 [1/mV] * V)
+    in [1/ms]
+epsilon = 7.67254363063000003e-3 [1/ms] * exp(8.66294591465500002e-2 [1/mV] * V)
+    in [1/ms]
+omega = 3.79737998367999990e-3 [1/ms] * exp(-1.42566812688100005e-2 [1/mV] * V)
+    in [1/ms]
+# States
+dot(C0) = -alpha * C0 + beta * C1
+dot(C1) = alpha * C0 - (beta + gamma) * C1 + delta * O1
+dot(O1) = gamma * C1 - (delta + epsilon) * O1 + omega * O2
+dot(O2) = epsilon * O1 - omega * O2
+
+#
+# Transient outward current Ito1 (two components)
+#
+[ito]
+use membrane.V
+use phys.F, phys.VFRT
+use sodium.Nai, extra.Nao
+use potassium.Ki, extra.Ko
+use itos.O as Os, itof.O as Of
+Ito1 = Itof + Itos
+    in [A/F]
+f_fast = 0.889
+    desc: Fraction of fast recovery channels
+scale = 0.872
+Gtof = f_fast * scale * 0.1 [mS/uF]
+    in [mS/uF]
+Itof = Gtof * Of * (V - rev.EK)
+    in [A/F]
+Itos = Itos_K + Itos_Na
+    in [A/F]
+Itos_K  = 1000 [ms/s] * Ptos * Os * F * VFRT * (Ki * exp(VFRT) - Ko) / (exp(VFRT) - 1)
+    in [A/F]
+Itos_Na = 1000 [ms/s] * Ptos * Os * F * VFRT * (Nai * exp(VFRT) - Nao) / (exp(VFRT) - 1) * 0.02
+    in [A/F]
+Ptos = (1 - f_fast) * scale * 4.2986e-7 [L/F/ms]
+    in [L/F/ms]
+
+#
+# Fast recovering component, Kv4.3
+# Page 1509, 1519, and Table 9
+# Based on Nabauer et al. [5]
+#
+[itof]
+use membrane.V
+# Rate parameters
+alphaa0 = 0.543708 [1/ms]
+    in [1/ms]
+aa = 0.028983 [1/mV]
+    in [1/mV]
+betaa0 = 0.080185 [1/ms]
+    in [1/ms]
+ba = 0.0468437 [1/mV]
+    in [1/mV]
+alphai0 = 0.0498424 [1/ms]
+    in [1/ms]
+ai = 3.73015999999999994e-4 [1/mV]
+    in [1/mV]
+betai0 =  8.19481999999999958e-4 [1/ms]
+    in [1/ms]
+bi = 5.374e-8 [1/mV]
+    in [1/mV]
+# Voltage dependent rates
+alpha_act = alphaa0 * exp(aa * V)
+    in [1/ms]
+beta_act = betaa0 * exp(-ba * V)
+    in [1/ms]
+alpha_inact = alphai0 * exp(-ai * V)
+    in [1/ms]
+beta_inact = betai0 * exp(bi * V)
+    in [1/ms]
+# Constant rate multipliers
+f1 = 1.8936
+f2 =  1.42246474559999996e1
+f3 =  1.58574378389000003e2
+f4 =  1.42936645351000010e2
+b1 = 6.77348
+b2 = 1.56212705152000009e1
+b3 = 2.87532603313000017e1
+b4 = 5.24576206679000052e2
+# Rates
+C0_C1 = 4 * alpha_act
+    in [1/ms]
+C0_CI0 = beta_inact
+    in [1/ms]
+C1_C0 = beta_act
+    in [1/ms]
+C1_C2 = 3 * alpha_act
+    in [1/ms]
+C1_CI1 = f1 * beta_inact
+    in [1/ms]
+C2_C1 = 2 * beta_act
+    in [1/ms]
+C2_C3 = 2 * alpha_act
+    in [1/ms]
+C2_CI2 = f2 * beta_inact
+    in [1/ms]
+C3_C2 = 3 * beta_act
+    in [1/ms]
+C3_CI3 = f3 * beta_inact
+    in [1/ms]
+C3_O = alpha_act
+    in [1/ms]
+CI0_C0 = alpha_inact
+    in [1/ms]
+O_C3 = 4 * beta_act
+    in [1/ms]
+O_OI = f4 * beta_inact
+    in [1/ms]
+CI0_CI1 = 4 * b1 * alpha_act
+    in [1/ms]
+CI1_C1 = alpha_inact / b1
+    in [1/ms]
+CI1_CI0 = beta_act / f1
+    in [1/ms]
+CI1_CI2 = 3 * b2 * alpha_act / b1
+    in [1/ms]
+CI2_C2 = alpha_inact / b2
+    in [1/ms]
+CI2_CI1 = 2 * f1 * beta_act / f2
+    in [1/ms]
+CI2_CI3 = 2 * b3 * alpha_act / b2
+    in [1/ms]
+CI3_C3 = alpha_inact / b3
+    in [1/ms]
+CI3_CI2 = 3 * f2 * beta_act / f3
+    in [1/ms]
+CI3_OI = b4 * alpha_act / b3
+    in [1/ms]
+OI_CI3 = 4 * f3 * beta_act / f4
+    in [1/ms]
+OI_O = alpha_inact / b4
+    in [1/ms]
+# States
+dot(C0) = C1_C0 * C1 + CI0_C0 * CI0 - (C0_C1 + C0_CI0) * C0
+dot(C1) = C2_C1 * C2 + CI1_C1 * CI1 + C0_C1 * C0 - (C1_C2 + C1_C0 + C1_CI1) * C1
+dot(C2) = C3_C2 * C3 + CI2_C2 * CI2 + C1_C2 * C1 - (C2_C3 + C2_C1 + C2_CI2) * C2
+dot(C3) = O_C3 * O + CI3_C3 * CI3 + C2_C3 * C2 - (C3_O + C3_C2 + C3_CI3) * C3
+dot(O) = C3_O * C3 + OI_O * OI - (O_C3 + O_OI) * O
+dot(CI0) = C0_CI0 * C0 + CI1_CI0 * CI1 - (CI0_C0 + CI0_CI1) * CI0
+dot(CI1) = CI2_CI1 * CI2 + C1_CI1 * C1 + CI0_CI1 * CI0 - (CI1_CI2 + CI1_C1 + CI1_CI0) * CI1
+dot(CI2) = CI3_CI2 * CI3 + C2_CI2 * C2 + CI1_CI2 * CI1 - (CI2_CI3 + CI2_C2 + CI2_CI1) * CI2
+dot(CI3) = OI_CI3 * OI + C3_CI3 * C3 + CI2_CI3 * CI2 - (CI3_OI + CI3_C3 + CI3_CI2) * CI3
+dot(OI) = O_OI * O + CI3_OI * CI3 - (OI_O + OI_CI3) * OI
+
+#
+# Slowly recovering component Kv1.4
+# Page 1509, 1520, and Table 9
+# Based on Nabauer et al. [5]
+#
+[itos]
+use membrane.V
+# Rate parameters
+alphaa0 = 1.84002414553999993 [1/ms]
+    in [1/ms]
+aa =  7.68548031000000024e-3 [1/mV]
+    in [1/mV]
+betaa0 = 1.08174833999999994e-2 [1/ms]
+    in [1/ms]
+ba = 7.79337817399999994e-2 [1/mV]
+    in [1/mV]
+alpha_act = alphaa0 * exp(aa * V)
+    in [1/ms]
+beta_act = betaa0 * exp(-ba * V)
+    in [1/ms]
+alpha_inact = 3.05767916000000001e-3 [1/ms]
+    in [1/ms]
+beta_inact = 2.44935999999999996e-6 [1/ms]
+    in [1/ms]
+# Constant rate multipliers
+b1 =  1.00947847104999999
+b2 =  1.17100540567000011
+b3 =  6.39027687579999948e-1
+b4 =  2.12035379094999987
+f1 =  5.24650739960000001e-1
+f2 =  1.75188540863900002e1
+f3 =  9.38587645345559963e2
+f4 =  5.47491947333260105e4
+# Rates
+C0_C1 = 4 * alpha_act
+    in [1/ms]
+C0_CI0 = beta_inact
+    in [1/ms]
+C1_C0 = beta_act
+    in [1/ms]
+C1_C2 = 3 * alpha_act
+    in [1/ms]
+C1_CI1 = f1 * beta_inact
+    in [1/ms]
+C2_C1 = 2 * beta_act
+    in [1/ms]
+C2_C3 = 2 * alpha_act
+    in [1/ms]
+C2_CI2 = f2 * beta_inact
+    in [1/ms]
+C3_C2 = 3 * beta_act
+    in [1/ms]
+C3_CI3 = f3 * beta_inact
+    in [1/ms]
+C3_O = alpha_act
+    in [1/ms]
+O_C3 = 4 * beta_act
+    in [1/ms]
+O_OI = f4 * beta_inact
+    in [1/ms]
+CI0_C0 = alpha_inact
+    in [1/ms]
+CI0_CI1 = 4 * b1 * alpha_act
+    in [1/ms]
+CI1_C1 = alpha_inact / b1
+    in [1/ms]
+CI1_CI0 = beta_act / f1
+    in [1/ms]
+CI1_CI2 = 3 * b2 * alpha_act / b1
+    in [1/ms]
+CI2_C2 = alpha_inact / b2
+    in [1/ms]
+CI2_CI1 = 2 * f1 * beta_act / f2
+    in [1/ms]
+CI2_CI3 = 2 * b3 * alpha_act / b2
+    in [1/ms]
+CI3_C3 = alpha_inact / b3
+    in [1/ms]
+CI3_CI2 = 3 * f2 * beta_act / f3
+    in [1/ms]
+CI3_OI = b4 * alpha_act / b3
+    in [1/ms]
+OI_CI3 = 4 * f3 * beta_act / f4
+    in [1/ms]
+OI_O = alpha_inact / b4
+    in [1/ms]
+# States
+dot(C0) = C1_C0 * C1 + CI0_C0 * CI0 - (C0_C1 + C0_CI0) * C0
+dot(C1) = C2_C1 * C2 + CI1_C1 * CI1 + C0_C1 * C0 - (C1_C2 + C1_C0 + C1_CI1) * C1
+dot(C2) = C3_C2 * C3 + CI2_C2 * CI2 + C1_C2 * C1 - (C2_C3 + C2_C1 + C2_CI2) * C2
+dot(C3) = O_C3 * O + CI3_C3 * CI3 + C2_C3 * C2 - (C3_O + C3_C2 + C3_CI3) * C3
+dot(O) = C3_O * C3 + OI_O * OI - (O_C3 + O_OI) * O
+dot(CI0) = C0_CI0 * C0 + CI1_CI0 * CI1 - (CI0_C0 + CI0_CI1) * CI0
+dot(CI1) = CI2_CI1 * CI2 + C1_CI1 * C1 + CI0_CI1 * CI0 - (CI1_CI2 + CI1_C1 + CI1_CI0) * CI1
+dot(CI2) = CI3_CI2 * CI3 + C2_CI2 * C2 + CI1_CI2 * CI1 - (CI2_CI3 + CI2_C2 + CI2_CI1) * CI2
+dot(CI3) = OI_CI3 * OI + C3_CI3 * C3 + CI2_CI3 * CI2 - (CI3_OI + CI3_C3 + CI3_CI2) * CI3
+dot(OI) = O_OI * O + CI3_OI * CI3 - (OI_O + OI_CI3) * OI
+
+#
+# Time independent K+ current IK1
+# Page 1510, 1520
+# New formulation
+#
+[ik1]
+use membrane.V, rev.EK
+IK1 = GK1 * sqrt(extra.Ko / 1 [mM]) * K1_inf * (V - EK)
+    in [A/F]
+GK1 = 0.12530512611880798 [mS/uF]
+    in [mS/uF]
+K1_inf = 1 / (0.94 + exp(1.26 / phys.RTF * (V - EK)))
+
+#
+# NCX current INaCa
+# Page 1510, 1521
+# Based on Winslow et al. [6]
+#
+[inaca]
+use sodium.Nai, extra.Nao
+use calcium.Cai, extra.Cao
+use phys.VFRT
+INaCa = kNaCa * (a1 - a2) / (a4 * a3 * a5)
+    in [A/F]
+    a1 = exp(eta * VFRT) * Nai^3 * Cao
+        in [mM^4]
+    a2 = exp((eta - 1) * VFRT) * Nao^3 * Cai
+        in [mM^4]
+    a3 = 1 + ksat * exp((eta - 1) * VFRT)
+    a4 = KmCa + Cao
+        in [mM]
+    a5 = (KmNa^3 + Nao^3) / 5000
+        in [mM^3]
+eta = 0.35
+ksat = 0.2
+kNaCa = 0.44 [A/F]
+    in [A/F]
+KmCa = 1.38 [mM]
+    in [mM]
+KmNa = 87.5 [mM]
+    in [mM]
+
+#
+# Na background current
+# Page 1521, and Table 10
+#
+[inab]
+INaB = GNaB * (membrane.V - rev.ENa)
+    in [A/F]
+GNaB = 0.001 [mS/uF]
+    in [mS/uF]
+
+#
+# NaK pump current INaK
+# Page 1521
+#
+[inak]
+use extra.Ko, extra.Nao, sodium.Nai
+use phys.VFRT
+INaK = INaKmax * fNaK * (Ko / (Ko + KmKo)) / (1 + (KmNai / Nai)^1.5)
+    in [A/F]
+INaKmax = 2.387 [A/F]
+    in [A/F]
+fNaK = 1 / (1 + 0.1245 * exp(-0.1 * VFRT) + 0.0365 * sigma * exp(-1.33 * VFRT))
+    sigma = (exp(extra.Nao / 67.3 [mM]) - 1) / 7
+KmNai = 20 [mM]
+    in [mM]
+KmKo = 1.5 [mM]
+    in [mM]
+
+#
+# Sarcolemmal Ca pump current IpCa
+# Page 1521
+#
+[ipca]
+use calcium.Cai
+IpCa = IpCamax * Cai / (KmpCa + Cai)
+    in [A/F]
+IpCamax = 0.05 [A/F]
+    in [A/F]
+KmpCa = 0.0005 [mM]
+    in [mM]
+
+#
+# Ca background current
+# Page 1521
+#
+[icab]
+ICaB = GCaB * (membrane.V - rev.ECa)
+    in [A/F]
+GCaB = 7.684e-5 [mS/uF]
+    in [mS/uF]
+
+#
+# L-type calcium current ICa
+# Page 1510, 1521, and Table 12
+# Based on Winslow et al. [6]
+#
+[ical]
+use membrane.V
+use phys.F, phys.VFRT
+use calcium.Cai, potassium.Ki
+use extra.Cao, extra.Ko
+# Calcium component
+ICa = ICamax * y * O
+    in [A/F]
+ICamax = PCa * 4 * VFFRT * (0.001 [mM] * exp(2 * VFRT) - Cao * 0.341) / (exp(2 * VFRT) - 1)
+    in [A/F]
+Icabar = piecewise(ICamax >= 0 [A/F], 0 [A/F], ICamax)
+    in [A/F]
+# Potassium component
+ICahalf = -0.265 [A/F]
+    in [A/F]
+ICaK = PKprime * O * y * VFFRT * (Ki * exp(VFRT) - Ko) / (exp(VFRT) - 1)
+    in [A/F]
+# Permeability
+Pscale = 7
+PCa = Pscale * 0.0002469 [L/F/s]
+    in [L/F/s]
+PK = Pscale * 4.574e-7 [L/F/s]
+    in [L/F/s]
+PKprime = PK / (1 + Icabar / ICahalf)
+    in [L/F/s]
+# Common term    
+VFFRT = 1000 * F * VFRT
+    in [C/mmol]
+# Activation terms
+aL = 2
+bL = 2
+alpha = 4 [1/ms] * 1.2 * 0.416 * exp(0.012 [1/mV] * (V - 35 [mV]))
+    in [1/ms]
+beta = 4 [1/ms] * 0.45 * 0.049 * exp(-0.065 [1/mV] * (V - 22 [mV]))
+    in [1/ms]
+alpha_prime = aL * alpha
+    in [1/ms]
+beta_prime = beta / bL
+    in [1/ms]
+fL = 0.3 [1/ms]
+    in [1/ms]
+gL = 4 [1/ms]
+    in [1/ms]
+gamma = 0.6 [1/ms] * 0.09233 [m^3/mol] * calcium.CaSS
+    in [1/ms]
+omega = 0.25 [1/ms] * 0.01
+    in [1/ms]
+# Activation transitions
+C0_C1 = 4 * alpha
+    in [1/ms]
+C1_C2 = 3 * alpha
+    in [1/ms]
+C2_C3 = 2 * alpha
+    in [1/ms]
+C3_C4 = alpha
+    in [1/ms]
+CCa0_CCa1 = 4 * alpha_prime
+    in [1/ms]
+CCa1_CCa2 = 3 * alpha_prime
+    in [1/ms]
+CCa2_CCa3 = 2 * alpha_prime
+    in [1/ms]
+CCa3_CCa4 = alpha_prime
+    in [1/ms]
+C1_C0 = beta
+    in [1/ms]
+C2_C1 = 2 * beta
+    in [1/ms]
+C3_C2 = 3 * beta
+    in [1/ms]
+C4_C3 = 4 * beta
+    in [1/ms]
+CCa1_CCa0 = beta_prime
+    in [1/ms]
+CCa2_CCa1 = 2 * beta_prime
+    in [1/ms]
+CCa3_CCa2 = 3 * beta_prime
+    in [1/ms]
+CCa4_CCa3 = 4 * beta_prime
+    in [1/ms]
+C0_CCa0 = gamma
+    in [1/ms]
+C1_CCa1 = aL * C0_CCa0
+    in [1/ms]
+C2_CCa2 = aL * C1_CCa1
+    in [1/ms]
+C3_CCa3 = aL * C2_CCa2
+    in [1/ms]
+C4_CCa4 = aL * C3_CCa3
+    in [1/ms]
+CCa0_C0 = omega
+    in [1/ms]
+CCa1_C1 = CCa0_C0 / bL
+    in [1/ms]
+CCa2_C2 = CCa1_C1 / bL
+    in [1/ms]
+CCa3_C3 = CCa2_C2 / bL
+    in [1/ms]
+CCa4_C4 = CCa3_C3 / bL
+    in [1/ms]
+# Activation states
+dot(C0) = C1_C0 * C1 + CCa0_C0 * CCa0 - (C0_C1 + C0_CCa0) * C0
+dot(C1) = C0_C1 * C0 + C2_C1 * C2 + CCa1_C1 * CCa1 - (C1_C0 + C1_C2 + C1_CCa1) * C1
+dot(C2) = C1_C2 * C1 + C3_C2 * C3 + CCa2_C2 * CCa2 - (C2_C1 + C2_C3 + C2_CCa2) * C2
+dot(C3) = C2_C3 * C2 + C4_C3 * C4 + CCa3_C3 * CCa3 - (C3_C2 + C3_C4 + C3_CCa3) * C3
+dot(C4) = C3_C4 * C3 + gL * O + CCa4_C4 * CCa4 - (C4_C3 + fL + C4_CCa4) * C4
+dot(CCa0) = CCa1_CCa0 * CCa1 + C0_CCa0 * C0 - (CCa0_CCa1 + CCa0_C0) * CCa0
+dot(CCa1) = CCa0_CCa1 * CCa0 + CCa2_CCa1 * CCa2 + C1_CCa1 * C1 - (CCa1_CCa0 + CCa1_CCa2 + CCa1_C1) * CCa1
+dot(CCa2) = CCa1_CCa2 * CCa1 + CCa3_CCa2 * CCa3 + C2_CCa2 * C2 - (CCa2_CCa1 + CCa2_CCa3 + CCa2_C2) * CCa2
+dot(CCa3) = CCa2_CCa3 * CCa2 + CCa4_CCa3 * CCa4 + C3_CCa3 * C3 - (CCa3_CCa2 + CCa3_CCa4 + CCa3_C3) * CCa3
+dot(CCa4) = CCa3_CCa4 * CCa3 + C4_CCa4 * C4 - (CCa4_CCa3 + CCa4_C4) * CCa4
+dot(O) = fL * C4 - gL * O
+# Inactivation
+a1 = 0.82
+dot(y) = (inf - y) / tau
+    inf = a1 / (1 + exp((V + 28.5 [mV]) / 7.8 [mV])) + (1 - a1)
+    # Note, the tau below corresponds to the fortran code, not the paper
+    tau = 1 [ms] / (0.00336336209452 / (0.5 + exp(V / -5.53899874036055 [mV])) + 0.00779046570737 * exp(V / -49.51039631160386 [mV]))
+        in [ms]
+    # This version is given in the paper, and used in Agrawal et al. 2022.
+    #tau = 1 [ms] / (0.00653 / (0.5 + exp(V / -7.1 [mV])) + 0.00512 * exp(V / -39.8 [mV]))
+
+#
+# RyR channel
+# Page 1522
+#
+[ryr]
+use calcium.CaSS, calcium.CaJSR
+Jrel = v1 * (O1 + O2) * (CaJSR - CaSS)
+    in [mM/ms]
+v1 = 1.8 [1/ms]
+    in [1/ms]
+# Rates
+kap = 0.01215 [1/uM^4/ms]
+    in [1/uM^4/ms]
+kam = 0.576 [1/ms]
+    in [1/ms]
+kbp = 0.00405 [1/uM^3/ms]
+    in [1/uM^3/ms]
+kbm = 1.93 [1/ms]
+    in [1/ms]
+kcp = 0.1 [1/ms]
+    in [1/ms]
+kcm = 0.0008 [1/ms]
+    in [1/ms]
+# States
+dot(C1) = -kap * (CaSS * 1000 [uM/mM])^4 * C1 + kam * O1
+dot(C2) = kcp * O1 - kcm * C2
+dot(O1) = -(dot(C1) + dot(O2) + dot(C2))
+dot(O2) = kbp * (CaSS * 1000 [uM/mM])^3 * O1 - kbm * O2
+
+#
+# SERCA2 pump
+# Page 1522
+#
+[serca]
+Jup = KSR * (vmaxf * fb - vmaxr * rb) / (1 + fb + rb)
+    in [mM/ms]
+    fb = (calcium.Cai / Kfb)^Nfb
+    rb = (calcium.CaNSR / Krb)^Nrb
+vmaxf = 7.48e-5 [1/ms]
+    in [1/ms]
+vmaxr = 0.000318 [1/ms]
+    in [1/ms]
+KSR = 1.2 [mM]
+    in [mM]
+Kfb = 0.000168 [mM]
+    in [mM]
+Krb = 3.29 [mM]
+    in [mM]
+Nfb = 1.2
+Nrb = 1
+
+#
+# Troponin
+# Page 1523
+#
+[troponin]
+use calcium.Cai, calcium.CaSS, calcium.CaJSR, calcium.CaNSR
+Jtrpn = LTRPNtot * dot(L) + HTRPNtot * dot(H)
+    in [mM/ms]
+beta_JSR = 1 / (1 + CSQNtot * KmCSQN / (CaJSR + KmCSQN)^2)
+beta_SS = 1 / (1 + CMDNtot * KmCMDN / (CaSS + KmCMDN)^2 + EGTAtot * KmEGTA / (CaSS + KmEGTA)^2)
+beta_i = 1 / (1 + CMDNtot * KmCMDN / (Cai + KmCMDN)^2 + EGTAtot * KmEGTA / (Cai + KmEGTA)^2)
+dot(H) = khp * Cai * (1 - H) - khm * H
+    desc: Fraction of Ca2+-bound high affinity troponin sites
+dot(L) = klp * Cai * (1 - L) - klm * L
+    desc: Fraction of Ca2+-bound low affinity troponin sites
+CMDNtot = 0.05 [mM]
+    in [mM]
+CSQNtot = 15 [mM]
+    in [mM]
+EGTAtot = 0 [mM]
+    in [mM]
+KmCMDN = 0.00238 [mM]
+    in [mM]
+KmCSQN = 0.8 [mM]
+    in [mM]
+KmEGTA = 0.00015 [mM]
+    in [mM]
+HTRPNtot = 0.14 [mM]
+    in [mM]
+LTRPNtot = 0.07 [mM]
+    in [mM]
+khm = 6.6e-5 [1/ms]
+    in [1/ms]
+khp = 20 [1/mM/ms]
+    in [1/mM/ms]
+klm = 0.04 [1/ms]
+    in [1/ms]
+klp = 40 [1/mM/ms]
+    in [1/mM/ms]    
+
+#
+# Calcium concentrations
+# Page 1523
+#
+[calcium]
+use phys.F, cell.C
+use cell.Vmyo, cell.VJSR, cell.VNSR, cell.VSS
+use serca.Jup, ryr.Jrel
+use troponin.Jtrpn, troponin.beta_JSR, troponin.beta_SS, troponin.beta_i
+Jtr = (CaNSR - CaJSR) / tautr
+    in [mM/ms]
+Jxfer = (CaSS - Cai) / tauxfer
+    in [mM/ms]
+tautr = 0.5747 [ms]
+    in [ms]
+tauxfer = 26.7 [ms]
+    in [ms]
+dot(Cai) = beta_i * (Jxfer - Jup - Jtrpn - (icab.ICaB - 2 * inaca.INaCa + ipca.IpCa) * 0.5 * C / (Vmyo * F))
+    in [mM]
+dot(CaSS) = beta_SS * (Jrel * VJSR / VSS - Jxfer * Vmyo / VSS - ical.ICa * C / (2 * VSS * F))
+    in [mM]
+dot(CaJSR) = beta_JSR * (Jtr - Jrel)
+    in [mM]
+dot(CaNSR) = Jup * Vmyo / VNSR - Jtr * VJSR / VNSR
+    in [mM]
+
+#
+# Sodium concentration
+# Page 1522
+#
+[sodium]
+use cell.C, cell.Vmyo, phys.F
+dot(Nai) = -(ina.INa + inab.INaB + 3 * (inaca.INaCa + inak.INaK) + ito.Itos_Na) * C / (Vmyo * F)
+    in [mM]
+
+#
+# Potassium concentration
+# Page 1522
+#
+[potassium]
+use cell.C, cell.Vmyo, phys.F
+dot(Ki) = -(ikr.IKr + iks.IKs + ik1.IK1 + ical.ICaK + stimulus.i_stim - 2 * inak.INaK + ito.Itof + ito.Itos_K) * C / (Vmyo * F)
+    in [mM]
+
+[[protocol]]
+# Level  Start    Length   Period   Multiplier
+1        10       0.5      1000     0
+
+[[script]]
+import matplotlib.pyplot as plt
+import myokit
+
+# Get model and protocol, create simulation
+m = get_model()
+p = get_protocol()
+s = myokit.Simulation(m, p)
+
+# Run simulation
+d = s.run(1000)
+
+# Display the results
+var = 'membrane.V'
+plt.figure()
+plt.plot(d.time(), d[var])
+plt.title(var)
+plt.show()
+
