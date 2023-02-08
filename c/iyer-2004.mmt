@@ -14,8 +14,8 @@ documentation: """
     The formulation for ical.y.tau used in this file is the one from the code,
     which differs slightly from the version in the paper (which is used in the
     updated CellML file).
-   
-    [1] Iyer, V., Mazhari, R., & Winslow, R. L. (2004). A computational model 
+
+    [1] Iyer, V., Mazhari, R., & Winslow, R. L. (2004). A computational model
         of the human left-ventricular epicardial myocyte. Biophysical Journal,
         87, 1507-1525. https://doi.org/10.1529/biophysj.104.043299
 
@@ -33,7 +33,7 @@ documentation: """
         https://doi.org/10.1161/hh1301.093633
 
     [5] Nabauer, M., Beuckelmann, D. J., Uberfuhr, P., & Steinbeck, G. (1996)
-        Regional differences in current density and rate-dependent properties 
+        Regional differences in current density and rate-dependent properties
         of the transient outward current in subepicardial and subendocardial
         myocytes of human left ventricle. Circulation, 93, 168-177.
         https://doi.org/10.1161/01.cir.93.1.168
@@ -340,7 +340,7 @@ k1213 = gamma2
     in [1/ms]
 k57 = rho
     in [1/ms]
-    
+
 k21 = beta
     in [1/ms]
 k32 = 2 * beta
@@ -842,6 +842,10 @@ use membrane.V
 use phys.F, phys.VFRT
 use calcium.Cai, potassium.Ki
 use extra.Cao, extra.Ko
+# Total current
+ICaL = ICa + ICaK
+    in [A/F]
+    label ICaL
 # Calcium component
 ICa = ICamax * y * O
     in [A/F]
@@ -862,7 +866,7 @@ PK = Pscale * 4.574e-7 [L/F/s]
     in [L/F/s]
 PKprime = PK / (1 + Icabar / ICahalf)
     in [L/F/s]
-# Common term    
+# Common term
 VFFRT = 1000 * F * VFRT
     in [C/mmol]
 # Activation terms
@@ -1048,7 +1052,7 @@ khp = 20 [1/mM/ms]
 klm = 0.04 [1/ms]
     in [1/ms]
 klp = 40 [1/mM/ms]
-    in [1/mM/ms]    
+    in [1/mM/ms]
 
 #
 # Calcium concentrations

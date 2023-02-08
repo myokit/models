@@ -296,6 +296,7 @@ use phys.FRT, phys.FFRT
 use extra.Cao, calcium.Cai
 ICaL = gCaL * d * f * fCa * 4 * V * FFRT * (Cai * exp(2 * V * FRT) - 0.341 * Cao) / (exp(2 * V * FRT) - 1)
     in [A/F]
+    label ICaL
 gCaL = 0.175 [L/F/s]
     in [L/F/s]
 dot(d) = (inf - d) / tau
