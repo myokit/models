@@ -62,10 +62,24 @@ def test_models():
 
 def test(path):
     """ Tests a model's syntax. """
+
+    # Check that we can load it
     try:
-        myokit.load(path)
+        m = myokit.load_model(path)
     except myokit.ParseError as e:
         return str(e)
+
+    # Check its meta-data
+    tags = [
+        'name',
+        'mmt_authors',
+        'version',
+        'desc',
+    ]
+    for tag in tags:
+        if tag not in m.meta:
+            return f'Missing meta data annotation: {tag}'
+
     return None
 
 
