@@ -299,6 +299,7 @@ ICaL = gCaL * d * f * fCa * 4 * V * FFRT * (Cai * exp(2 * V * FRT) - 0.341 * Cao
     label ICaL
 gCaL = 0.175 [L/F/s]
     in [L/F/s]
+    label gCaL
 dot(d) = (inf - d) / tau
     inf = 1 / (1 + exp((-5 [mV] - V) / 7.5 [mV]))
     tau = 1 [ms] * (alpha * beta + gamma)

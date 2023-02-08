@@ -485,9 +485,10 @@ PhiCaNa = if(vf == 0, 1 [C/mol] * 1 * (0.75 * Na_ss - 0.75 * Na_o),  1 * vff * (
     in [mC/L]
 PhiCaK = if(vf == 0, 1 [C/mol] * 1 * (0.75 * K_ss - 0.75 * K_o), 1 * vff * (0.75 * K_ss * exp(1 * vf) - 0.75 * K_o) / (exp(1 * vf) - 1))
     in [mC/L]
-base = 0.0001 [L/ms/F]
+PCa_base = 0.0001 [L/ms/F]
     in [L/ms/F]
-PCa = base * piecewise(cell.mode == 0, 1, cell.mode == 1, 1.2, 2.5) * 1.007
+    label gCaL
+PCa = PCa_base * piecewise(cell.mode == 0, 1, cell.mode == 1, 1.2, 2.5) * 1.007
     in [L/ms/F]
 PCap = 1.1 * PCa
     in [L/ms/F]

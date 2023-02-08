@@ -851,22 +851,23 @@ ICa = ICamax * y * O
     in [A/F]
 ICamax = PCa * 4 * VFFRT * (0.001 [mM] * exp(2 * VFRT) - Cao * 0.341) / (exp(2 * VFRT) - 1)
     in [A/F]
-Icabar = piecewise(ICamax >= 0 [A/F], 0 [A/F], ICamax)
-    in [A/F]
 # Potassium component
-ICahalf = -0.265 [A/F]
-    in [A/F]
 ICaK = PKprime * O * y * VFFRT * (Ki * exp(VFRT) - Ko) / (exp(VFRT) - 1)
     in [A/F]
 # Permeability
 Pscale = 7
+    label gCaL
 PCa = Pscale * 0.0002469 [L/F/s]
     in [L/F/s]
 PK = Pscale * 4.574e-7 [L/F/s]
     in [L/F/s]
 PKprime = PK / (1 + Icabar / ICahalf)
     in [L/F/s]
-# Common term
+ICahalf = -0.265 [A/F]
+    in [A/F]
+Icabar = piecewise(ICamax >= 0 [A/F], 0 [A/F], ICamax)
+    in [A/F]
+# Common terms
 VFFRT = 1000 * F * VFRT
     in [C/mmol]
 # Activation terms

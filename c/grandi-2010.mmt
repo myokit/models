@@ -459,11 +459,13 @@ ICaL_Na_sl = fsl_CaL * ibarna_sl * d * f * (1 - fCa_sl) * Q
 ICaL_K = ibark * d * f * (fjn_CaL * (1 - fCa_jn) + cell.fsl_CaL * (1 - fCa_sl)) * Q
     in [A/F]
 # Permeability
-PCa = 0.5 * 5.4e-4 [L/F/ms]
+scale = 1
+    label gCaL
+PCa = scale * 2.7e-4 [L/F/ms]
     in [L/F/ms]
-PNa = 0.5 * 1.5e-8 [L/F/ms]
+PNa = scale * 0.75e-8 [L/F/ms]
     in [L/F/ms]
-PK = 0.5 * 2.7e-7 [L/F/ms]
+PK = scale * 1.35e-7 [L/F/ms]
     in [L/F/ms]
 Q10CaL = 1.8
 Q = Q10CaL^phys.Q * 0.45
@@ -795,7 +797,7 @@ use cell.C, phys.F
 use cell.Vjn, cell.Vsl, cell.Vmyo
 # Note: J_Na_jnsl and J_Na_slmyo have the values from the code here, not from
 # the CellML
-J_Na_jnsl = 1 [L] / (1.6382e12 [ms] / 3 * 100) 
+J_Na_jnsl = 1 [L] / (1.6382e12 [ms] / 3 * 100)
     in [L/ms]
 J_Na_slmyo = 1 [L] / (1.8308e10 [ms] / 3 * 100)
     in [L/ms]
