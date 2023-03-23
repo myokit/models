@@ -1,0 +1,694 @@
+[[model]]
+name: courtemanche-1998
+version: 20230323
+mmt_authors: Michael Clerx
+desc: """
+    Model of the human atrial action potential by Courtemanche et al. [1].
+    
+    Adapted from the CellML implementation by Penny Noble [2], and checked
+    against the published equations.
+    
+    For some constants, the CellML implementation has more digits than the
+    paper. In addition, the CellML model corrects a sign error in the equation
+    for ikur.ui.tau.beta (as can be seen by comparing the graph for ikr.ui.tau
+    with that in the paper). It seems like the CellML model may have been based
+    on the original code, so this Myokit implementation follows the CellML
+    file. Differences with the equations in the paper are highlighted with
+    comments in the code below.
+    
+    This implementation makes some cosmetic changes, and three larger ones:
+    
+    1. Currents are all normalised, as in the paper.
+    2. The stimulus was set to 0.5ms and approximately twice the threshold
+       value for depolarisation at 1Hz pacing.
+    3. To ensure that [K]i stabilised, the stimulus current was added to the
+       equation for [K]i.
+    
+    [1] Courtemanche, M., Ramirez, R. J., & Nattel, S. (1998) Ionic mechanisms
+        underlying human atrial action potential properties: insights from a
+        mathematical model. American Journal of Physiology - Heart and
+        Circulatory Physiology, 275, H301-H321.
+        https://doi.org/10.1152/ajpheart.1998.275.1.H301
+    
+    [2] https://models.cellml.org/exposure/0e03bbe01606be5811691f9d5de10b65
+
+"""
+# Initial values
+membrane.V    = -8.19463303822041098e+01
+sodium.Nai    =  1.38169746305367962e+01
+potassium.Ki  =  1.36355229902154434e+02
+calcium.Cai   =  1.23092247890489894e-04
+calcium.CaUp  =  1.54668119199095355e+00
+calcium.CaRel =  1.07650740580354909e+00
+ina.m         =  2.56385228666526068e-03
+ina.h         =  9.70298907063270155e-01
+ina.j         =  9.81123905023234988e-01
+ito.oa        =  2.91755626557170314e-02
+ito.oi        =  9.99342865333055497e-01
+ikur.ua       =  4.58838038240151104e-03
+ikur.ui       =  9.91468962753066063e-01
+ikr.xr        =  8.33819909884048389e-04
+iks.xs        =  1.86683180787284714e-02
+ical.d        =  1.24231529593716656e-04
+ical.f        =  9.51907788168154578e-01
+ical.fCa      =  7.39682838459564729e-01
+cajsr.u       = -1.97647749727073971e-40
+cajsr.v       =  1.0
+cajsr.w       =  9.99233799248152699e-01
+
+
+#
+# Membrane potential
+#
+# Page H303, equations 1-2
+# Page H317, equations 18-19
+#
+[membrane]
+dot(V) = -(I_ion + I_diff + stimulus.I_stim)
+    in [mV]
+    label membrane_potential
+I_ion = (
+    ina.I_Na
+    + ik1.IK1
+    + ito.Ito
+    + ikur.IKur
+    + ikr.IKr
+    + iks.IKs
+    + ical.ICaL
+    + ipca.IpCa
+    + inak.INaK
+    + inaca.INaCa
+    + ib.IbNa
+    + ib.IbCa
+)
+    in [A/F]
+    label cellular_current
+I_diff = 0 [A/F]
+    in [A/F]
+    bind diffusion_current
+
+#
+# Stimulus current
+#
+[stimulus]
+I_stim = engine.pace * amplitude / geom.Cm
+    in [A/F]
+    label stimulus_current
+amplitude = 2 * -4618 [pA]
+    in [pA]
+    desc: """
+        Under baseline conditions, at 1Hz with a 0.5ms stimulus, -4618 pA is
+        approximately the smallest value that triggers three successive APs.
+        
+        The paper mentions a 1Hz stimulus of 2ms and 2000pA, used in figure 14:
+        "Figure 14 shows a model AP generated during stimulation at 1,000 ms in
+        response to 2-ms pulses of 2-nA amplitude (twice diastolic threshold)."
+        """
+
+#
+# Simulation variables
+#
+[engine]
+time = 0 [ms]
+    in [ms]
+    bind time
+pace = 0
+    bind pace
+
+#
+# Physical constants
+#
+# Page H303, Table 1
+#
+[phys]
+R = 8.3143 [J/mol/K]
+    in [J/mol/K]
+    desc: 
+T = 310 [K]
+    in [K]
+    desc: Temperature
+F = 96.4867 [C/mmol]
+    in [C/mmol]
+    desc: Faraday constant
+RTF = R * T / F
+    in [mV]
+FRT = 1 / RTF
+    in [1/mV]
+
+#
+# Cell dimensions
+#
+# Page H303, Table 1
+#
+[geom]
+Cm = 100 [pF]
+    in [pF]
+    label membrane_capacitance
+V_cell = 20100 [um^3]
+    in [um^3]
+    desc: Cell volume
+V_i = V_cell * 0.68
+    in [um^3]
+    desc: Intracellular volume
+V_up = 0.0552 * V_cell
+    in [um^3]
+    desc: SR uptake compartment volume
+V_rel = 0.0048 * V_cell
+    in [um^3]
+    desc: SR release compartment volume
+
+#
+# External ionic concentrations
+#
+# Page H303, Table 1
+#
+[extra]
+Ko = 5.4 [mM]
+    in [mM]
+    desc: Extracellular K+ concentration
+Nao = 140 [mM]
+    in [mM]
+    desc: Extracellular Na+ concentration
+Cao = 1.8 [mM]
+    in [mM]
+    desc: Extracellular Ca2+ concentration
+
+#
+# Temperature adjustments
+#
+# Page H303, Table 1
+#
+[temp]
+KQ10 = 3
+    desc: Temperature scaling factor for IKur and Ito kinetics
+
+#
+# Intracellular Na+ concentration
+#
+# Page H317, Equation 21
+#
+[sodium]
+use phys.F, geom.V_i, geom.Cm
+dot(Nai) = (-3 * inak.INaK - (3 * inaca.INaCa + ib.IbNa + ina.I_Na)) * Cm / (V_i * F)
+    in [mM]
+    label Nai
+
+#
+# Intracellular K+ concentration
+#
+# Page H317, Equation 22
+#
+[potassium]
+use phys.F, geom.V_i, geom.Cm
+dot(Ki) = (2 * inak.INaK - (ik1.IK1 + ito.Ito + ikur.IKur + ikr.IKr + iks.IKs + stimulus.I_stim)) * Cm / (geom.V_i * phys.F)
+    in [mM]
+    label K_i
+
+#
+# Intracellular Ca2+ concentrations
+#
+# Page H137, Equations 23-27
+#
+[calcium]
+use phys.F, geom.V_i, geom.V_up, geom.V_rel, geom.Cm
+use ca_buffers.CMDN_max, ca_buffers.Km_CMDN
+use ca_buffers.TRPN_max, ca_buffers.Km_TRPN
+use ca_buffers.CSQN_max, ca_buffers.Km_CSQN
+dot(Cai) = B1 / B2
+    in [mM]
+    label Cai
+    B1 = (2 * inaca.INaCa - (ipca.IpCa + ical.ICaL + ib.IbCa)) * Cm / (2 * V_i * F) + (V_up * (cansr.I_up_leak - cansr.I_up) + cajsr.I_rel * V_rel) / V_i
+        in [mM/ms]
+    B2 = 1 + TRPN_max * Km_TRPN / (Cai + Km_TRPN) ^ 2 + CMDN_max * Km_CMDN / (Cai + Km_CMDN) ^ 2
+dot(CaRel) = (itr.I_tr - cajsr.I_rel) * (1 + CSQN_max * Km_CSQN / (CaRel + Km_CSQN) ^ 2) ^ (-1)
+    in [mM]
+dot(CaUp) = cansr.I_up - (cansr.I_up_leak + itr.I_tr * V_rel / V_up)
+    in [mM]
+
+#
+# Reversal potentials
+# Page H317, Equation 28
+#
+[nernst]
+EK =  phys.RTF * log(extra.Ko / potassium.Ki)
+    in [mV]
+ENa = phys.RTF * log(extra.Nao / sodium.Nai)
+    in [mV]
+ECa = 0.5 * phys.RTF * log(extra.Cao / calcium.Cai)
+    in [mV]
+
+#
+# Fast sodium current
+#
+# Page H303, Table 1
+# Page H304, Equation 3
+# Page H317-H318, Equations 29-34
+#
+[ina]
+use membrane.V
+dot(m) = (inf - m) / tau
+    alpha = if(V == -47.13 [mV],
+            3.2 [1/ms], # Note that this is 0.32 * (1/0.1), so a l'hopital rule!
+            0.32 [1/ms/mV] * (V + 47.13 [mV]) / (1 - exp(-0.1 [1/mV] * (V + 47.13 [mV]))))
+        in [1/ms]
+    beta = 0.08 [1/ms] * exp(-V / 11 [mV])
+        in [1/ms]
+    tau = 1 / (alpha + beta)
+        in [ms]
+    inf = alpha / (alpha + beta)
+dot(h) = (inf - h) / tau
+    alpha = if(V < -40 [mV],
+            0.135 [1/ms] * exp((V + 80 [mV]) / -6.8 [mV]),
+            0 [1/ms]
+        )
+        in [1/ms]
+    beta = if(V < -40 [mV],
+            3.56 [1/ms] * exp(0.079 [1/mV] * V) + 3.1e5 [1/ms] * exp(0.35 [1/mV] * V),
+            1 / (0.13 [ms] * (1 + exp((V + 10.66 [mV]) / -11.1 [mV])))
+        )
+        in [1/ms]
+    tau = 1 / (alpha + beta)
+        in [ms]
+    inf = alpha / (alpha + beta)
+dot(j) = (inf - j) / tau
+    alpha = if(V < -40 [mV],
+            (-127140 [1/ms/mV] * exp(0.2444 [1/mV] * V) - 3.474e-5 [1/ms/mV] * exp(-0.04391 [1/mV] * V)) * (V + 37.78 [mV]) / (1 + exp(0.311 [1/mV] * (V + 79.23 [mV]))),
+            0 [1/ms]
+        )
+        in [1/ms]
+    beta = if(V < -40 [mV],
+            0.1212 [1/ms] * exp(-0.01052 [1/mV] * V) / (1 + exp(-0.1378 [1/mV] * (V + 40.14 [mV]))),
+            0.3 [1/ms] * exp(-2.535e-7 [1/mV] * V) / (1 + exp(-0.1 [1/mV] * (V + 32 [mV])))
+        )
+        in [1/ms]
+    tau = 1 / (alpha + beta)
+        in [ms]
+    inf = alpha / (alpha + beta)
+g_Na = 7.8 [nS/pF]
+    in [nS/pF]
+    desc: Maximal INa conductance
+I_Na = g_Na * m^3 * h * j * (V - nernst.ENa)
+    in [A/F]
+    label I_Na
+
+#
+# Time independent potassium current
+#
+# Page H303, Table 1
+# Page H304, Equation 4
+# Page H318, Equation 35
+#
+[ik1]
+use membrane.V
+gK1 = 0.09 [nS/pF]
+    in [nS/pF]
+IK1 = gK1 * (V - nernst.EK) / (1 + exp(0.07 [1/mV] * (V + 80 [mV])))
+    in [A/F]
+    label I_K1
+
+#
+# Transient outward potassium current
+#
+# Page H303, Table 1
+# Page H305, Equation 5
+# Page H318. Equations 36-40
+#
+[ito]
+use membrane.V
+use temp.KQ10
+dot(oa) = (inf - oa) / tau
+    alpha = 0.65 [1/ms] / (exp((V + 10 [mV]) / -8.5 [mV]) + exp((V - 30 [mV]) / -59 [mV]))
+        in [1/ms]
+    beta = 0.65 [1/ms] / (2.5 + exp((V + 82 [mV]) / 17 [mV]))
+        in [1/ms]
+    tau = 1 / (alpha + beta) / KQ10
+        in [ms]
+    inf = 1 / (1 + exp((V + 20.47 [mV]) / -17.54 [mV]))
+dot(oi) = (inf - oi) / tau
+    alpha = 1 [1/ms] / (18.53 + exp((V + 113.7 [mV]) / 10.95 [mV]))
+        in [1/ms]
+    beta = 1 [1/ms] / (35.56 + exp((V + 1.26 [mV]) / -7.44 [mV]))
+        in [1/ms]
+    tau = 1 / (alpha + beta) / KQ10
+        in [ms]
+    inf = 1 / (1 + exp((V + 43.1 [mV]) / 5.3 [mV]))
+gto = 0.1652 [nS/pF]
+    in [nS/pF]
+    desc: Maximal Ito conductance
+Ito = gto * oa^3 * oi * (V - nernst.EK)
+    in [A/F]
+    label I_to
+
+#
+# Ultrarapid delayed rectifier K+ current
+#
+# Page H305, Equation 6
+# Page H318, Equations 41-46
+#
+[ikur]
+use membrane.V
+use temp.KQ10
+dot(ua) = (inf - ua) / tau
+    tau = 1 / (alpha + beta) / KQ10
+        in [ms]
+        alpha = 0.65 [1/ms] / (exp((V + 10 [mV]) / -8.5 [mV]) + exp((V - 30 [mV]) / -59 [mV]))
+            in [1/ms]
+        beta = 0.65 [1/ms] / (2.5 + exp((V + 82 [mV]) / 17 [mV]))
+            in [1/ms]
+    inf = 1 / (1 + exp((V + 30.3 [mV]) / -9.6 [mV]))
+dot(ui) = (inf - ui) / tau
+    tau = 1 / (alpha + beta) / KQ10
+        in [ms]
+        alpha = 1 [1/ms] / (21 + exp((V - 185 [mV]) / -28 [mV]))
+            in [1/ms]
+        beta = 1 [1/ms] / exp((V - 158 [mV]) / -16 [mV])  # CellML uses -16, Paper uses 16. But graph in paper shows -16 (and KQ10=1).
+            in [1/ms]
+    inf = 1 / (1 + exp((V - 99.45 [mV]) / 27.48 [mV]))
+gKur = 0.005 [nS/pF] + 0.05 [nS/pF] / (1 + exp((V - 15 [mV]) / -13 [mV]))
+    in [nS/pF]
+    desc: Maximal IKur conductance
+IKur = gKur * ua^3 * ui * (V - nernst.EK)
+    in [A/F]
+    label I_Kur
+
+#
+# Rapid delayed rectifier potassium current
+#
+# Page H303, Table 1
+# Page H306, Equation 7
+# Page H318, Equations 47-49
+#
+[ikr]
+use membrane.V
+dot(xr) = (inf - xr) / tau
+    tau = 1 / (alpha + beta)
+        alpha = 0.0003 [1/ms/mV] * if(abs(V + 14.1 [mV]) < 1e-6 [mV],
+                5 [mV],
+                (V + 14.1 [mV]) / (1 - exp((V + 14.1 [mV]) / -5 [mV]))
+            )
+            in [1/ms]
+        beta = 7.3898e-5 [1/ms/mV] * if(abs(V - 3.3328 [mV]) < 1e-7 [mV],
+                5.1237 [mV],
+                (V - 3.3328 [mV]) / (exp((V - 3.3328 [mV]) / 5.1237 [mV]) - 1)
+            )
+            in [1/ms]
+        in [ms]
+    inf = 1 / (1 + exp((V + 14.1 [mV]) / -6.5 [mV]))
+gKr = 0.029411765 [nS/pF] # Extra digits 11765 from CellML file
+    in [nS/pF]
+    desc: Maximal IKr conductance
+IKr = gKr * xr * (V - nernst.EK) / (1 + exp((V + 15 [mV]) / 22.4 [mV]))
+    in [A/F]
+    label I_Kr
+
+#
+# Slow delayed rectifier potassium current
+#
+# Page H303, Table 1
+# Page H306. Equation 8
+# Page H318-H319, Equations 50-52
+#
+[iks]
+use membrane.V
+dot(xs) = (inf - xs) / tau
+    tau = 0.5 / (alpha + beta)
+        in [ms]
+        alpha = 4e-5 [1/ms/mV] * if(abs(V - 19.9 [mV]) < 1e-6 [mV],
+                17 [mV],
+                (V - 19.9 [mV]) / (1 - exp((V - 19.9 [mV]) / -17 [mV]))
+            )
+            in [1/ms]
+        beta = 3.5e-5 [1/ms/mV] * if(abs(V - 19.9 [mV]) < 1e-6 [mV],
+                9 [mV],
+                (V - 19.9 [mV]) / (exp((V - 19.9 [mV]) / 9 [mV]) - 1)
+            )
+            in [1/ms]
+    inf = 1 / sqrt(1 + exp((V - 19.9 [mV]) / -12.7 [mV]))
+gKs = 0.12941176 [nS/pF] # Extra digits 41176 from CellML model
+    in [nS/pF]
+    desc: Maximal IKs conductance
+IKs = gKs * xs^2 * (V - nernst.EK)
+    in [A/F]
+
+#
+# L-type Calcium current
+#
+# Page H303, Table 1
+# Page H306, Equation 9
+# Page H319, Equations 53-56
+#
+[ical]
+use membrane.V, calcium.Cai
+dot(d) = (inf - d) / tau
+    tau = if(abs(V + 10 [mV]) < 1e-6 [mV],
+            1 / (6.24 [mV] * 2 * 0.035 [1/ms/mV]),
+            (1 - exp((V + 10 [mV]) / -6.24 [mV])) / (0.035 [1/ms/mV] * (V + 10 [mV]) * (1 + exp((V + 10 [mV]) / -6.24 [mV])))
+          )
+        in [ms]
+    inf = 1 / (1 + exp((V + 10 [mV]) / -8 [mV]))
+dot(f) = (inf - f) / tau
+    tau = 9 [ms] / (0.0197 * exp(-0.0337 [1/mV]^2 * (V + 10 [mV])^2) + 0.02)
+        in [ms]
+    inf = 1 / (1 + exp((V + 28 [mV]) / 6.9 [mV]))  # CellML model 1/(1+exp(x)) as exp(-x)/(1+exp(-x) here...
+dot(fCa) = (inf - fCa) / tau
+    tau = 2 [ms]
+        in [ms]
+    inf = 1 / (1 + Cai / 0.00035 [mM])
+ECaL = 65 [mV]
+    in [mV]
+    desc: Reversal potential for ICaL
+gCaL = 0.12375 [nS/pF] # Paper uses 0.1238, CellML uses 0.12375
+    in [nS/pF]
+    desc: Maximal ICaL conductance
+ICaL = gCaL * d * f * fCa * (V - ECaL)
+    in [A/F]
+    label I_CaL
+
+#
+# Na+-K+ pump current
+#
+# Page H303, Table 1
+# Page H308, Equation 10
+# Page H319, Equations 57-59
+#
+[inak]
+use membrane.V, phys.FRT
+use sodium.Nai, extra.Nao, extra.Ko
+INaK_max = 0.59933874 [A/F] # Paper uses 0.6, CellML uses 5.9933874e-1
+    in [A/F]
+    desc: Maximal INaK
+KmNai = 10 [mM]
+    in [mM]
+    desc: [Na+]i half-saturation constant for INaK
+KmKo = 1.5 [mM]
+    in [mM]
+    desc: [K+]o half-saturation constant for INaK
+sigma = (exp(Nao / 67.3 [mM]) - 1) / 7
+    desc: [Na+]o-dependence parameter for INaK
+fNaK = 1 / (1 + 0.1245 * exp(-0.1 * V * FRT) + 0.0365 * sigma * exp(-V * FRT))
+    desc: Voltage-dependence parameter for INaK
+INaK = INaK_max * fNaK * Ko / (Ko + KmKo) / (1 + (KmNai / Nai)^1.5)
+    in [A/F]
+    label I_NaK
+
+#
+# Na+/Ca2+ exchanger current
+#
+# Page H303, Table 1
+# Page H308, Equation 11
+# Page H319, Equation 60
+#
+[inaca]
+use membrane.V, phys.FRT
+use sodium.Nai, calcium.Cai
+use extra.Nao, extra.Cao
+INaCa_max = 1600 [A/F]
+    in [A/F]
+    desc: Maximal INaCa
+g = 0.35
+    desc: Voltage-dependence parameter for INaCa
+KmNa = 87.5 [mM]
+    in [mM]
+    desc: [Na+]i half-saturation constant for INaCa
+KmCa = 1.38 [mM]
+    in [mM]
+    desc: [Ca2+]o half-saturation constant for INaCa
+ksat = 0.1
+    desc: Saturation factor for INaCa
+INaCa = INaCa_max * (
+            exp(g * V * FRT) * Nai^3 * Cao - exp((g - 1) * V * FRT) * Nao^3 * Cai
+        ) / (
+            (KmNa^3 + Nao^3) * (KmCa + Cao) * (1 + ksat * exp((g - 1) * V * FRT))
+        )
+    in [A/F]
+    label INaCa
+
+#
+# Background currents
+#
+# Page H303, Table 1
+# Page H308, Equations 12-13
+# Page H319, Equations 61-62
+#
+[ib]
+use membrane.V
+gbCa = 0.001131 [nS/pF]
+    in [nS/pF]
+gbNa =  0.0006744375 [nS/pF]  # Extra digits 4375 from CellML
+    in [nS/pF]
+IbCa = gbCa * (V - nernst.ECa)
+    in [A/F]
+IbNa = gbNa * (V - nernst.ENa)
+    in [A/F]
+
+#
+# Sarcolemmal calcium pump current
+#
+# Page H303, Table 1
+# Page H308, Equation 14
+# Page H319, Equation 63
+#
+[ipca]
+use calcium.Cai
+IpCa_max = 0.275 [A/F]
+    in [A/F]
+    desc: Maximal IpCa
+IpCa = IpCa_max * Cai / (0.0005 [mM] + Cai)
+    in [A/F]
+
+#
+# Calcium release from the JSR
+#
+# Page H303, Table 1
+# Page H308, Equation 15
+# Page H319, Equations 64-68
+#
+# Not sure if the chosen units of [mL/um^3] are the sensible ones here.
+#
+[cajsr]
+use membrane.V
+use geom.V_rel, geom.Cm, phys.F
+dot(u) = (inf - u) / tau
+    tau = 8 [ms]
+        in [ms]
+    inf = 1 / (1 + exp(-(Fn - c1) / c2))
+dot(v) = (inf - v) / tau
+    tau = 1.91 [ms] + 2.09 [ms] / (1 + exp(-(Fn - c1) / c2))
+        in [ms]
+    inf = 1 - (1 + exp(-(Fn - 0.2 * c1) / c2)) ^ (-1)
+dot(w) = (inf - w) / tau
+    tau = 6 [ms*mV] * if(abs(V - 7.9 [mV]) < 1e-6 [mV], 
+            2 / 13 [mV],
+            (1 - exp(-(V - 7.9 [mV]) / 5 [mV])) / ((1 + 0.3 * exp(-(V - 7.9 [mV]) / 5 [mV])) * (V - 7.9 [mV]))
+        )
+        in [ms]
+    inf = 1 - 1 / (1 + exp(-(V - 40 [mV]) / 17 [mV]))
+Fn = 1e-12 [mL/um^3] * V_rel * I_rel - 5e-13 [mL/um^3] / F * (0.5 * ical.ICaL - 0.2 * inaca.INaCa) * Cm
+    desc: Sarcoplasmic Ca2+ flux signal for Irel
+    in [umol/ms]
+c1 = 3.4175e-13 [umol/ms]
+    in [umol/ms]
+c2 = 13.67e-16 [umol/ms]
+    in [umol/ms]
+K_rel = 30 [1/ms]
+    in [1/ms]
+    desc: Maximal release rate for I_real
+I_rel = K_rel * u^2 * v * w * (calcium.CaRel - calcium.Cai)
+    in [mM/ms]
+
+#
+# Transfer current from NSR to JSR
+#
+# Page H309, equation 16
+# Page H319, equations 69-70
+#
+[itr]
+tau_tr = 180 [ms]
+    in [ms]
+I_tr = (calcium.CaUp - calcium.CaRel) / tau_tr
+    in [mM/ms]
+
+#
+# Calcium uptake by and leak from the NSR
+#
+# "Triggering of Ca2+ release from the JSR is modified from the original
+# formulation of Luo and Rudy (37) following the work of Friedman et al."
+# Two references are given: one is an MSc thesis and the other a conference,
+# both are hard to find.
+#
+# Page H303, Table 1
+# Page H309, equation 17
+# Page H319, equations 71-72
+#
+[cansr]
+I_up_max = 0.005 [mM/ms]
+    in [mM/ms]
+    desc: Maximal Ca2+ uptake rate for Iup
+K_up = 0.00092 [mM]
+    in [mM]
+    desc: [Ca2+]i half-saturation constant for Iup
+Ca_up_max = 15 [mM]
+    in [mM]
+    desc: Maximal Ca2+ concentration in SR
+I_up = I_up_max / (1 + K_up / calcium.Cai)
+    in [mM/ms]
+I_up_leak = I_up_max * calcium.CaUp / Ca_up_max
+    in [mM/ms]
+
+#
+# Calcium buffers
+#
+# Page H303, Table 1
+# Page H319, equations 73-75
+#
+[ca_buffers]
+use calcium.Cai, calcium.CaRel
+CMDN_max = 0.05 [mM]
+    in [mM]
+    desc: Total calmodulin concentration in myoplasm
+TRPN_max = 0.07 [mM]
+    in [mM]
+    desc: Total troponin concentration in myoplasm
+CSQN_max = 10 [mM]
+    in [mM]
+    desc: Total calsequestrin concentration in SR release compartment
+Km_CMDN = 0.00238 [mM]
+    in [mM]
+    desc: Ca2_+ half-saturation constant for calmodulin
+Km_TRPN = 0.0005 [mM]
+    in [mM]
+    desc: Ca2_+ half-saturation constant for troponin
+Km_CSQN = 0.8 [mM]
+    in [mM]
+    desc: Ca2_+ half-saturation constant for Iup
+Ca_CMDN = CMDN_max * Cai / (Cai + Km_CMDN)
+    in [mM]
+    desc: Ca2+-bound calmodulin concentration
+Ca_TRPN = TRPN_max * Cai / (Cai + Km_TRPN)
+    in [mM]
+    desc: Ca2+-bound troponin concentration
+Ca_CSQN = CSQN_max * CaRel / (CaRel + Km_CSQN)
+    in [mM]
+    desc: Ca2+-bound calsequestrin concentration
+
+[[protocol]]
+# Level  Start    Length   Period   Multiplier
+1.0      50       0.5      1000     0
+
+[[script]]
+import matplotlib.pyplot as plt
+import myokit
+
+# Get model and protocol, create simulation
+m = get_model()
+p = get_protocol()
+s = myokit.Simulation(m, p)
+
+# Run simulation
+d = s.run(3000)
+
+# Display the results
+plt.figure()
+plt.plot(d['engine.time'], d['membrane.V'])
+plt.show()
+
