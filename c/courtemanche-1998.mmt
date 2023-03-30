@@ -1,6 +1,6 @@
 [[model]]
 name: courtemanche-1998
-version: 20230323
+version: 20230330
 mmt_authors: Michael Clerx
 desc: """
     Model of the human atrial action potential by Courtemanche et al. [1].
@@ -191,7 +191,7 @@ KQ10 = 3
 use phys.F, geom.V_i, geom.Cm
 dot(Nai) = (-3 * inak.INaK - (3 * inaca.INaCa + ib.IbNa + ina.I_Na)) * Cm / (V_i * F)
     in [mM]
-    label Nai
+    label Na_i
 
 #
 # Intracellular K+ concentration
@@ -216,7 +216,7 @@ use ca_buffers.TRPN_max, ca_buffers.Km_TRPN
 use ca_buffers.CSQN_max, ca_buffers.Km_CSQN
 dot(Cai) = B1 / B2
     in [mM]
-    label Cai
+    label Ca_i
     B1 = (2 * inaca.INaCa - (ipca.IpCa + ical.ICaL + ib.IbCa)) * Cm / (2 * V_i * F) + (V_up * (cansr.I_up_leak - cansr.I_up) + cajsr.I_rel * V_rel) / V_i
         in [mM/ms]
     B2 = 1 + TRPN_max * Km_TRPN / (Cai + Km_TRPN) ^ 2 + CMDN_max * Km_CMDN / (Cai + Km_CMDN) ^ 2
@@ -521,7 +521,7 @@ INaCa = INaCa_max * (
             (KmNa^3 + Nao^3) * (KmCa + Cao) * (1 + ksat * exp((g - 1) * V * FRT))
         )
     in [A/F]
-    label INaCa
+    label I_NaCa
 
 #
 # Background currents
