@@ -1,0 +1,604 @@
+[[model]]
+name: nygren-1998
+version: 20230407
+mmt_authors: Michael Clerx
+desc: """
+    Model of the human atrial action potential by Nygren et al. [1, 2], based
+    in part on the earlier rabbit atrial model by Lindblad et al. [3].
+
+    This implementation is based on the CellML version by Catherine Lloyd [4],
+    but with considerable differences in organisation and two important
+    changes described below. The equations and parameter values were checked
+    against the original publications (in two cases, the .
+
+    In this implementation, the stimulus was set to 0.5 [ms] and approximately
+    twice the threshold value for depolarisation.
+
+    As suggested in [5], two measures were taken to stabilise the model's
+    long-term behaviour: (1) the parameter phi_Na_en was set to zero; (2) the
+    stimulus current was added to the equation for Ki.
+
+    [1] Nygren, A., Fiset, C., Firek, L., Clark, J.W., Lindblad, D.S., Clark, 
+        R.B., and Giles, W.R. (1998) Mathematical Model of an Adult Human
+        Atrial Cell: The Role of K+ Currents in Repolarization. Circulation
+        Research, 82, 63-81.
+        https://doi.org/10.1161/01.RES.82.1.63
+
+    [2] Nygren, A. (1998) Mechanisms of repolarization and conduction in a 
+        mathematical model of electrophysiological responses in the human 
+        atrium. Diss., Rice University.
+        https://hdl.handle.net/1911/19297.
+
+    [3] Lindblad, D.S., Murphey, C.R., Clark, J.W., and Giles, W.G. (1996) A
+        model of the action potential and underlying membrane currents in a
+        rabbit atrial cell. American Journal of Physiology, 271, H1666-H1691.
+        https://doi.org/10.1152/AJPHEART.1996.271.4.H1666
+
+    [4] https://models.physiomeproject.org/exposure/ad761ce160f3b4077bbae7a004c229e3
+
+    [5] Jacquemet, V. (2007) Steady-state solutions in mathematical models of 
+        atrial cell electrophysiology and their stability. Mathematical
+        Biosciences 208, 241–269.
+        https://doi.org/10.1016/j.mbs.2006.10.007
+
+"""
+# Initial values
+membrane.V     = -7.26771499383132635e+01
+cleft.Nac      =  1.30009832458329072e+02
+cleft.Kc       =  5.69458595963551684e+00
+cleft.Cac      =  1.81717472998778651e+00
+sodium.Nai     =  8.01849095939633294e+00
+potassium.Ki   =  1.29983721864305551e+02
+calcium.Cai    =  6.31772336519627494e-05
+calcium.Cad    =  6.99276211335551765e-05
+calcium.Ca_up  =  6.34285619525465583e-01
+calcium.Ca_rel =  6.21698064975615527e-01
+ina.m          =  3.87633676556560589e-03
+ina.h1         =  8.46627323443430391e-01
+ina.h2         =  8.40040725535278088e-01
+ical.d         =  1.70638315876908684e-05
+ical.f1        =  9.98301010553781953e-01
+ical.f2        =  9.98258917383494038e-01
+it.r           =  1.23206114490715659e-03
+it.s           =  9.41107906631992619e-01
+isus.r         =  1.94215334451197663e-04
+isus.s         =  9.90779826387994222e-01
+iks.n          =  5.29456062400710664e-03
+ikr.pa         =  6.71290831201526612e-05
+irel.F1        =  4.49761808318342504e-01
+irel.F2        =  2.40121576745048245e-03
+irel.O_Calse   =  4.27277372433418845e-01
+buf.O_C        =  2.58605505425938860e-02
+buf.O_TC       =  1.24789414462885290e-02
+buf.O_TMgC     =  1.86244003074023917e-01
+buf.O_TMgMg    =  7.18101273075750113e-01
+
+#
+# Membrane potential
+# Table 5
+#
+# Note: The paper omits IKr and IKs from the dV/dt equation, but we can assume
+# that was a mistake. Interestingly they are omitted in the PhD thesis as well.
+#
+[membrane]
+dot(V) = -(i_ion + i_diff + stimulus.Istim) / cell.Cm
+    in [mV]
+    label membrane_potential
+i_diff = 0 [pA]
+    bind diffusion_current
+    in [pA]
+i_ion = (
+        + ina.INa
+        + ical.ICaL
+        + it.It
+        + isus.Isus
+        + ik1.IK1
+        + ikr.IKr
+        + iks.IKs
+        + ibna.IBNa
+        + ibca.IBCa
+        + inak.INaK
+        + icap.ICaP
+        + inaca.INaCa
+        )
+    in [pA]
+    label cellular_current
+
+#
+# Stimulus current
+#
+[stimulus]
+Istim = engine.pace * stim_amplitude
+    in [pA]
+    label stimulus_current
+stim_amplitude = -2679 [pA] * 2
+    in [pA]
+    desc: """
+        Under baseline conditions, at 1Hz with a 0.5ms stimulus, -2679 pA is
+        approximately the smallest value that triggers three successive APs.
+        """
+
+#
+# Simulation engine variables
+#
+[engine]
+time = 0 [s] bind time
+    in [s]
+pace = 0 bind pace
+
+#
+# Physical constants
+# Table 17
+#
+[phys]
+F = 96487 [C/mol]
+    in [C/mol]
+R = 8314 [mJ/mol/K]
+    in [mJ/mol/K]
+T = 306.15 [K]
+    in [K]
+RTF = R * T / F
+    in [mV]
+FRT = F / R / T
+    in [1/mV]
+FFRT = F * FRT
+    in [C/mol/mV]
+
+#
+# Cell properties
+# Table 17
+#
+[cell]
+Cm = 0.05 [nF]
+    in [nF]
+    label membrane_capacitance
+Vi = 5.884e-3 [nL]
+    in [nL]
+    desc: Total cytosolic volume
+Vd = 0.02 * Vi
+    in [nL]
+    desc: Volume of the diffusion-restricted subsarcolemmal space
+Vc = 0.136 * Vi
+    in [nL]
+    desc: Volume of the extracellular cleft space
+Vup = 3.969e-4 [nL]
+    in [nL]
+    desc: Volume of the sarcoplasmic reticulum uptake compartment
+Vrel = 4.41e-5 [nL]
+    in [nL]
+    desc: Volume of the sarcoplasmic reticulum release compartment
+
+#
+# Reversal potentials
+#
+[rev]
+use phys.RTF
+ENa = RTF * log(cleft.Nac / sodium.Nai)
+    in [mV]
+EK = RTF * log(cleft.Kc / potassium.Ki)
+    in [mV]
+ECa = RTF / 2 * log(cleft.Cac / calcium.Cai)
+    in [mV]
+
+#
+# Sodium current: INa
+# Page 64, Table 6
+#
+[ina]
+use cleft.Nac
+use membrane.V
+use phys.FRT, phys.FFRT
+dot(m) = (inf - m) / tau
+    inf = 1 / (1 + exp((V + 27.12 [mV]) / -8.21 [mV]))
+    tau = 4.2e-5 [s] * exp(-((V + 25.57 [mV]) / 28.8 [mV])^2) + 2.4e-5 [s]
+        in [s]
+h_inf = 1 / (1 + exp((V + 63.6 [mV]) / 5.3 [mV]))
+h_factor = 1 / (1 + exp((V + 35.1 [mV]) / 3.2 [mV]))
+dot(h1) = (h_inf - h1) / tau
+    tau = 0.03 [s] * h_factor + 0.0003 [s]
+        in [s]
+dot(h2) = (h_inf - h2) / tau
+    tau = 0.12 [s] * h_factor + 0.003 [s]
+        in [s]
+PNa = 0.0016 [nL/s]
+    in [nL/s]
+INa = PNa * m^3 * (0.9 * h1 + 0.1 * h2) * Nac * V * FFRT * (exp((V - rev.ENa) * FRT) - 1) / (exp(V * FRT) - 1)
+    in [pA]
+    label I_Na
+
+#
+# L-type calcium current: ICaL
+# Page 64, Table 7
+# 
+# Note: The value for kCa given in the paper is 0.25mM, but the CellML file and
+# several published implementations use 0.025mM. The PhD thesis [2] similarly
+# uses 0.025mM.
+#
+[ical]
+use membrane.V, calcium.Cad
+dot(d) = (inf - d) / tau
+    inf = 1 / (1 + exp((V + 9 [mV]) / -5.8 [mV]))
+    tau = 0.0027 [s] * exp(-((V + 35 [mV]) / 30 [mV])^2) + 0.002 [s]
+        in [s]
+finf = 1 / (1 + exp((V + 27.4 [mV]) / 7.1 [mV]))
+dot(f1) = (finf - f1) / tau
+    desc: Fast inactivation
+    tau = 0.161 [s] * exp(-((V + 40 [mV]) / 14.4 [mV])^2) + 0.01 [s]
+        in [s]
+dot(f2) = (finf - f2) / tau
+    desc: Slow inactivation
+    tau = 1.3323 [s] * exp(-((V + 40 [mV]) / 14.2 [mV])^2) + 0.0626 [s]
+        in [s]
+kCa = 0.025 [mM]
+    in [mM]
+    desc: Half-maximum Ca2+ binding concentration for fCa
+fCa = Cad / (Cad + kCa)
+    desc: [Ca2+]d dependent ratio of fast to slow inactivation
+ECa_app = 60 [mV]
+    in [mV]
+    desc: Apparent equilibrium (Nernst) potential for ICaL
+gCaL = 6.75 [nS]
+    in [nS]
+ICaL = gCaL * d * (fCa * f1 + (1 - fCa) * f2) * (V - ECa_app)
+    in [pA]
+    label I_CaL
+
+#
+# Transient outward K+ current: It
+# Page 65, Table 8
+#
+[it]
+use membrane.V
+dot(r) = (inf - r) / tau
+    desc: Activation
+    inf = 1 / (1 + exp((V - 1 [mV]) / -11 [mV]))
+    tau = 0.0035 [s] * exp(-(V / 30 [mV])^2) + 0.0015 [s]
+        in [s]
+dot(s) = (inf - s) / tau
+    desc: Inactivation
+    inf = 1 / (1 + exp((V + 40.5 [mV]) / 11.5 [mV]))
+    tau = 0.4812 [s] * exp(-((V + 52.45 [mV]) / 14.97 [mV])^2) + 0.01414 [s]
+        in [s]
+gt = 7.5 [nS]
+    in [nS]
+It = gt * r * s * (V - rev.EK)
+    in [pA]
+    label I_to
+
+#
+# Sustained outward K+ current: Isus
+# Page 65, Table 8
+#
+[isus]
+use membrane.V
+dot(r) = (inf - r) / tau
+    desc: Activation
+    inf = 1 / (1 + exp((V + 4.3 [mV]) / -8 [mV]))
+    tau = 0.009 [s] / (1 + exp((V + 5 [mV]) / 12 [mV])) + 0.0005 [s]
+        in [s]
+dot(s) = (inf - s) / tau
+    desc: Inactivation
+    inf = 0.4 / (1 + exp((V + 20 [mV]) / 10 [mV])) + 0.6
+    tau = 0.047 [s] / (1 + exp((V + 60 [mV]) / 10 [mV])) + 0.3 [s]
+        in [s]
+g_sus = 2.75 [nS]
+    in [nS]
+Isus = g_sus * r * s * (V - rev.EK)
+    in [pA]
+    label I_Kur
+
+#
+# Rapid delayed rectifier K+ current: IKr
+# Page 66, Table 9
+#
+[ikr]
+use membrane.V
+dot(pa) = (inf - pa) / tau
+    inf = 1 / (1 + exp((V + 15 [mV]) / -6 [mV]))
+    tau = 0.03118 [s] + 0.21718 [s] * exp(-((V + 20.1376 [mV]) / 22.1996 [mV])^2)
+        in [s]
+pi = 1 / (1 + exp((V + 55 [mV]) / 24 [mV]))
+gKr = 0.5 [nS]
+    in [nS]
+IKr = gKr * pa * pi * (V - rev.EK)
+    in [pA]
+    label I_Kr
+
+#
+# Slow delayed rectifier K+ current: IKs
+# Page 66, Table 9
+#
+[iks]
+use membrane.V
+dot(n) = (inf - n) / tau
+    inf = 1 / (1 + exp((V - 19.9 [mV]) / -12.7 [mV]))
+    tau = 0.7 [s] + 0.4 [s] * exp(-((V - 20 [mV]) / 20 [mV])^2)
+        in [s]
+g_Ks = 1 [nS]
+    in [nS]
+IKs = g_Ks * n * (V - rev.EK)
+    in [pA]
+
+#
+# Inwardly rectifying K+ current: IK1
+# Page 66, Table 10
+#
+[ik1]
+use phys.FRT
+use membrane.V, rev.EK
+gK1 = 3 [nS]
+    in [nS]
+IK1 = gK1 * (cleft.Kc / 1 [mM])^0.4457 * (V - EK) / (1 + exp(1.5 * (V - EK + 3.6 [mV]) * FRT))
+    in [pA]
+    label I_K1
+
+#
+# Background Na+ current: IBNa
+# Page 66, Table 11
+#
+[ibna]
+gBNa = 0.060599 [nS]
+    in [nS]
+IBNa = gBNa * (membrane.V - rev.ENa)
+    in [pA]
+
+#
+# Background Ca2+ current: IBCa
+# Page 66, Table 11
+#
+[ibca]
+gBCa = 0.078681 [nS]
+    in [nS]
+IBCa = gBCa * (membrane.V - rev.ECa)
+    in [pA]
+
+#
+# Sodium-potassium pump current: INaK
+# Page 66, Table 12
+#
+[inak]
+use membrane.V
+use cleft.Kc, sodium.Nai
+kK = 1 [mM]
+    in [mM]
+    desc: Half-maximum K+ binding concentration for INaK
+kNa = 11 [mM]
+    in [mM]
+    desc: Half-maximum Na+ binding concentration for INaK
+INaK_max = 70.8253 [pA]
+    in [pA]
+INaK = INaK_max * Kc / (Kc + kK) / (1 + (kNa/Nai)^1.5) * (V + 150 [mV]) / (V + 200 [mV])
+    in [pA]
+    label I_NaK
+
+#
+# Na/Ca exchange current: INaCa
+# Page 66, Table 12
+#
+[inaca]
+use membrane.V, phys.FRT
+use calcium.Cai, sodium.Nai
+use cleft.Cac, cleft.Nac
+g = 0.45
+    desc: Position of energy barrier controlling voltage dependence of INaCa
+d = 0.0003 [mM^-4]
+    desc: Denominator constant for INaCa
+    in [1/mM^4]
+x = Nai^3 * Cac * exp(g * V * FRT) - Nac^3 * Cai * exp((g - 1) * V * FRT)
+    desc: Numerator for INaCa
+    in [mM^4]
+kNaCa = 0.0374842 [pA/mM^4]
+    in [pA/mM^4]
+    desc: Scaling factor for INaCa
+INaCa = kNaCa * x / (1 + d * (Nac^3 * Cai + Nai^3 * Cac))
+    in [pA]
+    label I_NaCa
+    
+#
+# Sarcolemmal calcium pump current: ICaP
+# Page 66, Table 12
+#
+[icap]
+use calcium.Cai
+k_CaP = 0.0002 [mM]
+    in [mM]
+    desc: Half-maximal Ca2+ binding concentration for ICaP
+ICaP_max = 4 [pA]
+    in [pA]
+ICaP = ICaP_max * Cai / (Cai + k_CaP)
+    in [pA]
+
+#
+# Intracellular Na+
+# Page 67, Table 13
+#
+# Note the parameter phi_Na_en, used in the paper to balance out the in and
+# efflux. As suggested in [5], this has been set to 0 in this implementation.
+#
+[sodium]
+dot(Nai) = -(ina.INa + ibna.IBNa + 3 * inak.INaK + 3 * inaca.INaCa + phi_Na_en) / (cell.Vi * phys.F)
+    in [mM]
+    label Na_i
+phi_Na_en = 0 [pA]
+    in [pA]
+    desc: "Electroneutral Na+ influx", set to -1.68 [pA] in the original model
+
+#
+# Intracellular K+
+# Table 13
+#
+[potassium]
+dot(Ki) = -(it.It + isus.Isus + ik1.IK1 + ikr.IKr + iks.IKs - 2 * inak.INaK + stimulus.Istim) / (cell.Vi * phys.F)
+    in [mM]
+    label K_i
+
+#
+# Intracellular Ca2+, and Ca2+ in SR
+# Table 13, Table 16
+#
+# Note: The paper gets the sign for the Idi term wrong in dot(Cad), but the
+# thesis has it correctly, and so does the CellML.
+#
+[calcium]
+use phys.F
+use cell.Vi, cell.Vd, cell.Vrel, cell.Vup
+use buf.O_C, buf.O_TC, buf.O_TMgC
+tau_di = 0.01 [s]
+    in [s]
+Idi = (Cad - Cai) * 2 * F * Vd / tau_di
+    in [pA]
+    desc: Ca2+ diffusion from the diffusion-restricted subsarcolemmal space to the cytosol
+dOdt = 0.08 [mM] * dot(O_TC) + 0.16 [mM] * dot(O_TMgC) + 0.045 [mM] * dot(O_C)
+    in [mM/s]   
+dot(Cai) = -(-Idi + ibca.IBCa + icap.ICaP - 2 * inaca.INaCa + iup.Iup - irel.Irel) / (2 * Vi * F) - dOdt
+    in [mM]
+    label Ca_i
+dot(Cad) = -(ical.ICaL + Idi) / (2 * Vd * F)
+    in [mM]
+    desc: Ca2+ concentration in the restricted subsarcolemmal space
+dot(Ca_up) = (iup.Iup - itr.Itr) / (2 * Vup * F)
+    in [mM]
+    desc: Ca2+ concentration in the sarcoplasmic reticulum uptake department
+dot(Ca_rel) = (itr.Itr - irel.Irel) / (2 * Vrel * F) - 31 [mM] * dot(irel.O_Calse)
+    in [mM]
+    desc: Ca2+ concentration in the sarcoplasmic reticulum release department
+
+#
+# Extracellular concentrations in the "bulk" space and a "cleft" space
+# surrounding the cell membrane.
+# Page 67, Table 14
+#
+[cleft]
+use cell.Vc, phys.F
+Nab = 130 [mM]
+    in [mM]
+    desc: Na+ concentration in bulk (bathing) medium
+    label Na_o
+tau_Na = 14.3 [s]
+    in [s]
+dot(Nac) = (Nab - Nac) / tau_Na + (ina.INa + ibna.IBNa + 3 * inak.INaK + 3 * inaca.INaCa + sodium.phi_Na_en) / (Vc * F)
+    in [mM]
+    desc: Na+ concentration in the extracellular cleft space
+
+Kb = 5.4 [mM]
+    in [mM]
+    label K_o
+    desc: K+ concentration in bulk (bathing) medium
+tau_K = 10 [s]
+    in [s]
+dot(Kc) = (Kb - Kc) / tau_K + (it.It + isus.Isus + ik1.IK1 + ikr.IKr + iks.IKs - 2 * inak.INaK) / (Vc * F)
+    in [mM]
+    desc: K+ concentration in the extracellular cleft space
+
+Cab = 1.8 [mM]
+    in [mM]
+    label Ca_o
+    desc: Ca2+ concentration in bulk (bathing) medium
+tau_Ca = 24.7 [s]
+    in [s]
+dot(Cac) = (Cab - Cac) / tau_Ca + (ical.ICaL + ibca.IBCa + icap.ICaP - 2 * inaca.INaCa) / (2 * Vc * F)
+    in [mM]
+    desc: Ca2+ concentration in the extracellular cleft space
+
+#
+# Intracellular Ca2+ buffering
+# Table 15
+#
+[buf]
+use calcium.Cai
+Mgi = 2.5 [mM]
+    in [mM]
+dot(O_C) = 200000 [1/mM/s] * Cai * (1 - O_C) - 476 [1/s] * O_C
+    desc: Fractional occupancy of the calmodulin buffer by Ca2+
+dot(O_TC) = 78400 [1/mM/s] * Cai * (1 - O_TC) - 392 [1/s] * O_TC
+    desc: Fractional occupancy of the troponin-Ca2+ buffer by Ca2+
+dot(O_TMgC) = 200000 [1/mM/s] * Cai * (1 - O_TMgC - O_TMgMg) - 6.6 [1/s] * O_TMgC
+    desc: Fractional occupancy of the troponin-Mg2+ buffer by Ca2+
+dot(O_TMgMg) = 2000 [1/mM/s] * Mgi * (1 - O_TMgC - O_TMgMg) - 666 [1/s] * O_TMgMg
+    desc: Fractional occupancy of the troponin-Mg2+ buffer by Mg2+
+
+#
+# Sarcoplasmic reticulum Ca2+ uptake current: Iup
+# Table 16
+#
+[iup]
+use calcium.Cai, calcium.Ca_up
+k_cyca = 0.0003 [mM]
+    in [mM]
+    desc: Half-maximum binding concentration for [Ca2+]i to Iup
+k_srca = 0.5 [mM]
+    in [mM]
+    desc: Half-maximum binding concentration for [Ca2+]up to Iup
+k_xcs = 0.4
+    desc: Ratio of forward to back reactions for Iup
+I_up_max = 2800 [pA]
+    in [pA]
+Iup = I_up_max * (Cai / k_cyca - k_xcs^2 * Ca_up / k_srca) / ((Cai + k_cyca) / k_cyca + k_xcs * (Ca_up + k_srca) / k_srca)
+    in [pA]
+
+#
+# Sarcoplasmic reticulum Ca2+ translocation current (from uptake to release
+# compartment): Itr
+# Table 16
+#
+[itr]
+use cell.Vrel, phys.F
+use calcium.Ca_up, calcium.Ca_rel
+tau = 0.01 [s]
+    in [s]
+    desc: Time constant of diffusion ("translocation") of Ca2+ from SR uptake to release compartment
+Itr = (Ca_up - Ca_rel) * 2 * F * Vrel / tau
+    in [pA]
+
+#
+# Sarcoplasmic reticulum Ca2+ release current: Irel
+# Table 16
+#
+[irel]
+use calcium.Cai, calcium.Cad, calcium.Ca_rel
+Kd = 0.003 [mM]
+    in [mM]
+    desc: Half-activation [Ca2+]d for Irel
+Ki = 0.0003 [mM]
+    in [mM]
+    desc: Half-activation [Ca2+]i for Irel
+kr = 0.815 [1/s]
+    in [1/s]
+    desc: Recovery rate for the SR release channel
+ka = 203.8 [1/s] * ((Cai / (Cai + Ki))^4 + (Cad / (Cad + Kd))^4)
+    in [1/s]
+ki = 33.96 [1/s] + 339.6 [1/s] * (Cai / (Cai + Ki))^4
+    in [1/s]
+dot(F1) = kr * (1 - F1 - F2) - ka * F1
+    desc: Relative amount of "inactive precursor"
+dot(F2) = ka * F1 - ki * F2
+    desc: Relative amount of "activator"
+dot(O_Calse) = 480 [1/mM/s] * Ca_rel * (1 - O_Calse) - 400 [1/s] * O_Calse
+    desc: Fractional occupancy of the calsequestrin buffer (in the SR release compartment) by Ca2+
+alpha = 200000 [pA/mM]
+    desc: Scaling factor for Irel
+    in [pA/mM]
+Irel = alpha * (F2 / (F2 + 0.25))^2 * (Ca_rel - Cai)
+    in [pA]
+
+[[protocol]]
+# Level  Start    Length   Period   Multiplier
+1        0.05     0.0005   1        0
+
+[[script]]
+import matplotlib.pyplot as pl
+import myokit
+
+# Get model and protocol, create simulation
+m = get_model()
+p = get_protocol()
+s = myokit.Simulation(m, p)
+
+# Run simulation
+d = s.run(3, log_interval=1e-3, log=['engine.time', 'membrane.V'])
+
+# Display the results
+pl.figure()
+pl.plot(d.time(), d['membrane.V'])
+pl.show()
+
