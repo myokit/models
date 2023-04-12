@@ -1,6 +1,6 @@
 [[model]]
 name: nygren-1998
-version: 20230407
+version: 20230412
 mmt_authors: Michael Clerx
 desc: """
     Model of the human atrial action potential by Nygren et al. [1, 2], based
@@ -9,14 +9,18 @@ desc: """
     This implementation is based on the CellML version by Catherine Lloyd [4],
     but with considerable differences in organisation and two important
     changes described below. The equations and parameter values were checked
-    against the original publications (in two cases, the .
+    against the original publications. In two cases, ical.kCa and calcium.Idi,
+    the paper equation differed from the CellML one. For ical.kCa, the correct
+    value was found to be the CellML one, as evidenced from the value in the
+    thesis [2] and a recreation of the paper's Figure 8. For Idi, the CellML
+    corrected an obvious sign error in the paper's equations.
 
-    In this implementation, the stimulus was set to 0.5 [ms] and approximately
-    twice the threshold value for depolarisation.
+    In this Myokit implementation, the stimulus was set to 0.5 [ms] and
+    approximately twice the threshold value for depolarisation.
 
-    As suggested in [5], two measures were taken to stabilise the model's
-    long-term behaviour: (1) the parameter phi_Na_en was set to zero; (2) the
-    stimulus current was added to the equation for Ki.
+    In addition, as suggested in [5], two measures were taken to stabilise the
+    model's long-term behaviour: (1) the parameter phi_Na_en was set to zero;
+    (2) the stimulus current was added to the equation for Ki.
 
     [1] Nygren, A., Fiset, C., Firek, L., Clark, J.W., Lindblad, D.S., Clark, 
         R.B., and Giles, W.R. (1998) Mathematical Model of an Adult Human
@@ -595,7 +599,7 @@ p = get_protocol()
 s = myokit.Simulation(m, p)
 
 # Run simulation
-d = s.run(3, log_interval=1e-3, log=['engine.time', 'membrane.V'])
+d = s.run(3, log=['engine.time', 'membrane.V'])
 
 # Display the results
 pl.figure()
