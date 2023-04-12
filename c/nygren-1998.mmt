@@ -587,22 +587,56 @@ Irel = alpha * (F2 / (F2 + 0.25))^2 * (Ca_rel - Cai)
 
 [[protocol]]
 # Level  Start    Length   Period   Multiplier
-1        0.05     0.0005   1        0
+1        0.1      0.0005   1        0
 
 [[script]]
-import matplotlib.pyplot as pl
+import matplotlib.pyplot as plt
 import myokit
 
-# Get model and protocol, create simulation
+#
+# Recreate figure 8 from the paper
+# Note the slight differences in pacing protocol, plus model changes described
+# in the model header.
+#
+
 m = get_model()
 p = get_protocol()
+
 s = myokit.Simulation(m, p)
+s.pre(1000)
+d = s.run(0.5).npview()
+d['engine.time'] *= 1e3
 
-# Run simulation
-d = s.run(3, log=['engine.time', 'membrane.V'])
+fig = plt.figure(figsize=(7, 6))
+fig.subplots_adjust(0.12, 0.10, 0.95, 0.99, hspace=0.2)
+grid = fig.add_gridspec(3, 1)
 
-# Display the results
-pl.figure()
-pl.plot(d.time(), d['membrane.V'])
-pl.show()
+ax = fig.add_subplot(grid[0, 0])
+ax.set_ylabel('Vm (mV)')
+ax.set_xlim(0, 500)
+ax.set_ylim(-85, 40)
+ax.plot(d.time(), d['membrane.V'])
+
+ax = fig.add_subplot(grid[1, 0])
+ax.set_ylabel('I (pA)')
+ax.set_xlim(0, 500)
+ax.set_ylim(-300, 400)
+ax.plot(d.time(), d['it.It'], label='It')
+ax.plot(d.time(), d['isus.Isus'], label='Isus')
+ax.plot(d.time(), d['ina.INa'], label='INa')
+ax.plot(d.time(), d['ical.ICaL'], label='ICaL')
+ax.legend(loc='upper right', ncol=2)
+
+ax = fig.add_subplot(grid[2, 0])
+ax.set_xlabel('Time (ms)')
+ax.set_ylabel('I (pA)')
+ax.set_xlim(0, 500)
+ax.set_ylim(-40, 60)
+ax.plot(d.time(), d['inaca.INaCa'], label='INaCa')
+ax.plot(d.time(), d['inak.INaK'], label='INaK')
+ax.plot(d.time(), d['ikr.IKr'] + d['iks.IKs'], label='IKr+IKs')
+ax.plot(d.time(), d['ibna.IBNa'] + d['ibca.IBCa'], label='IBNa+IBCa')
+ax.legend(loc='upper right', ncol=2)
+
+plt.show()
 
