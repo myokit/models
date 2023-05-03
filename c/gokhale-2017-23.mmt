@@ -1,0 +1,253 @@
+[[model]]
+name: gokhale-2017-23
+version: 20230503
+mmt_authors: Michael Clerx
+desc: """
+    The 2017 model of the ex293 AP by Gokhale et al. [1], 23 degrees C version.
+
+    The Nav1.5 and Kir2.1 currents in the 23C model are based on the data from
+    [2], while endogeneous INa and IK were fit to [3] and [4] respectively.
+    All currents in the 35 degrees model were temperature-shifted, sometimes
+    using literature data on temperature effects, sometimes by fitting to 
+    tissue data (including conduction velocity).
+        
+    The formulation of the Nav1.5 current is based on the model by Lindblad et
+    al. [5], the endogenous INa is a class Hodgkin-Huxley m^3*h form, and the
+    endogenous IK current formulation is based on the IKs equations in [6].    
+
+    This implementation is based on the equations given in the paper and
+    supplement [1]. To avoid overshadowing the sodium current, the stimulus
+    current was set to be short and large. Unfortunately, the choice of
+    stimulus current has quite a large effect in this model.
+
+    The units of currents were taken to be [A/F] (as used in the figures) and
+    units for conductances were changed from [mS/cm^2] to [nS/pF] (thereby
+    removing the assumption that the specific membrane capacity is exactly
+    1 uF/cm^2).
+    
+    The implementation was verified by recreating parts of figures 1 and 2,
+    which could partly be achieved (some information on monodomain parameters
+    and the exact stimulus and voltage-clamp protocols is missing). In
+    addition, the 35C model was compared to an independent reimplementation by
+    Ross Johnstone.
+
+    [1] Gokhale, T. A., Kim, J. M., Kirkton, R. D., Bursac, N, and Henriquez,
+        C. S. (2017) Modeling an Excitable Biosynthetic Tissue with Inherent
+        Variability for Paired Computational-Experimental Studies. PLOS
+        Computational Biology. 13(1): e1005342.
+        https://doi.org/10.1371/journal.pcbi.1005342
+        
+    [2] Kirkton, R. D., and Bursac, N. (2011) Engineering biosynthetic
+        excitable tissues from unexcitable cells for electrophysiological and
+        cell therapy studies. Nature communications 2:300
+        https://doi.org/10.1038/ncomms1302
+        
+    [3] He, B., and Soderlund, D. M. (2017) Human embryonic kidney (HEK293) 
+        cells express endogenous voltage-gated sodium currents and Nav1.7 
+        sodium channels. Neuroscience Letters 469:268-272.
+        http://doi.org/10.1016/j.neulet.2009.12.012
+
+    [4] Yu, S. P., and Kerchner, G. A. (1998) Endogenous voltage-gated
+        potassium channels in human embryonic kidney (HEK293) cells. Journal of
+        Neuroscience Research, 52:612-617.
+        
+    [5] Lindblad, D.S., Murphey, C.R., Clark, J.W., and Giles, W.G. (1996) A
+        model of the action potential and underlying membrane currents in a
+        rabbit atrial cell. American Journal of Physiology, 271, H1666-H1691.
+        https://doi.org/10.1152/AJPHEART.1996.271.4.H1666
+
+    [6] Ten Tusscher, K. H. W. J., Noble, D., Noble, P. J., Panfilov, A.
+        V. (2004). A model for human ventricular tissue. American Journal of
+        Physiology. Heart and Circulatory Physiology, 286(4), H1573-H1589.
+        https://doi.org/10.1152/ajpheart.00794.2003
+
+"""
+# Initial values
+membrane.V = -7.22651874807475991e+01
+ina.m      =  1.00750135618336983e-01
+ina.h1     =  7.70266922311133029e-02
+ina.h2     =  1.01512472791467304e-02
+ik1.n1     =  5.06725020925576586e-01
+ik1.n2     =  5.06730533825844986e-01
+inawt.o    =  7.89580185141157825e-02
+inawt.p    =  7.25504654607261878e-01
+ikwt.b     =  6.55571248958797814e-02
+
+#
+# Simulation variables
+#
+[engine]
+time = 0 [ms]
+    in [ms]
+    bind time
+pace = 0
+    bind pace
+
+#
+# Membrane potential
+#
+# Equations 1 and 2.
+#
+[membrane]
+dot(V) = -(i_ion + stimulus.i_stim + i_diff)
+    in [mV]
+    label membrane_potential
+i_ion = ina.INa + ik1.IK1 + inawt.INawt + ikwt.IKwt
+    in [A/F]
+i_diff = 0 [A/F]
+    in [A/F]
+    bind diffusion_current
+
+#
+# Stimulus current
+#
+[stimulus]
+amplitude = -150 [A/F]
+    in [A/F]
+i_stim = engine.pace * amplitude
+    in [A/F]
+
+#
+# Reversal potentials
+#
+# Table S2
+#
+[rev]
+ENa = 59.2 [mV]
+    in [mV]
+EK = -72.4 [mV]
+    in [mV]
+
+#
+# External concentrations
+#
+# The value of Ko is hinted at in the text "increased by as little as 2mM
+# from 5.4mM to 7.4mM".
+#
+[extra]
+Ko = 5.4 [mM]
+    in [mM]
+
+#
+# Nav1.5 sodium current
+#
+# Equation 5 and Table S2. The value for f is given in Supplementary text 1.
+# The formulation is based on Lindblad 1996.
+#
+[ina]
+use membrane.V, rev.ENa
+dot(m) = (inf - m) / tau
+    inf = (1.653 / (1 + exp((V + 36.54 [mV]) / -7.984 [mV]))
+           - 0.9225 / (1 + exp((V + 25.31 [mV]) / -11.44 [mV]))
+           + 0.0971)
+    tau = 0.9685 [ms] * exp((V + 53.87 [mV])^2 / -1136 [mV^2]) + 0.0924 [ms]
+        in [ms]
+h_inf = 1 / (1 + exp((V + 86.06 [mV]) / 5.691 [mV]))
+dot(h1) = (h_inf - h1) / tau
+    tau = (29.4 [ms] * exp((V + 83.17 [mV])^2 / -786.6 [mV^2])
+           + 0.0922 [ms] / (1 + exp((V - 9.195 [mV]) / 2.982 [mV]))
+           + 0.6461 [ms])
+        in [ms]
+dot(h2) = (h_inf - h2) / tau
+    tau = 1097 [ms] * exp((V + 87.77 [mV])^2 / -377.4 [mV^2]) + 2.987 [ms]
+        in [ms]
+d = 0.9
+    desc: Relative contribution of the fast inactivation component
+g = 32.64 [nS/pF]
+    in [nS/pF]
+INa = g * m^3 * (d * h1 + (1 - d) * h2) * (V - ENa)
+    in [A/F]
+
+#
+# Kir2.1 potassium current
+#
+# Equation 3 and Table S2. The value for f is given in Supplementary text 1.
+# New formulation?
+#
+[ik1]
+use membrane.V, rev.EK, extra.Ko
+n_inf = 1 / (1 + exp((V + 71.88 [mV]) / 14.32 [mV]))
+dot(n1) = (n_inf - n1) / tau
+    tau = (0.1927 [ms] * exp((V + 106.8 [mV])^2 / -390.5 [mV^2])
+           + 1.588 [ms] / (1 + exp((V - 9.861 [mV]) / 983.1 [mV]))
+           - 0.6923 [ms])
+        in [ms]
+dot(n2) = (n_inf - n2) / tau
+    tau = (1.628 [ms] * exp((V + 96.75 [mV])^2 / -399.6 [mV^2])
+           + 2.057 [ms] / (1 + exp((V + 92.94 [mV]) / 32.09 [mV]))
+           + 0.0521 [ms])
+        in [ms]
+f = 0.75
+    desc: Relative contribution of the fast activation component
+g = 4.664 [nS/pF]
+    in [nS/pF]
+IK1 = g * sqrt(Ko / 5.4 [mM]) * (f * n1 + (1 - f) * n2) * (V - EK)
+    in [A/F]
+
+#
+# Endogeneous sodium current
+#
+# Equation 7 and Table S2
+#
+# "steady-state activation and inactivation curves as well as the relevant time
+#  constants for the endogenous sodium current were derived from the findings
+#  of He and Soderlund" [3].
+# But note that the 35C model will have been adjusted from these values.
+#
+[inawt]
+use membrane.V, rev.ENa
+dot(o) = (inf - o) / tau
+    inf = 1 / (1 + exp((V + 46.25 [mV]) / -10.59 [mV]))
+    tau = 0.298 [ms]
+        in [ms]
+dot(p) = (inf - p) / tau
+    inf = 0.0708 + 0.9292 / (1 + exp((V + 64.67 [mV]) / 8.738 [mV]))
+    tau = 0.9953 [ms]
+        in [ms]
+g = 0.22 [nS/pF]
+    in [nS/pF]
+INawt = g * o^3 * p * (V - ENa)
+    in [A/F]
+
+#
+# Endogeneous potassium current
+#
+# Equation 8 and Table S2.
+# The formulation is based on IKs in Ten Tusscher 2004.
+#
+# "The steady state activation curve for the endogenous potassium channel, as
+#  well as the time constant of activation were determined based on data from
+#  Yu and Kerchner" [4].
+# But note that the 35C model will have been adjusted from these values.
+#
+[ikwt]
+use membrane.V, rev.EK
+dot(b) = (inf - b) / tau
+    inf = 1 / (1 + exp((V + 9.055 [mV]) / -23.79 [mV]))
+    tau = 1.6 [ms]
+        in [ms]    
+g = 0.1313 [nS/pF]
+    in [nS/pF]
+IKwt = g * b^2 * (V - EK)
+    in [A/F]
+
+[[protocol]]
+# Level  Start    Length   Period   Multiplier
+1        10       0.5      100      0
+
+[[script]]
+import myokit
+import matplotlib.pyplot as plt
+
+m = get_model()
+p = get_protocol()
+
+s = myokit.Simulation(m, p)
+#s.set_max_step_size(1000)
+d = s.run(40)
+
+fig = plt.figure()
+ax = fig.add_subplot()
+ax.plot(d.time(), d['membrane.V'])
+plt.show()
+
