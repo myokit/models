@@ -1,6 +1,6 @@
 [[model]]
 name: tentusscher-2006
-version: 20230202
+version: 20230425
 mmt_authors: Michael Clerx
 display_name: Ten Tusscher & Panfilov, 2006
 desc: """
@@ -190,18 +190,18 @@ FFRT = F * FRT
 #
 [ina]
 use membrane.V, nernst.ENa
-INa = gNa * m ^ 3 * h * j * (V - ENa)
+INa = gNa * m^3 * h * j * (V - ENa)
     in [A/F]
 gNa = 14.838 [mS/uF]
     in [mS/uF]
 dot(m) = (inf - m) / tau
-    inf = 1 / (1 + exp((-56.86 [mV] - V) / 9.03 [mV])) ^ 2
+    inf = 1 / (1 + exp((-56.86 [mV] - V) / 9.03 [mV]))^2
     tau = 1 [ms] * alpha * beta
         in [ms]
     alpha = 1 / (1 + exp((-60 [mV] - V) / 5 [mV]))
     beta = 0.1 / (1 + exp((V + 35 [mV]) / 5 [mV])) + 0.1 / (1 + exp((V - 50 [mV]) / 200 [mV]))
 dot(h) = (inf - h) / tau
-    inf = 1 / (1 + exp((V + 71.55 [mV]) / 7.43 [mV])) ^ 2
+    inf = 1 / (1 + exp((V + 71.55 [mV]) / 7.43 [mV]))^2
     tau = 1 / (alpha + beta)
         in [ms]
     alpha = if(V < -40 [mV],
@@ -213,7 +213,7 @@ dot(h) = (inf - h) / tau
                 0.77 [mS/uF] / (0.13 * (1 + exp((V + 10.66 [mV]) / -11.1 [mV]))))
         in [1/ms]
 dot(j) = (inf - j) / tau
-    inf = 1 / (1 + exp((V + 71.55 [mV]) / 7.43 [mV])) ^ 2
+    inf = 1 / (1 + exp((V + 71.55 [mV]) / 7.43 [mV]))^2
     tau = 1 / (alpha + beta)
         in [ms]
     alpha = if(V < -40 [mV],
@@ -273,7 +273,7 @@ dot(xr2) = (inf - xr2) / tau
 #
 [iks]
 use membrane.V, nernst.EKs
-IKs = gKs * xs ^ 2 * (V - EKs)
+IKs = gKs * xs^2 * (V - EKs)
     in [A/F]
 gKs = if(cell.type != 2,
          0.392 [mS/uF],      # Endo and epicardial
@@ -303,7 +303,7 @@ gto = if(cell.type == 0,
     in [mS/uF]
 dot(r) = (inf - r) / tau
     inf = 1 / (1 + exp((20 [mV] - V) / 6 [mV]))
-    tau = 9.5 [ms] * exp(-(V + 40 [mV]) ^ 2 / 1800 [mV^2]) + 0.8 [ms]
+    tau = 9.5 [ms] * exp(-(V + 40 [mV])^2 / 1800 [mV^2]) + 0.8 [ms]
         in [ms]
 dot(s) = (inf - s) / tau
     inf = if(cell.type == 0,
@@ -312,9 +312,9 @@ dot(s) = (inf - s) / tau
             )
     tau = if(cell.type == 0,
              # Endocardial:
-             1000 [ms] * exp(-(V + 67 [mV]) ^ 2 / 1000 [mV^2]) + 8 [ms],
+             1000 [ms] * exp(-(V + 67 [mV])^2 / 1000 [mV^2]) + 8 [ms],
              # Epicardial and mid-myocardial:
-             85 [ms] * exp(-(V + 45 [mV]) ^ 2 / 320 [mV^2]) + 5 [ms] / (1 + exp((V - 20 [mV]) / 5 [mV])) + 3 [ms]
+             85 [ms] * exp(-(V + 45 [mV])^2 / 320 [mV^2]) + 5 [ms] / (1 + exp((V - 20 [mV]) / 5 [mV])) + 3 [ms]
             )
         in [ms]
 
@@ -342,15 +342,15 @@ dot(d) = (inf - d) / tau
     gamma = 1 / (1 + exp((50 [mV] - V) / 20 [mV]))
 dot(f) = (inf - f) / tau
     inf = 1 / (1 + exp((V + 20 [mV]) / 7 [mV]))
-    tau = 1102.5 [ms] * exp(-(V + 27 [mV]) ^ 2 / 225 [mV^2]) + 200 [ms] / (1 + exp((13 [mV] - V) / 10 [mV])) + 180 [ms] / (1 + exp((V + 30 [mV]) / 10 [mV])) + 20 [ms]
+    tau = 1102.5 [ms] * exp(-(V + 27 [mV])^2 / 225 [mV^2]) + 200 [ms] / (1 + exp((13 [mV] - V) / 10 [mV])) + 180 [ms] / (1 + exp((V + 30 [mV]) / 10 [mV])) + 20 [ms]
         in [ms]
 dot(f2) = (inf - f2) / tau
     inf = 0.67 / (1 + exp((V + 35 [mV]) / 7 [mV])) + 0.33
-    tau = 562 [ms] * exp(-(V + 27 [mV]) ^ 2 / 240 [mV^2]) + 31 [ms] / (1 + exp((25 [mV] - V) / 10 [mV])) + 80 [ms] / (1 + exp((V + 30 [mV]) / 10 [mV]))
+    tau = 562 [ms] * exp(-(V + 27 [mV])^2 / 240 [mV^2]) + 31 [ms] / (1 + exp((25 [mV] - V) / 10 [mV])) + 80 [ms] / (1 + exp((V + 30 [mV]) / 10 [mV]))
         in [ms]
 dot(fCaSS) = (inf - fCaSS) / tau
-    inf = 0.6 / (1 + (CaSS / 0.05 [mM]) ^ 2) + 0.4
-    tau = 80 [ms] / (1 + (CaSS / 0.05 [mM]) ^ 2) + 2 [ms]
+    inf = 0.6 / (1 + (CaSS / 0.05 [mM])^2) + 0.4
+    tau = 80 [ms] / (1 + (CaSS / 0.05 [mM])^2) + 2 [ms]
         in [ms]
 
 #
@@ -380,8 +380,8 @@ use membrane.V, phys.FRT
 use extra.Nao, extra.Cao
 use sodium.Nai, calcium.Cai
 INaCa = (K_NaCa
-         * (exp(gamma * V * FRT) * Nai ^ 3 * Cao - exp((gamma - 1) * V * FRT) * Nao ^ 3 * Cai * alpha)
-         / ((Km_Nai ^ 3 + Nao ^ 3) * (Km_Ca + Cao) * (1 + K_sat * exp((gamma - 1) * V * FRT))))
+         * (exp(gamma * V * FRT) * Nai^3 * Cao - exp((gamma - 1) * V * FRT) * Nao^3 * Cai * alpha)
+         / ((Km_Nai^3 + Nao^3) * (Km_Ca + Cao) * (1 + K_sat * exp((gamma - 1) * V * FRT))))
     in [A/F]
 K_NaCa = 1000 [A/F]
     in [A/F]
@@ -486,8 +486,8 @@ Jrel = Vrel * O * (CaSR - CaSS)
     in [mM/ms]
 Vrel = 0.102 [mS/uF]
     in [mS/uF]
-O = k1 * CaSS ^ 2 * R_prime / (k3 + k1 * CaSS ^ 2)
-kcasr = max_sr - (max_sr - min_sr) / (1 + (EC / CaSR) ^ 2)
+O = k1 * CaSS^2 * R_prime / (k3 + k1 * CaSS^2)
+kcasr = max_sr - (max_sr - min_sr) / (1 + (EC / CaSR)^2)
     max_sr = 2.5
     min_sr = 1
     EC = 1.5 [mM]
@@ -521,7 +521,7 @@ Vleak = 0.00036 [mS/uF]
 #
 [jup]
 use calcium.Cai
-Jup = Vmax_up / (1 + K_up ^ 2 / Cai ^ 2)
+Jup = Vmax_up / (1 + K_up^2 / Cai^2)
     in [mM/ms]
 Vmax_up = 0.006375 [mM/ms]
     in [mM/ms]
@@ -561,9 +561,9 @@ ddt_CaSS_total = -ical.ICaL * Cm / (2 * Vss * F) + Jrel * Vsr / Vss - Jxfer * Vc
 ddt_CaSR_total = Jup - (Jrel + Jleak)
     in [mM/ms]
 # Conversion factors from d/dt total to d/dt free
-f_JCai_free = 1 / (1 + Buf_c * K_buf_c / (Cai + K_buf_c) ^ 2)
-f_JCaSS_free = 1 / (1 + Buf_SS * K_buf_SS / (CaSS + K_buf_SS) ^ 2)
-f_JCaSR_free = 1 / (1 + Buf_SR * K_buf_SR / (CaSR + K_buf_SR) ^ 2)
+f_JCai_free = 1 / (1 + Buf_c * K_buf_c / (Cai + K_buf_c)^2)
+f_JCaSS_free = 1 / (1 + Buf_SS * K_buf_SS / (CaSS + K_buf_SS)^2)
+f_JCaSR_free = 1 / (1 + Buf_SR * K_buf_SR / (CaSR + K_buf_SR)^2)
 # Buffering: Ca_buffered = Ca_i * Buf_c / (Ca_i + K_bufc)
 Buf_c = 0.2 [mM]
     in [mM]
