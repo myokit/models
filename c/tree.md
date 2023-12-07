@@ -51,7 +51,10 @@ Ebihara, Johnson (1980) Fast Sodium Current In Cardiac Muscle
 ## 1982 Bristow
 ## 1982 Irisawa
 ## 1984 Noble
-## 1985 DiFrancesco MP
+## 1985 DiFrancesco mP
+Bits:
+- INaK new formulation
+
 ## 1985 Reiner mS
 ## 1987 Drouhard
 ## 1987 Hilgemann RA
@@ -68,11 +71,16 @@ Bits:
 ## 1991 Wilders mS
 ## 1993 Karma mV
 ## 1993 Nordin GV
+Bits:
+- INaK new formulation
 ## 1993 Winslow
 ## 1994 Demir RS
 
 ## 1994 Luo GV
 Base: Luo 1991
+
+Bits:
+- INaK new formulation
 
 ## 1995 Zeng GV
 ## 1996 Dokos RS
@@ -124,6 +132,8 @@ Kurata, Hisatome, Imanishi, Shibamoto (2002) Dynamical description of sinoatrial
 ## 2003 Cabo CV
 ## 2003 Garny
 ## 2003 Matsuoka mV
+Bits:
+- INaK from Smith 2004
 ## 2003 Mitchell mV
 ## 2003 Pandit LV
 ## 2003 Sarai mS
@@ -182,6 +192,10 @@ Modifications:
 Base: Hund 2004
 
 ## 2007 Niederer LV
+## 2007 Terkildsen MV
+Bits:
+- INaK from Smith 2004
+
 ## 2008 Benson CV
 ## 2008 Bueno-Orovio HV
 
