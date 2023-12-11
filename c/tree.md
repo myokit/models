@@ -133,7 +133,7 @@ Kurata, Hisatome, Imanishi, Shibamoto (2002) Dynamical description of sinoatrial
 ## 2003 Garny
 ## 2003 Matsuoka mV
 Bits:
-- INaK from Smith 2004
+- INaK novel reduced formulation, based on INaCa
 ## 2003 Mitchell mV
 ## 2003 Pandit LV
 ## 2003 Sarai mS
@@ -192,9 +192,9 @@ Modifications:
 Base: Hund 2004
 
 ## 2007 Niederer LV
-## 2007 Terkildsen MV
+## 2007 Terkildsen GV
 Bits:
-- INaK from Smith 2004
+- INaK from Smith 2004, updated by same authors
 
 ## 2008 Benson CV
 ## 2008 Bueno-Orovio HV
@@ -207,6 +207,9 @@ Base: Livshitz 2007
 
 ## 2008 Mahajan RV
 ## 2008 Pasek GV
+## 2008 Terkildsen RV
+Base: Pandit et al. 2001, and Niederer 2006 and Hinch 2004
+
 ## 2008 Saucerman LV
 ## 2008 Wang LV
 ## 2009a Aslanidi RA
@@ -225,7 +228,6 @@ Base: Ten Tusscher 2004 (not 2006!)
 ## 2009 Maltsev HS
 Base: Kurata, Shannon 2004
 Maltsev, Lakatta (2009) Synergism of coupled subsarcolemmal Ca2 clocks and sarcolemmal voltage clocks confers robust and flexible pacemaker function in a novel pacemaker cell model
-
 ## 2009 Stewart HP - included
 Base: Ten Tusscher 2006
 
@@ -257,7 +259,7 @@ Base: Nygren 1998
 ## 2011 O'Hara HV - included
 Base: Hund 2004
 Bits:
-- INaK from Smith 2004
+- INaK from Smith 2004, with reparametrisation
 
 --- Noble 2012 cut-off -------------------------------------------------------
 
