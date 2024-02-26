@@ -79,8 +79,10 @@ Bits:
 ## 1994 Luo GV
 Base: Luo 1991
 
-Bits:
+Modifications:
 - INaK new formulation
+- Rescaled gK1
+- ...
 
 ## 1995 Zeng GV
 ## 1996 Dokos RS
@@ -119,7 +121,12 @@ Zhang, Holden et al., Boyett (2000) Mathematical models of action potentials in 
 ## 2001 Mazhari CV
 ## 2001 Noble GP
 ## 2001 Pandit LV
-## 2021 Puglisi GV
+## 2001 Puglisi GV
+Base: Luo 1994
+Modifications:
+- Rescaled gK1
+- ... see Table 1
+
 ## 2002 Bernus
 Reduces: Priebe 1998
 ## 2002 Fenton mV
@@ -148,8 +155,12 @@ Base: Winslow 1999 and others
 ## 2004 Lovell RS
 
 ## 2004 Shannon RV
+Base: LR94? And Puglisi and Bers, 2001 ?
 
 Shannon, Wang et al., Bers (2004) A mathematical treatment of integrated Ca dynamics within the ventricular myocyte
+Modifications:
+- Rescaled gK1
+- ...
 
 ## 2004 Smith INaK
 
@@ -202,6 +213,11 @@ Bits:
 ## 2008 Fink - included
 Base: Ten Tusscher 2006
 
+Modifications:
+- New IK1 formulation, based on Yan & Ishihara 2005
+- New IKr formulation
+- Rescaled IKs
+
 ## 2008 Hund CV
 Base: Livshitz 2007
 
@@ -235,6 +251,9 @@ Base: Ten Tusscher 2006
 
 ## 2010 Grandi HV - included
 Base: Shannon 2004
+Modifications:
+- Scaled gK1
+- ...
 
 ## 2010 Li MV
 
@@ -247,6 +266,9 @@ Base: Iyer 2004
 
 ## 2011 Grandi-Pandit-Voigt HA - included
 Base: Grandi 2010
+Modifications:
+- Scaled gK1
+- ...
 
 ## 2011 Heijman CV - included
 Base: Decker 2009
@@ -279,7 +301,7 @@ Base: Grandi 2011
 Modifications:
 - Added IKAch (Kneller et al. 2002)
 - Replaced INa with Courtemanche 1998 one
-- Modified IK1
+- Modified IK1 (changed gK1 and a)
 
 ## 2015 Himeno HV
 Bases: Several! Interesting one to look at
