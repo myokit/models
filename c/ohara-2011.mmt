@@ -1,19 +1,42 @@
 [[model]]
 name: ohara-2011
-version: 20230208
+version: 20240307
 mmt_authors: Michael Clerx
 display_name: O'Hara et al., 2011
 desc: """
     The 2011 model for the undiseased human ventricular AP and calcium
     transient by O'Hara et al. [1].
 
-    The model builds on several other models, including [2].
+    The model builds on several other models, including [2]. 
 
     This implementation is based on the original Matlab code provided by the
     authors. It was checked against the original code by comparing the
-    calculated derivatives. Where possible, the page of the appendix to [1]
-    that describes each component is indicated.
+    calculated derivatives. After this, two small changes to the INaK 
+    formulation were made (see below).
 
+    Comments and errata on [1]:
+    
+    1. The comment "Publisher's Note: Errors in Text S1" describes three issues
+       in the supplement text, which are not present in the published model
+       code. Similarly, "Publisher's Note: Error in Figure 1, panel C, 5th 
+       subplot" and "Publisher's Note: Rate dependent APD curves for TP model
+       were arranged incorrectly in Figure 18A" describe issues in the figures.
+       No changes to the Myokit model were made based on these comments.
+    2. The comment "A Note About the Fast Na Current (I~~Na~~) Formulation"
+       explains issues with using the O'Hara model for tissue simulations, and
+       suggests a replacement of the INa formulation for this purpose. No
+       changes to the Myokit model were made based on this comment.
+    4. The comment "Ko and liquid junction potential" describes what could be a
+       model issue (no LJP correction), but gives no solution, and so no
+       changes to the Myokit model were made based on this note.
+    5. The comment "Two minor issues in the INaK model implementation"
+       describes two errors in the INaK equations, which do not significantly
+       affect model output under baseline conditions. Both are corrected in
+       this Myokit model.
+    
+    Where possible, the page of the supplement to [1] that describes each 
+    component has been indicated.
+    
     References:
 
     [1] O'Hara, T., Virág, L., Varró, A., & Rudy, Y. (2011). Simulation of the
@@ -115,7 +138,7 @@ amplitude = -80 [A/F]
 #
 [cell]
 mode = 1
-    desc: The type of cell. Endo = 0, Epi = 1, Mid = 2
+    desc: The type of cell. Endo = 0, Epi = 1, M = 2
 L = 0.01 [cm] : Cell length
     in [cm]
 r = 0.0011 [cm] : Cell radius
@@ -188,8 +211,8 @@ EK = phys.RTF * log(extra.K_o / potassium.K_i)
 PNaK = 0.01833
     desc: Permeability ratio K+ to Na+
 EKs = phys.RTF * log((extra.K_o + PNaK * extra.Na_o) / (potassium.K_i + PNaK * sodium.Na_i))
-    desc: Reversal potential for IKs
     in [mV]
+    desc: Reversal potential for IKs
 
 #
 # INa: Fast sodium current
@@ -207,19 +230,19 @@ use membrane.V
 sm = 1 / (1 + exp((V + 39.57 [mV]) / -9.871 [mV]))
     desc: Steady state value for m-gates
 tm = 1 [ms] / (6.765 * exp((V + 11.64 [mV]) / 34.77 [mV]) + 8.552 * exp(-(V + 77.42 [mV]) / 5.955 [mV]))
-    desc: Time constant for m-gates
     in [ms]
+    desc: Time constant for m-gates
 dot(m) = (sm - m) / tm
     desc: Activation gate for INa
 # h-gates
 sh = 1 / (1 + exp((V + 82.9 [mV]) / 6.086 [mV]))
     desc: Steady-state value for h-gates
 thf = 1 [ms] / (1.432e-5 * exp((V + 1.196 [mV]) / -6.285 [mV]) + 6.149 * exp((V + 0.5096 [mV]) / 20.27 [mV]))
+    in [ms]
     desc: Time constant for fast development of inactivation in INa
-    in [ms]
 ths = 1 [ms] / (0.009794 * exp((V + 17.95 [mV]) / -28.05 [mV]) + 0.3343 * exp((V + 5.73 [mV]) / 56.66 [mV]))
-    desc: Time constant for slow development of inactivation in INa
     in [ms]
+    desc: Time constant for slow development of inactivation in INa
 Ahf = 0.99 : Fraction of INa channels with fast inactivation
 Ahs = 1 - Ahf : Fraction of INa channels with slow inactivation
 dot(hf) = (sh - hf) / thf
@@ -232,14 +255,14 @@ h = Ahf * hf + Ahs * hs
 sj = sh
     desc: Steady-state value for j-gate in INa
 tj = 2.038 [ms] + 1 [ms] / (0.02136 * exp((V + 100.6 [mV]) / -8.281 [mV]) + 0.3052 * exp((V + 0.9941 [mV]) / 38.45 [mV]))
-    desc: Time constant for j-gate in INa
     in [ms]
+    desc: Time constant for j-gate in INa
 dot(j) = (sj - j) / tj
     desc: Recovery from inactivation gate for non-phosphorylated INa
 # Phosphorylated channels
 thsp = 3 * ths
-    desc: Time constant for h-gate of phosphorylated INa
     in [ms]
+    desc: Time constant for h-gate of phosphorylated INa
 shsp = 1 / (1 + exp((V + 89.1 [mV]) / 6.086 [mV]))
     desc: Steady-state value for h-gate of phosphorylated INa
 dot(hsp) = (shsp - hsp) / thsp
@@ -297,10 +320,10 @@ INaL = fNaL * gNaL * (V - rev.ENa) * m * ((1 - camk.f) * h + camk.f * hp)
 [ito]
 use membrane.V
 ta = 1.0515 [ms] / (one + two)
+    in [ms]
     one = 1 / (1.2089 * (1 + exp((V - 18.4099 [mV]) / -29.3814 [mV])))
     two = 3.5 / (1 + exp((V + 100 [mV]) / 29.3814 [mV]))
     desc: Time constant for Ito activation
-    in [ms]
 sa = 1 / (1 + exp((V - 14.34 [mV]) / -14.82 [mV]))
     desc: Steady-state value for Ito activation
 dot(a) = (sa - a) / ta
@@ -575,8 +598,8 @@ gK1 = 0.1908 [mS/uF]
     in [mS/uF]
     desc: Maximum conductance for IK1 (before scaling)
 IK1 = fK1 * gK1 * sqrt(K_o / 1 [mM]) * r * x * (V - rev.EK)
-    desc: Inward rectifier Potassium current
     in [A/F]
+    desc: Inward rectifier Potassium current
 
 #
 # INaCa: Sodium/calcium exchange current
@@ -736,13 +759,16 @@ JncxNa = 3 * (E4 * k7 - E1 * k8) + E3 * k4pp - E2 * k3pp
 JncxCa = E2 * k2 - E1 * k1
     in [1/s]
 INaCa_ss = 0.2 * inaca.fNaCa * inaca.gNaCa * allo * (JncxNa + 2 * JncxCa)
-    desc: Sodium/Calcium exchange current into the T-Tubule subspace
     in [A/F]
+    desc: Sodium/Calcium exchange current into the T-Tubule subspace
 
 #
 # INaK: Sodium/potassium ATPase current
-# Based on Smith and Crampin, 2004, PBMB
-# Page 14
+# Based on Smith & Crampin 2004 https://doi.org/10.1016/j.pbiomolbio.2004.01.010
+# The formulation below was corrected from the O'Hara implementation, see
+# https://docs.google.com/document/d/111fqNzQGvGAjB_PrkvejEhzqwROrR6czz_OBz7Ep-iM
+#
+# Supplement page 14
 #
 [inak]
 use membrane.V
@@ -779,8 +805,9 @@ MgATP = 9.8 [mM]
     in [mM]
 Kmgatp = 1.698e-7 [mM]
     in [mM]
-H = 1e-7 [mM]
+H = 1e-4 [mM]
     in [mM]
+    note: Corrected to 1e-7 [M] (pH 7) from original value of 1e-7 [mM]
 eP = 4.2 [mM]
     in [mM]
 Khp = 1.698e-7 [mM]
@@ -811,28 +838,27 @@ a4 = k4p * MgATP / Kmgatp / (1 + MgATP / Kmgatp)
     in [Hz]
 b4 = k4m * (K_i / Kki)^2 / ((1 + Na_i / Knai)^3 + (1 + K_i / Kki)^2 - 1)
     in [Hz]
-x1 = a4 * a1 * a2 + b2 * b4 * b3 + a2 * b4 * b3 + b3 * a1 * a2
+x1 = a4 * a1 * a2 + b1 * b4 * b3 + a2 * b4 * b3 + b3 * a1 * a2
     in [Hz^3]
+    note: Corrected from the original code (b1 in second term)
 x2 = b2 * b1 * b4 + a1 * a2 * a3 + a3 * b1 * b4 + a2 * a3 * b4
     in [Hz^3]
 x3 = a2 * a3 * a4 + b3 * b2 * b1 + b2 * b1 * a4 + a3 * a4 * b1
     in [Hz^3]
 x4 = b4 * b3 * b2 + a3 * a4 * a1 + b2 * a4 * a1 + b3 * b2 * a1
     in [Hz^3]
-E1 = x1 / (x1 + x2 + x3 + x4)
-E2 = x2 / (x1 + x2 + x3 + x4)
-E3 = x3 / (x1 + x2 + x3 + x4)
-E4 = x4 / (x1 + x2 + x3 + x4)
-JnakNa = 3 * (E1 * a3 - E2 * b3)
+r = (a1 * a2 * a3 * a4 - b1 * b2 * b3 * b4) / (x1 + x2 + x3 + x4)
     in [1/s]
-JnakK = 2 * (E4 * b1 - E3 * a1)
+JnakNa = 3 * r
     in [1/s]
+JnakK = -2 * r
+    in [1/s]    
 fNaK = piecewise(cell.mode == 0, 1, cell.mode == 1, 0.9, 0.7)
 PNaK = 30 [C/F]
     in [C/F]
 INaK = fNaK * PNaK * (JnakNa + JnakK)
-    desc: Sodium/Potassium ATPase current
     in [A/F]
+    desc: Sodium/Potassium ATPase current
 
 #
 # IKb: Background potassium current
@@ -845,8 +871,8 @@ fKb = if(cell.mode == 1, 0.6, 1)
 gKb = 0.003 [mS/uF]
     in [mS/uF]
 IKb = fKb * gKb * xkb * (V - rev.EK)
-    desc: Background Potassium current
     in [A/F]
+    desc: Background Potassium current
 
 #
 # INab: Background sodium current
@@ -903,8 +929,8 @@ dot(Jrelnp) = (inf - Jrelnp) / tau
             in [ms]
     inf = base * if(cell.mode == 2, 1.7, 1)
         in [mM/ms]
-    base = -1 [mM/ms/mV] * a_rel * ical.ICaL / (1 + (1.5 [mM] / Ca_jsr)^8)
-        in [mM/ms]
+        base = -1 [mM/ms/mV] * a_rel * ical.ICaL / (1 + (1.5 [mM] / Ca_jsr)^8)
+            in [mM/ms]
 btp = 1.25 * bt
     in [ms]
 a_relp = 0.5 * btp
@@ -917,8 +943,8 @@ dot(Jrelp) = (inf - Jrelp) / tau
             in [ms]
     inf = base * if(cell.mode == 2, 1.7, 1)
         in [mM/ms]
-    base = -1 [mM/ms/mV] * a_relp * ical.ICaL / (1 + (1.5 [mM] / Ca_jsr)^8)
-        in [mM/ms]
+        base = -1 [mM/ms/mV] * a_relp * ical.ICaL / (1 + (1.5 [mM] / Ca_jsr)^8)
+            in [mM/ms]
 Jrel = (1 - camk.f) * Jrelnp + camk.f * Jrelp
     desc: SR Calcium release flux via Ryanodine receptor
     in [mM/ms]
@@ -1027,13 +1053,13 @@ ICa_tot = ipca.IpCa + icab.ICab - 2 * inaca.INaCa
     in [A/F]
 dot(Ca_i) = buff * (-ICa_tot * AFC / (2 * vmyo) - serca.Jup * vnsr / vmyo + diff.Jdiff * vss / vmyo)
     in [mM]
-    desc: Intracellular Calcium concentratium
+    desc: Intracellular calcium concentration
     buff = 1 / (1 + cmdnmax * kmcmdn / (kmcmdn + Ca_i)^2 + trpnmax * kmtrpn / (kmtrpn + Ca_i)^2)
 ICa_ss_tot = ical.ICaL - 2 * inacass.INaCa_ss
     in [A/F]
 dot(Ca_ss) = buff * (-ICa_ss_tot * AFC / (2 * vss) + ryr.Jrel * vjsr / vss - diff.Jdiff)
     in [mM]
-    desc: Calcium concentratium in the T-Tubule subspace
+    desc: Calcium concentration in the T-Tubule subspace
     buff = 1 / (1 + BSRmax * KmBSR / (KmBSR + Ca_ss)^2 + BSLmax * KmBSL / (KmBSL + Ca_ss)^2)
 dot(Ca_jsr) = buff * (serca.Jtr - ryr.Jrel)
     in [mM]
