@@ -172,6 +172,8 @@ Bits:
 
 ## 2005 Couto LV
 ## 2005 Krogh-Madsen
+## 2005 Kurata HV
+Kurata, Hisatome, Matsuda, Shibamoto (2005) Dynamical Mechanisms of Pacemaker Generation in IK1-Downregulated Human Ventricular Myocytes; Insights from Bifurcation Analyses of a Mathematical Model
 ## 2005 Michailova CV
 ## 2006 Cortassa mV
 ## 2006 Fink HV
@@ -242,7 +244,7 @@ Base: Ten Tusscher 2004 (not 2006!)
 ## 2009 Maleckar HA
 
 ## 2009 Maltsev HS
-Base: Kurata, Shannon 2004
+Base: Kurata 2002, Shannon 2004
 Maltsev, Lakatta (2009) Synergism of coupled subsarcolemmal Ca2 clocks and sarcolemmal voltage clocks confers robust and flexible pacemaker function in a novel pacemaker cell model
 ## 2009 Stewart HP - included
 Base: Ten Tusscher 2006
