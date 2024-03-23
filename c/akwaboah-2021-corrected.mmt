@@ -1,6 +1,7 @@
 [[model]]
 name: akwaboah-2021-corrected
 version: 20240323
+mmt_authors: Michael Clerx
 desc: """
     Model of the hiPSC AP by Akwaboah et al [1], with corrections.
 
@@ -732,7 +733,7 @@ fig.subplots_adjust(0.07, 0.08, 0.99, 0.98, hspace=0.3, wspace=0.1)
 ax00 = fig.add_subplot(2, 2, 1)  # Top-left: Vm before pacing
 ax01 = fig.add_subplot(2, 2, 2)  # Top-right: Vm after 1000s pacing
 ax2 = fig.add_subplot(4, 1, 3)   # Middle: [K]i during 999s pacing
-ax3 = fig.add_subplot(4, 1, 4)   # Bottom: [Na]i during 999s pacing 
+ax3 = fig.add_subplot(4, 1, 4)   # Bottom: [Na]i during 999s pacing
 
 ax00.set_ylabel('Vm (mV)')
 ax2.set_ylabel('[K]i (mM)')
@@ -743,11 +744,11 @@ ax3.set_xlabel('Time (ms)')
 for k, version in enumerate(('Python', 'C', 'Corrected')):
     s.reset()
     s.set_constant('mode.version', k)
-    d0 = s.run(1e3)   
-    d1 = s.run(999e3, log=['engine.time', 'potassium.K_i', 'sodium.Na_i'], 
+    d0 = s.run(1e3)
+    d1 = s.run(999e3, log=['engine.time', 'potassium.K_i', 'sodium.Na_i'],
                log_interval=1e3)
     d2 = s.run(1e3)
-    
+
     ax00.plot(d0.time(), d0['membrane.V'], label=version)
     ax01.plot(d2.time(), d2['membrane.V'], label=version)
     ax2.plot(d1.time(), d1['potassium.K_i'], label=version)
