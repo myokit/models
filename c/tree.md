@@ -356,6 +356,25 @@ Base: O'Hara 2011 (HV) and Pan 2011 (CP)
 Modifications (partial):
 - INa from Dutta 2017; Passini 2016
 Trovato, Passini et al., Rodriguez (2020) Human Purkinje in silico model enables mechanistic investigations into automaticity and pro-arrhythmic abnormalities
+## 2021 Akwaboah Hi - included
+Base: Kurata 2002 and Courtemanche 1998
+Bits:
+- INa from Luo 1991, with partial reparameterisation
+- Ito from Grandi 2010, with partial reparametrisation
+- IKr from Kurata 2002, with partial reparametrisation
+- If from Stewart 2009, with partial reperametrisation
+- ICaL from Kurata 2002, with partial reparametrisation
+- IKs from Courtemanche 1998
+- IKur from Courtemanche 1998
+- INaK from Courtemanche 1998
+- INaCa from Courtemanche 1998
+- IKACh from Kurata 2002
+- IK1 from Grandi 2010
+- IbCa from Courtemanche 1998
+- IbNa from Courtemanche 1998
+- IpCa from Courtemanche 1998
+- Calcium handling from Kurata 2002
+
 ## 2021 Gaur PV
 Gaur, Qi et al., Vigmond (2021) A computational model of pig ventricular cardiomyocyte electrophysiology and calcium handling; Translation from pig to human electrophysiology
 ## 2022 Bartolucci HV

@@ -1,0 +1,854 @@
+[[model]]
+name: akwaboah-2021-original
+version: 20240323
+desc: """
+    Model of the hiPSC AP by Akwaboah et al [1], matching the published code.
+
+    This model adapts the calcium handling from Kurata et al. [3], and uses
+    current formulation from various other models, most prominently
+    Courtemanche et al. [4]. Five currents (INa, Ito,  IKr, ICaL, and If) were
+    partially refit to steady-state IV curves measured in a single lab. The
+    conductances were adjusted by hand.
+
+    This code was checked against the Python and C implementations supplied by
+    the authors on Github. There are differences between the two
+    implementations, which are summarised below. This Myokit implementation
+    contains a switch to let it mimick either model. The Myokit code was tested
+    by comparing calculated derivatives to the C and Python output and matched
+    to within machine precision. A third mode is added which corrects mistakes
+    in both implementations.
+
+    Differences between the implementations and model issues are listed below.
+
+    1. The value of K_Ito is 0.75 * 0.85 in the C code, 0.75 in the Python
+       code. The paper (Table S7) agrees with the C code.
+    2. The value of K_If is 0.85 in the C code, 0.91 in the Python code. The
+       paper (Table S7) agrees with the C code.
+    3. The C code uses an if-statement to stop If from becoming positive. This
+       is unlikely to be the physiological mechanism and is not mentioned in
+       the paper (equation 52). Figures 6 in the paper shows the C code version
+       with the capping to negative values.
+       In addition, the if-statement only limits If, not its individual
+       components If,Na and If,K. As the individual components are used in the
+       concentration updates, this is likely to break conservation of charge.
+    4. The INaK value sigma is calculated using a term "(1/7)" in both Python
+       and C code. In Python this evaluates to a floating point value, but in C
+       it is an integer division with result 0, so that sigma is always 0.
+    5. The value of K_INaK is 1.7 * 1.978 * 0.95 in the C code, 1.7 in the
+       Python code. The paper (Table S7) agrees with the C code.
+    6. The value of K_INaCa is 9 * 1.8 in the C code, 1 in the Python code. The
+       paper (Table S7) agrees with the C code.
+    7. The reversal potential used in the background calcium current is scaled
+       by 0.6 in the C code. There is no mention of this in the paper or
+       supplement.
+    8. The value of Prel is 5*2 in the C code, 5*10 in the Python code. The
+       paper (Table S8) agrees with the Python code.
+    9. The value of Pup is 0.005 in the C code, 0.0075 in the Python code. The
+       paper (Table S8) agrees with the Python code.
+    10. The value of tau_tr is 60 in the C code, 55*0.5 in the Python code. The
+        paper (Table S8) agrees with the Python code.
+    11. The differential equations for Ca_i, Ca_sub, Ca_rel, and Ca_up are
+        incorrectly multiplied by a factor Cm in the C code (but see below).
+        These equations are not shown in the paper.
+    12. The term (ICaL + IpCa + ...) in the update for Ca_sub should be
+        multiplied by Cm. The Python code does not include a Cm multiplication,
+        while the C code multiplies the full equation (not just the current
+        term) by Cm.
+    13. The cell volume Vcell is 3500 in the C code, 20100 in the Python code.
+        The paper (Table S8) agrees with the Python code.
+
+    References:
+
+    [1] Akwaboah, A. D., Tsevi, B., Yamlome, P., Treat, J. A., Brucal-Hallare,
+        M., Cordeiro, J. M. & Deo, M. (2021) An in silico hiPSC-derived
+        cardiomyocyte model built with genetic algorithm.
+        https://doi.org/10.3389/fphys.2021.675867
+
+    [2] Github repository for [1]. Accessed on 2024-03-22, at commit
+        3d0807fdde0c2d52f1e5fef7f8e5ef70b2b087d5
+        https://github.com/Adakwaboah/hiPSC-CM_Computational_Model
+
+    [3] Kurata, Y., Hisatome, I., Imanishi, S. & Shibamoto, T. (2002) Dynamical
+        description of sinoatrial node pacemaking; improved mathematical model
+        for primary pacemaker cell.
+        https://doi.org/10.1152/ajpheart.00900.2001
+
+"""
+# Initial values (C version). These match the ones given in [1] Table S9.
+membrane.V     = -66.643468720486
+ina.m          = 0.049124825877
+ina.h          = 0.727700325891
+ina.j          = 0.894208866121
+sodium.Na_i    = 9.680699292047
+potassium.K_i  = 91.709001163473
+ito.xf         = 0.005930308293
+ito.yf         = 0.981076047295
+ito.xs         = 0.005925315068
+ito.ys         = 0.257724187021
+ikr.fa         = 0.005855419715
+ikr.sa         = 0.036098779153
+ikr.i          = 0.868561127740
+if.y           = 0.065137562713
+ical.d         = 0.000033876121
+ical.f         = 0.997882750596
+ical.fca       = 0.547948046949
+cabuf.tc       = 0.043582776022
+cabuf.tmc      = 0.449383699221
+cabuf.tmm      = 0.486436847737
+cabuf.cmi      = 0.087712453951
+cabuf.cms      = 0.108049141579
+cabuf.cq       = 0.028782461964
+calcium.Ca_i   = 0.000228812553
+calcium.Ca_sub = 0.000288302762
+calcium.Ca_up  = 0.825695731160
+calcium.Ca_rel = 0.024701468338
+iks.x          = 0.048136026971
+ikur.a         = 0.021931284659
+ikur.i         = 0.969241564523
+"""
+# Initial values (Python version)
+membrane.V     = -72.13392269291998
+ina.m          = 0.021232582553136294
+ina.h          = 0.8953389405508547
+ina.j          = 0.9828395333073615
+sodium.Na_i    = 10.612071750230232
+potassium.K_i  = 91.88105959334906
+ito.xf         = 0.0042110467813189535
+ito.yf         = 0.979408089136425
+ito.xs         = 0.004203096455919421
+ito.ys         = 0.18607260860356756
+ikr.fa         = 0.007833508834981354
+ikr.sa         = 0.07751078049183394
+ikr.i          = 0.9070325229910078
+if.y           = 0.054930836509322276
+ical.d         = 1.4345390653496403e-5
+ical.f         = 0.9746917094323123
+ical.fca       = 0.4540983986303234
+cabuf.tc       = 0.05706947461622824
+cabuf.tmc      = 0.5179947908649024
+cabuf.tmm      = 0.42582651486832124
+cabuf.cmi      = 0.11324342208462247
+cabuf.cms      = 0.15020628640302436
+cabuf.cq       = 0.005815289107170125
+calcium.Ca_i   = 0.0003039768831025202
+calcium.Ca_sub = 0.00042073428597645955
+calcium.Ca_up  = 0.6752811199537715
+calcium.Ca_rel = 0.004874494711477725
+iks.x          = 0.06422007766460627
+ikur.a         = 0.012521015669772591
+ikur.i         = 0.9694571918864883
+"""
+
+# Simulation inputs
+[engine]
+time = 0 [ms]
+    in [ms]
+    bind time
+pace = 0
+    bind pace
+
+# Membrane potential
+[membrane]
+dot(V) = -(i_ion + stimulus.i_stim)
+    in [mV]
+i_ion = (
+        + ina.INa
+        + ik1.IK1
+        + ikr.IKr
+        + iks.IKs
+        + ikur.IKur
+        + ikach.IKAch
+        + ito.Ito
+        + if.If
+        + ical.ICaL
+        + ipca.IpCa
+        + inak.INaK
+        + inaca.INaCa
+        + ibna.IbNa
+        + ibca.IbCa
+)
+    in [A/F]
+
+#
+# Model configuration
+#
+[mode]
+iso = 0
+    desc: Isoproterenol; set to 1 to enable
+pacing = 0
+    desc: Pacing; set to 1 if pacing to reduce If by 50%
+version = 2
+    desc: 0=Python, 1=C, 2=Corrected
+
+#
+# Stimulus current
+#
+[stimulus]
+i_stim = amplitude * engine.pace
+    in [A/F]
+amplitude = if(mode.pacing == 1, -50 [A/F], 0 [A/F])
+    in [A/F]
+
+#
+# Fast sodium current
+#
+# Based on Luo & Rudy 1991, but partially refit to hipsc data
+#
+[ina]
+use membrane.V
+p01 = 1.01872382e1 [mS/uF] in [mS/uF]
+p02 = 2.81165049e-1 [1/ms/mV] in [1/ms/mV]
+p03 = 4.11026646e-2 [1/ms] in [1/ms]
+p04 = 1.85913230e-1 [1/ms] in [1/ms]
+p05 = 2.33559087 [1/ms] in [1/ms]
+p06 = 2.69343146e5 [1/ms] in [1/ms]
+p07 = 9.44262616e4 [1/ms/mV] in [1/ms/mV]
+p08 = 1.95789481e-1 [1/mV] in [1/mV]
+p09 = 4.34129546e-5 [1/ms/mV] in [1/ms/mV]
+p10 = 5.95815316e-2 [1/mV] in [1/mV]
+p11 = 4.29535950e-1 [1/mV] in [1/mV]
+p12 = 1.26055107e-1 [1/ms] in [1/ms]
+p13 = 5.45387213e-3 [1/mV] in [1/mV]
+p14 = 1.11372808e-1 [ms] in [ms]
+p15 = 8.23823189e-1 [mV] in [mV]
+p16 = 7.98343615 [mV] in [mV]
+p17 = 4.37170307e-1 [1/ms] in [1/ms]
+p18 = 2.87045755e-7 [1/mV] in [1/mV]
+p19 = 2.42211297e-2 [1/mV] in [1/mV]
+p20 = 5.22647290e1 [mV] in [mV]
+dot(m) = (inf - m) / tau
+    a = p02 * (V + 47.13 [mV]) / (1 - exp(-0.1 [1/mV] * (V + 47.13 [mV])))
+        in [1/ms]
+    b = p03 * exp(-V / 11 [mV])
+        in [1/ms]
+    tau = 1 / (a + b)
+        in [ms]
+    inf = a * tau
+dot(h) = (inf - h) / tau
+    a = if(V < -40 [mV], p04 * exp((80 [mV] + V) / -6.8 [mV]), 0 [1/ms])
+        in [1/ms]
+    b = if(V < -40 [mV],
+           p05 * exp(0.079 [1/mV] * V) + p06 * exp(0.35 [1/mV] * V),
+           1 / (p14 * (1 + exp((V + p15) / -p16))))
+        in [1/ms]
+    tau = 1 / (a + b)
+        in [ms]
+    inf = a * tau
+dot(j) = (inf - j) / tau
+    a = if(V < -40 [mV],
+           (-p07 * exp(p08 * V) - p09 * exp(-p10 * V)) * (V + 37.78 [mV]) / (1 + exp(p11 * (V + 79.23 [mV]))),
+           0 [1/ms])
+        in [1/ms]
+    b = if(V < -40 [mV],
+           (p12 * exp(-p13 * V)) / (1 + exp(-0.1378 [1/mV] * (V + 40.14 [mV]))),
+           (p17 * exp(-p18 * V)) / (1 + exp(-p19 * (V + p20))))
+        in [1/ms]
+    tau = 1 / (a + b)
+        in [ms]
+    inf = a * tau
+K_INa = 1
+    desc: Manual scaling factor
+INa = K_INa * p01 * m^3 * h * j * (V - rev.ENa)
+    in [A/F]
+
+#
+# Ito
+#
+# Based on Grandi-Pandit 2010, but partially refit to hipsc data
+#
+[ito]
+use membrane.V
+p01 = 1.07795129e-3 [mS/uF] in [mS/uF]
+p02 = 1.55692740e-1 [mS/uF] in [mS/uF]
+p03 = 1.46825076e1 [mV] in [mV]
+p04 = 1.59100592e1 [mV] in [mV]
+p05 = 3.83118368 [ms] in [ms]
+p06 = 4.80328534e1 [mV] in [mV]
+p07 = 4.89599981e1 [mV] in [mV]
+p08 = 2.85524250e-1 [ms] in [ms]
+p09 = 1.23540497e2 [ms] in [ms]
+p10 = 5.03128630e1 [mV] in [mV]
+p11 = 3.16319213e2 [mV^2] in [mV^2]
+p12 = 1.32886316e1 [ms] in [ms]
+p13 = 4.13205093 [ms] in [ms]
+p14 = 2.30054808 [mV] in [mV]
+p15 = 2.67131386e1 [mV] in [mV]
+p16 = 1.12598680e-1 [ms] in [ms]
+p17 = 1.13596188e3 [ms] in [ms]
+p18 = 4.95801337e1 [mV] in [mV]
+p19 = 5.53181883 [mV] in [mV]
+p20 = 1.97135761e1 [ms] in [ms]
+xinf = 1 / (1 + exp(-(V - p03) / p04))
+yinf = 1 / (1 + exp((V + 41.1 [mV]) / 6.68 [mV]))
+dot(xf) = (xinf - xf) / tau
+    tau = p05 * exp(-((V + p06) / p07)^2) + p08
+        in [ms]
+dot(yf) = (yinf - yf) / tau
+    tau = p09 * exp(-(V + p10)^2 / p11) + p12
+        in [ms]
+dot(xs) = (xinf - xs) / tau
+    tau = p13 / (1 + exp((V + p14) / p15)) + p16
+        in [ms]
+dot(ys) = (yinf - ys) / tau
+    tau = p17 / (1 + exp((V + p18) / p19)) + p20
+        in [ms]
+Itof = p01 * xf * yf * (V - rev.EK)
+    desc: Fast component of Ito
+    in [A/F]
+Itos = p02 * xs * ys * (V - rev.EK)
+    desc: Slow component of Ito
+    in [A/F]
+K_Ito = 0.75 * if(mode.version == 0, 1, 0.85)
+    desc: Manual scaling factor
+    note: Paper value (Table S7) agrees with the C value 0.75 * 0.85 * (p01 | p02)
+Ito = K_Ito * (Itof + Itos)
+    in [A/F]
+
+#
+# IKr
+#
+# Based on Kurata 2002, but refit to hipsc data
+#
+[ikr]
+use membrane.V
+p01 = 1.86484701e-2 [mS/uF] in [mS/uF]
+p02 = 6.42652882 [mV] in [mV]
+p03 = 1.18799783e1 [mV] in [mV]
+p04 = 4.01163188e1 [mV] in [mV]
+p05 = 1.40822232e1 [mV] in [mV]
+p06 = 9.63756681e-1 [ms] in [ms]
+p07 = 4.23722972e-2
+p08 = 1.70356140e1 [mV] in [mV]
+p09 = 1.24135620e-3
+p10 = 2.33474212e1 [mV] in [mV]
+p11 = 4.56822754e-3
+p12 = 1.46185713e1 [mV] in [mV]
+p13 = 1.71859133e-4
+p14 = 1.73714985e1 [mV] in [mV]
+p15 = 8.47065470e-2 [1/ms] in [1/ms]
+p16 = 5.21505971e1 [mV] in [mV]
+p17 = 7.59956413e-1 [1/ms] in [1/ms]
+p18 = 1.07977148e2 [mV] in [mV]
+ainf = 1 / (1 + exp(-(V + p02) / p03))
+dot(fa) = (ainf - fa) / tau
+    tau = p06 / (p07 * exp(V / p08) + p09 * exp(-V / p10))
+        in [ms]
+dot(sa) = (ainf - sa) / tau
+    tau = p06 / (p11 * exp(V / p12) + p13 * exp(-V / p14))
+        in [ms]
+dot(i) = (inf - i) / tau
+    inf = 1 / (1 + exp((V + p04) / p05))
+    tau = 1 / (p15 * exp(-V / p16) + p17 * exp(V / p18))
+        in [ms]
+gkr = p01 * (ext.K_o / 1 [mM])^0.59
+    in [mS/uF]
+K_IKr = 1.25
+    desc: Manual scaling factor
+IKr = K_IKr * gkr * (V - rev.EK) * (0.6 * fa + 0.4 * sa) * i
+    in [A/F]
+
+#
+# If
+#
+# Based on Stewart 2009, but partially refit to hipsc data
+#
+[if]
+use membrane.V
+p1 = 5.02968027e-2 [mS/uF] in [mS/uF]
+p2 = 7.02798870e-2 [mS/uF] in [mS/uF]
+p3 = 1.68826991
+p4 = 3.67280874e-2 [1/mV] in [1/mV]
+p5 = 5.17628426
+p6 = 5.35050858e-2 [1/mV] in [1/mV]
+p7 = 4.01031320e3 [ms] in [ms]
+dot(y) = (inf - y) / tau
+    inf = 1 / (1 + exp((V + 80.6 [mV]) / 6.8 [mV]))
+    tau = p7 / (a + b)
+        a = exp(-(p3 + (p4 * V)))
+        b = exp(p5 + (p6 * V))
+        in [ms]
+K_If = if(mode.version == 0, 0.91, 0.85) * if(mode.pacing == 1, 0.5, 1)
+    desc: Manual scaling factor
+    note: Paper value (Table S7) agrees with the C value 0.85 * (p1 | p2)
+If_Na = K_If * p1 * y * (V - rev.ENa)
+    in [A/F]
+If_K = K_If * p2 * y * (V - rev.EK)
+    in [A/F]
+If = if(mode.version == 1 and base > 0 [A/F], 0 [A/F], base)
+    base = If_K + If_Na
+        in [A/F]
+    in [A/F]
+    note: """
+        The C code has a cheeky if-statement here stopping If from ever being
+        positive. This also seems to have been used to create Figure 6. Note
+        that it isn't applied to If_Na and If_K, which are used in the
+        concentration updates, so it presumably breaks conservation of charge.
+        """
+
+#
+# ICaL
+#
+# Based on Kurata 2002 but partially refit to hipsc data
+# Note: Kinetics is determined by Ca_sub, driving by Ca_i
+#
+[ical]
+use phys.F, phys.Et
+use membrane.V
+use calcium.Ca_sub, calcium.Ca_i, ext.Ca_o
+p1 = 0.18722844 [L/F/s] in [L/F/s]
+p2 = 1.00592002 [mV] in [mV]
+p3 = 6.38249172 [mV] in [mV]
+p4 = 29.16060561 [mV] in [mV]
+p5 = 3.60776178 [mV] in [mV]
+p6 = 0.09457633 [mV] in [mV]
+Km_fca = 0.00035 [mM] in [mM]
+dot(d) = (inf - d) / tau
+    inf = 1 / (1 + exp(-(V + p2) / p3))
+    tau = 1 / (a + b)
+        in [ms]
+    a = -0.02839 [1/ms/mV] * (V + 35 [mV]) / (exp(-(V + 35 [mV]) / 2.5 [mV]) - 1) - (0.0849 [1/ms/mV] * V) / (exp(-V / 4.8 [mV]) - 1.00000001)
+        in [1/ms]
+    b = 0.01143 [1/ms/mV] * (V - 5 [mV]) / (exp((V - 5 [mV]) / 2.5 [mV]) - 1)
+        in [1/ms]
+dot(f) = (inf - f) / tau
+    inf = 1 / (1 + exp((V + p4) / p5))
+    tau = 257.1 [ms] * exp(-((V + 32.5 [mV]) / 13.9 [mV])^2) + 44.3 [ms]
+        in [ms]
+dot(fca) = (inf - fca) / tau
+    inf = Km_fca / (Km_fca + Ca_sub)
+    tau = inf / 0.035 [1/ms]
+        in [ms]
+K_ICaL = 1.1 * if(mode.iso == 1, 2, 1)
+    desc: Manual scaling factor
+ICaL = K_ICaL * p1 * d * f * fca * 4 * ((V - p6) * F) / Et \
+        * (Ca_i * exp((2 * (V - p6)) / Et) - 0.341 * Ca_o) \
+        / (exp((2 * (V - p6)) / Et) - 1)
+    in [A/F]
+
+#
+# IKs
+#
+# From Courtemanche 1998
+#
+[iks]
+use membrane.V
+dot(x) = (inf - x) / tau
+    inf = 1 / sqrt(1 + exp(-(V - 19.9 [mV]) / 12.7 [mV]))
+    tau = 1 / (2 * (a + b))
+        a = 4e-5 [1/ms/mV] * (V - 19.9 [mV]) / (1 - exp(-(V - 19.9 [mV]) / 17 [mV]))
+            in [1/ms]
+        b = 3.5e-5 [1/ms/mV] * (V - 19.9 [mV]) / (exp((V - 19.9 [mV]) / 9 [mV]) - 1)
+            in [1/ms]
+        in [ms]
+K_IKs = 0.3
+    desc: Manual scaling factor
+G_ks = 0.129 [nS/pF]
+    in [nS/pF]
+IKs = K_IKs * G_ks * x^2 * (V - rev.EKs)
+    in [A/F]
+
+#
+# IKur
+#
+# From Courtemanche 1998. Prepared for refitting but parameters values match
+# original Courtemanche model.
+#
+[ikur]
+use membrane.V
+p01 = 0.005 [mS/uF] in [mS/uF]
+p02 = 0.05 [mS/uF] in [mS/uF]
+p03 = 15 [mV] in [mV]
+p04 = 13 [mV] in [mV]
+p05 = 0.65 [1/ms] in [1/ms]
+p06 = 10 [mV] in [mV]
+p07 = 8.5 [mV] in [mV]
+p08 = 30 [mV] in [mV]
+p09 = 59 [mV] in [mV]
+p10 = 0.65 [1/ms] in [1/ms]
+p11 = 2.5
+p12 = 82 [mV] in [mV]
+p13 = 17 [mV] in [mV]
+p14 = 30.3 [mV] in [mV]
+p15 = 9.6 [mV] in [mV]
+p16 = 21
+p17 = 185 [mV] in [mV]
+p18 = 28 [mV] in [mV]
+p19 = 1 [1/ms] in [1/ms]
+p20 = 158 [mV] in [mV]
+p21 = 16 [mV] in [mV]
+p22 = 99.45 [mV] in [mV]
+p23 = 27.48 [mV] in [mV]
+K_q10 = 3
+dot(a) = (inf - a) / tau
+    inf = 1 / (1 + exp(-(V + p14) / p15))
+    tau = 1 / (K_q10 * (aa + bb))
+        in [ms]
+    aa = p05 / (exp(-(V + p06) / p07) + exp((-(V - p08) / p09)))
+        in [1/ms]
+    bb = p10 / (p11 + exp((V + p12) / p13))
+        in [1/ms]
+dot(i) = (inf - i) / tau
+    inf = 1 / (1 + exp((V - p22) / p23))
+    tau = 1 / (K_q10 * (aa + bb))
+        in [ms]
+    aa = 1 [1/ms] / (p16 + exp(-(V - p17) / p18))
+        in [1/ms]
+    bb = p19 * exp((V - p20) / p21)
+        in [1/ms]
+gkur = p01 + p02 / (1 + exp(- (V - p03) / p04))
+    in [mS/uF]
+K_IKur = 0.8
+    desc: Manual scaling factor
+IKur = K_IKur * gkur * a^3 * i * (V - rev.EK)
+    in [A/F]
+
+#
+# INaK
+#
+# From Courtemanche 1998
+#
+[inak]
+use membrane.V
+use phys.R, phys.T, phys.F
+use sodium.Na_i, ext.Na_o
+use potassium.K_i, ext.K_o
+K_mNai = 87.5 [mM]
+    in [mM]
+    desc: [Na]i half-saturation constant
+K_mKo = 1 [mM]
+    in [mM]
+    desc: [K]i half-saturation constant
+sigma = if(mode.version == 1, 0, (1 / 7) * (exp(ext.Na_o / 67.3 [mM]) - 1))
+    note: The C code has a bug here: (1/7) in C is an integer operation so that sigma is always 0.
+f_NaK = 1 / (1 + 0.1245 * exp(-(0.1 * (F * V)) / (R * T)) + 0.0365 * sigma * exp(-(F * V) / (R * T)))
+INaK_max = 4.3 [A/F]
+    in [A/F]
+K_INaK = 1.7 * if(mode.version == 0, 1, 1.978 * 0.95) * if(mode.iso == 1, 1.3, 1)
+    desc: Manual scaling factor
+    note: Paper value (Table S7) agrees with the C code value of 1.7 * 1.978 * 0.95 * INaKMax
+INaK = K_INaK * INaK_max * f_NaK * (1 / (1 + (K_mNai / Na_i)^1.5)) * (K_o / (K_o + K_mKo))
+    in [A/F]
+
+#
+# INaCa
+#
+# From Courtemanche 1998
+#
+[inaca]
+use membrane.V
+use phys.R, phys.T, phys.F
+use sodium.Na_i, ext.Na_o
+use calcium.Ca_i, ext.Ca_o
+gamma_NaCa = 0.35
+k_sat = 0.1
+K_mCa = 1.38 [mM]
+    in [mM]
+    desc: Half-saturation constant
+K_mNa = 10 [mM]
+    in [mM]
+INaCa_max = 100 [A/F]
+    in [A/F]
+K_INaCa = if(mode.version == 0, 1, 9 * 1.8) * if(mode.iso == 1, 1.3, 1)
+    desc: Manual scaling factor
+    note: Paper value (Table S7) agrees with the C code value of 9 * 1.8 * INaCa_max
+numer = (exp(gamma_NaCa * (F / (R * T)) * V) * Na_i^3 * Ca_o - exp((gamma_NaCa - 1) * (F / (R * T)) * V) * Na_o^3 * Ca_i)
+    in [mM^4]
+denom = (K_mNa^3 + Na_o^3) * (K_mCa + Ca_o) * (1 + k_sat * (exp((gamma_NaCa - 1) * (F / (R * T)) * V)))
+    in [mM^4]
+INaCa = K_INaCa * INaCa_max * (numer / denom)
+    in [A/F]
+
+#
+# IKACh
+#
+# From Kurata 2002
+#
+[ikach]
+use membrane.V
+use phys.R, phys.T, phys.F
+use potassium.K_i, ext.K_o
+gKAch = 0.0011 [A/F/mM] * (K_o / 1 [mM])^0.41
+    in [A/F/mM]
+K_IKAch = 1
+    desc: Manual scaling factor
+IKAch = K_IKAch * gKAch * (K_i - K_o * exp(-V * F / (R * T)))
+    in [A/F]
+
+#
+# IK1
+#
+# From Grandi-Pandit 2010
+#
+[ik1]
+use membrane.V
+use rev.EK
+inf = a / (a + b)
+    a = 1.02 / (1 + exp(0.2385 [1/mV] * (V - EK - 59.215 [mV])))
+    b = (0.49124 * exp(0.08032 [1/mV] * (V + 5.476 [mV] - EK))
+            + exp(0.06175 [1/mV] * (V - 594.31 [mV] - EK))
+         ) / (1 + exp(-0.5143 [1/mV] * (V + 4.753 [mV] - EK)))
+K_IK1 = 0.18 * if(mode.iso == 1, 0.8, 1)
+    desc: Manual scaling factor
+IK1 = K_IK1 * 0.35 [mS/uF] * (sqrt(ext.K_o / 5.4 [mM])) * inf * (V - EK)
+    in [A/F]
+
+#
+# Background calcium current
+#
+# From Courtemanche 1998
+#
+[ibca]
+G_bCa = 0.00113 [mS/uF]
+    in [mS/uF]
+K_IbCa = 1.6
+    desc: Manual scaling factor
+IbCa = K_IbCa * G_bCa * (membrane.V - rev.ECa * if(mode.version == 1, 0.6, 1))
+    in [A/F]
+    note: Scaling of ECa is not mentioned in the paper or supplement
+
+#
+# Background sodium current
+#
+# From Courtemanche 1998
+#
+[ibna]
+G_bNa = 0.000674 [mS/uF]
+    in [mS/uF]
+K_IbNa = 1.6
+    desc: Manual scaling factor
+IbNa = K_IbNa * G_bNa * (membrane.V - rev.ENa)
+    in [A/F]
+
+#
+# IpCa
+#
+# From Courtemanche 1998
+#
+[ipca]
+use calcium.Ca_i
+IpCa_max = 0.275 [pA/pF]
+    in [pA/pF]
+K_IpCa = 5.2
+    desc: Manual scaling factor
+IpCa = K_IpCa * IpCa_max * Ca_i / (0.0005 [mM] + Ca_i)
+    in [A/F]
+
+#
+# Calcium buffering
+#
+# From Kurata 2002
+#
+[cabuf]
+use calcium.Ca_i, calcium.Ca_sub, calcium.Ca_rel
+Mg_i = 2.5 [mM]
+    in [mM]
+    desc: Intracellular magnesium
+k_ftc = 88.8 [1/mM/ms] in [1/mM/ms]
+k_btc = 0.446 [1/ms] in [1/ms]
+dot(tc) = k_ftc * Ca_i * (1 - tc) - k_btc * tc
+k_ftmc = 227.7 [1/mM/ms] in [1/mM/ms]
+k_btmc = 0.00751 [1/ms] in [1/ms]
+dot(tmc) = k_ftmc * Ca_i * (1 - tmc - tmm) - k_btmc * tmc
+k_ftmm = 2.277 [1/mM/ms] in [1/mM/ms]
+k_btmm = 0.751 [1/ms] in [1/ms]
+dot(tmm) = k_ftmm * Mg_i * (1 - tmc - tmm) - k_btmm * tmm
+k_fcm = 227.7 [1/mM/ms] in [1/mM/ms]
+k_bcm = 0.542 [1/ms] in [1/ms]
+dot(cmi) = k_fcm * Ca_i * (1 - cmi) - k_bcm * cmi
+dot(cms) = k_fcm * Ca_sub * (1 - cms) - k_bcm * cms
+k_fcq = 0.534 [1/mM/ms] in [1/mM/ms]
+k_bcq = 0.445 [1/ms] in [1/ms]
+dot(cq) = k_fcq * Ca_rel * (1 - cq) - k_bcq * cq
+
+#
+# Calcium concentrations
+#
+# From Kurata 2002
+#
+[calcium]
+use phys.F
+use cell.Cm
+use cell.V_sub, cell.V_up, cell.Vi, cell.Vrel
+use ical.ICaL, ipca.IpCa, ibca.IbCa, inaca.INaCa
+tau_difCa = 0.04 [ms]
+    in [ms]
+jCa_diff = (Ca_sub - Ca_i) / tau_difCa
+    in [mM/ms]
+Prel = 5 [1/ms] * if(mode.version == 1, 2, 10)
+    in [1/ms]
+    desc: Maxmimum SR release rate
+    note: Paper (Table S8) agrees with Python value of 50 ms^-1
+Krel = 0.0012 [mM]
+    in [mM]
+jrel = Prel * (Ca_rel - Ca_sub) / (1 + (Krel / Ca_sub)^2)
+    desc: Ca release from JSR
+    in [mM/ms]
+Pup = 0.005 [M/s] * if(mode.version == 1, 1, 1.5) * if(mode.iso == 1, 1.2, 1)
+    in [mM/ms]
+    desc: Maximum SR uptake rate
+    note: Paper (Table S8) agrees with the Python value of 1.5*0.005
+Kup = 0.0006 [mM]
+    in [mM]
+    desc: Half-maximal Ca_up
+jup = Pup / (1 + Kup / Ca_i)
+    in [mM/ms]
+    desc: Ca uptake by NSR
+tau_tr = if(mode.version == 1, 60 [ms], 55 * 0.5 [ms])
+    in [ms]
+    note: Paper (Table S8) agrees with Python value of 55 * 0.5
+jtr = (Ca_up - Ca_rel) / tau_tr
+    desc: Transfer from NSR to JSR
+    in [mM/ms]
+CM_tot = 0.045 [mM] in [mM]
+TC_tot = 0.031 [mM] in [mM]
+TMC_tot = 0.062 [mM] in [mM]
+CQ_tot = 10 [mM] in [mM]
+dot(Ca_i) = if(mode.version == 1, Cm / 1 [pF], 1) * (
+        + (jCa_diff * V_sub - jup * V_up) / Vi
+        - (CM_tot * dot(cabuf.cmi)
+        + TC_tot * dot(cabuf.tc)
+        + TMC_tot * dot(cabuf.tmc)))
+    in [mM]
+    note: The C version incorrectly multiplies this equation by Cm
+dot(Ca_sub) = if(mode.version == 1, Cm / 1 [pF], 1) * (
+        + jrel * (Vrel / V_sub)
+        - (ICaL + IpCa + IbCa - 2 * INaCa) / (2 * F * V_sub) * if(mode.version == 2, Cm, 1 [pF])
+        - (jCa_diff + CM_tot * dot(cabuf.cms)))
+    in [mM]
+    note: """
+        The C-version incorrectly multiplies the full equation by Cm.
+        The term involving the currents does require a multiplication by Cm
+        (which is not present in the Python version), but the other terms do
+        not need the extra Cm multiplication.
+        """
+dot(Ca_rel) = if(mode.version == 1, Cm / 1 [pF], 1) * (jtr - jrel - CQ_tot * dot(cabuf.cq))
+    in [mM]
+    note: The C-version incorrectly multiplies this equation by Cm
+dot(Ca_up) = if(mode.version == 1, Cm / 1 [pF], 1) * (jup - jtr * (Vrel / V_up))
+    in [mM]
+    note: The C-version incorrectly multiplies this equation by Cm
+
+#
+# Intracellular sodium
+#
+[sodium]
+INa_tot = (+ 3 * inak.INaK
+           + 3 * inaca.INaCa
+           + ina.INa
+           + if.If_Na
+           + ibna.IbNa)
+    in [A/F]
+dot(Na_i) = -cell.Cm * INa_tot / (phys.F * cell.Vi)
+    in [mM]
+
+#
+# Intracellular potassium
+#
+[potassium]
+IK_tot = (+ ito.Ito
+          + ikr.IKr
+          + if.If_K
+          + ik1.IK1
+          + iks.IKs
+          + ikur.IKur
+          + ikach.IKAch
+          - 2 * inak.INaK)
+    in [A/F]
+dot(K_i) = -cell.Cm * IK_tot / (phys.F * cell.Vi)
+    in [mM]
+
+#
+# External concentrations
+#
+[ext]
+Na_o = 140 [mM]
+    in [mM]
+K_o = 5.4 [mM]
+    in [mM]
+    note: Increase to 10 or 12 to simulate hyperkalemia
+Ca_o = 2 [mM]
+    in [mM]
+    note: Increase to 4 or 6 to simulate hypercalcemia
+
+#
+# Physical constants
+#
+[phys]
+R = 8.3143 [J/K/mol]
+    in [J/K/mol]
+T = 310 [K]
+    in [K]
+F = 96.4867 [C/mmol]
+    in [C/mmol]
+Et = (R * T) / F
+    in [mV]
+
+[cell]
+Cm = 100 [pF]
+    in [pF]
+Vcell = if(mode.version == 1, 3500 [um^3], 20100 [um^3])
+    in [um^3]
+    note: The paper (Table S8) agrees with the Python code value of 20100 [um^3]
+V_sub = 0.01 * Vcell
+    in [um^3]
+V_up = 0.0116 * Vcell
+    in [um^3]
+Vi = 0.46 * (Vcell - V_sub)
+    in [um^3]
+Vrel = 0.0012 * Vcell
+    in [um^3]
+
+[rev]
+use phys.R, phys.T, phys.F
+ENa = (R * T / F) * log(ext.Na_o / sodium.Na_i)
+    in [mV]
+EK = (R * T / F) * log(ext.K_o / potassium.K_i)
+    in [mV]
+EKs = ((R * T) / F) * log((0.01833 * ext.Na_o + ext.K_o) / (0.01833 * sodium.Na_i + potassium.K_i))
+    in [mV]
+ECa = (R * T / (2 * F)) * log(ext.Ca_o / calcium.Ca_i)
+    in [mV]
+
+[[protocol]]
+# Level  Start    Length   Period   Multiplier
+1        0        0.5      1000     0
+
+[[script]]
+import myokit
+import matplotlib.pyplot as plt
+
+# Load model, create simulation
+m = get_model()
+s = myokit.Simulation(m)
+
+# Create figure
+fig = plt.figure(figsize=(10, 6))
+fig.subplots_adjust(0.07, 0.08, 0.99, 0.98, hspace=0.3, wspace=0.1)
+
+ax00 = fig.add_subplot(2, 2, 1)  # Top-left: Vm before pacing
+ax01 = fig.add_subplot(2, 2, 2)  # Top-right: Vm after 1000s pacing
+ax2 = fig.add_subplot(4, 1, 3)   # Middle: [K]i during 999s pacing
+ax3 = fig.add_subplot(4, 1, 4)   # Bottom: [Na]i during 999s pacing 
+
+ax00.set_ylabel('Vm (mV)')
+ax2.set_ylabel('[K]i (mM)')
+ax3.set_ylabel('[Na]i (mM)')
+ax3.set_xlabel('Time (ms)')
+
+# Run for all three versions
+for k, version in enumerate(('Python', 'C', 'Corrected')):
+    s.reset()
+    s.set_constant('mode.version', k)
+    d0 = s.run(1e3)   
+    d1 = s.run(999e3, log=['engine.time', 'potassium.K_i', 'sodium.Na_i'], 
+               log_interval=1e3)
+    d2 = s.run(1e3)
+    
+    ax00.plot(d0.time(), d0['membrane.V'], label=version)
+    ax01.plot(d2.time(), d2['membrane.V'], label=version)
+    ax2.plot(d1.time(), d1['potassium.K_i'], label=version)
+    ax3.plot(d1.time(), d1['sodium.Na_i'], label=version)
+
+ax00.legend(loc='lower left')
+plt.show()
+
