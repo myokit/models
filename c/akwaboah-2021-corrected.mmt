@@ -1,6 +1,6 @@
 [[model]]
 name: akwaboah-2021-corrected
-version: 20240324
+version: 20240325
 mmt_authors: Michael Clerx
 desc: """
     Model of the hiPSC AP by Akwaboah et al [1], with corrections.
@@ -513,7 +513,6 @@ K_IbCa = 1.6
     desc: Manual scaling factor
 IbCa = K_IbCa * G_bCa * (membrane.V - rev.ECa)
     in [A/F]
-    note: Scaling of ECa is not mentioned in the paper or supplement
 
 #
 # Background sodium current
@@ -602,7 +601,6 @@ jup = Pup / (1 + Kup / Ca_i)
     desc: Ca uptake by NSR
 tau_tr = 27.5 [ms]
     in [ms]
-    note: Paper (Table S8) agrees with Python value of 55 * 0.5
 jtr = (Ca_up - Ca_rel) / tau_tr
     desc: Transfer from NSR to JSR
     in [mM/ms]
@@ -621,18 +619,10 @@ dot(Ca_sub) = (
         - (ICaL + IpCa + IbCa - 2 * INaCa) * Cm / (2 * F * V_sub)
         - (jCa_diff + CM_tot * dot(cabuf.cms)))
     in [mM]
-    note: """
-        The C-version incorrectly multiplies the full equation by Cm.
-        The term involving the currents does require a multiplication by Cm
-        (which is not present in the Python version), but the other terms do
-        not need the extra Cm multiplication.
-        """
 dot(Ca_rel) = jtr - jrel - CQ_tot * dot(cabuf.cq)
     in [mM]
-    note: The C-version incorrectly multiplies this equation by Cm
 dot(Ca_up) = jup - jtr * (Vrel / V_up)
     in [mM]
-    note: The C-version incorrectly multiplies this equation by Cm
 
 #
 # Intracellular sodium
@@ -671,10 +661,8 @@ Na_o = 140 [mM]
     in [mM]
 K_o = 5.4 [mM]
     in [mM]
-    note: Increase to 10 or 12 to simulate hyperkalemia
 Ca_o = 2 [mM]
     in [mM]
-    note: Increase to 4 or 6 to simulate hypercalcemia
 
 #
 # Physical constants
