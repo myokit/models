@@ -8,12 +8,12 @@ desc: """
     The Nav1.5 and Kir2.1 currents in the 23C model are based on the data from
     [2], while endogeneous INa and IK were fit to [3] and [4] respectively.
     All currents in the 35 degrees model were temperature-shifted, sometimes
-    using literature data on temperature effects, sometimes by fitting to 
+    using literature data on temperature effects, sometimes by fitting to
     tissue data (including conduction velocity).
-        
+
     The formulation of the Nav1.5 current is based on the model by Lindblad et
     al. [5], the endogenous INa is a class Hodgkin-Huxley m^3*h form, and the
-    endogenous IK current formulation is based on the IKs equations in [6].    
+    endogenous IK current formulation is based on the IKs equations in [6].
 
     This implementation is based on the equations given in the paper and
     supplement [1]. To avoid overshadowing the sodium current, the stimulus
@@ -24,7 +24,7 @@ desc: """
     units for conductances were changed from [mS/cm^2] to [nS/pF] (thereby
     removing the assumption that the specific membrane capacity is exactly
     1 uF/cm^2).
-    
+
     The implementation was verified by recreating parts of figures 1 and 2,
     which could partly be achieved (some information on monodomain parameters
     and the exact stimulus and voltage-clamp protocols is missing). In
@@ -36,21 +36,21 @@ desc: """
         Variability for Paired Computational-Experimental Studies. PLOS
         Computational Biology. 13(1): e1005342.
         https://doi.org/10.1371/journal.pcbi.1005342
-        
+
     [2] Kirkton, R. D., and Bursac, N. (2011) Engineering biosynthetic
         excitable tissues from unexcitable cells for electrophysiological and
         cell therapy studies. Nature communications 2:300
         https://doi.org/10.1038/ncomms1302
-        
-    [3] He, B., and Soderlund, D. M. (2017) Human embryonic kidney (HEK293) 
-        cells express endogenous voltage-gated sodium currents and Nav1.7 
+
+    [3] He, B., and Soderlund, D. M. (2017) Human embryonic kidney (HEK293)
+        cells express endogenous voltage-gated sodium currents and Nav1.7
         sodium channels. Neuroscience Letters 469:268-272.
         http://doi.org/10.1016/j.neulet.2009.12.012
 
     [4] Yu, S. P., and Kerchner, G. A. (1998) Endogenous voltage-gated
         potassium channels in human embryonic kidney (HEK293) cells. Journal of
         Neuroscience Research, 52:612-617.
-        
+
     [5] Lindblad, D.S., Murphey, C.R., Clark, J.W., and Giles, W.G. (1996) A
         model of the action potential and underlying membrane currents in a
         rabbit atrial cell. American Journal of Physiology, 271, H1666-H1691.
@@ -225,7 +225,7 @@ use membrane.V, rev.EK
 dot(b) = (inf - b) / tau
     inf = 1 / (1 + exp((V + 9.055 [mV]) / -23.79 [mV]))
     tau = 1.6 [ms]
-        in [ms]    
+        in [ms]
 g = 0.1313 [nS/pF]
     in [nS/pF]
 IKwt = g * b^2 * (V - EK)
