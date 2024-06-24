@@ -1,6 +1,6 @@
 [[model]]
 name: ohara-2011
-version: 20240529
+version: 20240624
 mmt_authors: Michael Clerx
 display_name: O'Hara et al., 2011
 desc: """
@@ -772,70 +772,93 @@ INaCa_ss = 0.2 * inaca.fNaCa * inaca.gNaCa * allo * (JncxNa + 2 * JncxCa)
 use membrane.V
 use extra.Na_o, sodium.Na_i, sodium.Na_ss
 use extra.K_o, potassium.K_i, potassium.K_ss
-k1p = 949.5 [1/s]
-    in [1/s]
-k1m = 182.4 [1/s/mM]
-    in [1/s/mM]
-k2p = 687.2 [1/s]
-    in [1/s]
-k2m = 39.4 [1/s]
-    in [1/s]
-k3p = 1899 [1/s]
-    in [1/s]
-k3m = 79300 [1/s/mM^2]
-    in [1/s/mM^2]
-k4p = 639 [1/s]
-    in [1/s]
-k4m = 40 [1/s]
-    in [1/s]
-Knai0 = 9.073 [mM]
+MgATP = 9.8 [mM]    # Original
     in [mM]
-Knao0 = 27.78 [mM]
+    desc: Intracellular MgATP concentration
+MgADP = 0.05 [mM]   # Original
+    in [mM] 
+    desc: Intracellular MgADP concentration
+eP = 4.2 [mM]       # Original
     in [mM]
-Kki = 0.5 [mM]
+    desc: The total concentration of inorganic phosphate (free + bound)
+H = 1e-4 [mM]       # Corrected (see below)
     in [mM]
-Kko = 0.3582 [mM]
-    in [mM]
-delta = -0.155
-MgADP = 0.05 [mM]
-    in [mM]
-MgATP = 9.8 [mM]
-    in [mM]
-Kmgatp = 1.698e-7 [mM]
-    in [mM]
-H = 1e-4 [mM]
-    in [mM]
+    desc: Intracellular H+
     note: Corrected to 1e-7 [M] (pH 7) from original value of 1e-7 [mM]
-eP = 4.2 [mM]
+Khp = 1.698e-7 [mM] # This value is suspicious! Smith and crampin paper says 6.77. Cellml says 1.69e-4
     in [mM]
-Khp = 1.698e-7 [mM]
+    desc: Dissociation constant relating [HPi] and [H]
+Kxkur = 292 [mM]    # Original    
     in [mM]
-Knap = 224 [mM]
+    desc: Dissociation constant relating [KPi] and [K]i
+Knap = 224 [mM]     # Original
     in [mM]
-Kxkur = 292 [mM]
+    desc: Dissociation constant relating [NaPi] and [Na]i
+# Table 1 parameters in Smith & Cramin
+k1p = 949.5 [1/s]       # Refit from 1050
+    in [1/s]
+k1m = 182.4 [1/s/mM]    # Refit from 172.1
+    in [1/s/mM]
+k2p = 687.2 [1/s]       # Refit from 481
+    in [1/s]
+k2m = 39.4 [1/s]        # Refit from 40
+    in [1/s]
+k3p = 1899 [1/s]        # Refit from 2000
+    in [1/s]
+k3m = 79300 [1/s/mM^2]  # Original
+    in [1/s/mM^2]
+k4p = 639 [1/s]         # Refit from 320
+    in [1/s]
+k4m = 40 [1/s]          # Original
+    in [1/s]
+Knao0 = 27.78 [mM]      # Refit from 15.5
     in [mM]
-P = eP / (1 + H / Khp + Na_i / Knap + K_i / Kxkur)
+    desc: Extracellular Na+ dissociation constant at 0mV
+Knai0 = 9.073 [mM]      # Refit from 2.49
     in [mM]
+    desc: Intracellular Na+ dissociation constant at 0mV
+Kko = 0.3582 [mM]       # Refit from 0.213
+    in [mM]
+    desc: Extracellular K+ dissociation constant
+Kki = 0.5 [mM]          # Original
+    in [mM]
+    desc: Intracellular K+ dissociation constant
+Kmgatp = 1.698e-7 [mM]  # Refit from 2.51
+    in [mM]
+    desc: Intracellular MgATP dissociation constant
+delta = -0.155          # Refit from -0.031
+    desc: """A constant that "determines how the voltage dependence is
+             partitioned between intra and extracellular Na+ dissociation 
+             reactions."""
+# Equations 14: Voltage-dependent Na+ dissociation constants
 Knai = Knai0 * exp(delta * V * phys.FRT / 3)
     in [mM]
 Knao = Knao0 * exp((1 - delta) * V * phys.FRT / 3)
     in [mM]
+# Equations 30: Forward (clockwise) rates
 a1 = k1p * (Na_i / Knai)^3 / ((1 + Na_i / Knai)^3 + (1 + K_i / Kki)^2 - 1)
-    in [Hz]
-b1 = k1m * MgADP
     in [Hz]
 a2 = k2p
     in [Hz]
-b2 = k2m * (Na_o / Knao)^3 / ((1 + Na_o / Knao)^3 + (1 + K_o / Kko)^2 - 1)
-    in [Hz]
 a3 = k3p * (K_o / Kko)^2 / ((1 + Na_o / Knao)^3 + (1 + K_o / Kko)^2 - 1)
-    in [Hz]
-b3 = k3m * P * H / (1 + MgATP / Kmgatp)
     in [Hz]
 a4 = k4p * MgATP / Kmgatp / (1 + MgATP / Kmgatp)
     in [Hz]
+# Equations 31: Backward (anticlockwise) rates
+b1 = k1m * MgADP
+    in [Hz]
+b2 = k2m * (Na_o / Knao)^3 / ((1 + Na_o / Knao)^3 + (1 + K_o / Kko)^2 - 1)
+    in [Hz]
+b3 = k3m * P * H / (1 + MgATP / Kmgatp)
+    in [Hz]
 b4 = k4m * (K_i / Kki)^2 / ((1 + Na_i / Knai)^3 + (1 + K_i / Kki)^2 - 1)
     in [Hz]
+# Equation 33
+P = eP / (1 + H / Khp + Na_i / Knap + K_i / Kxkur)
+    in [mM]
+# Terms used to calculate the steady-state occupancies of the four states
+# Based on the "diagram method" described in [2], these terms are the sums of
+# the reaction rates of all (non-cyclical) paths leading to each state
 x1 = a4 * a1 * a2 + b1 * b4 * b3 + a2 * b4 * b3 + b3 * a1 * a2
     in [Hz^3]
     note: Corrected from the original code (b1 in second term)
@@ -845,8 +868,11 @@ x3 = a2 * a3 * a4 + b3 * b2 * b1 + b2 * b1 * a4 + a3 * a4 * b1
     in [Hz^3]
 x4 = b4 * b3 * b2 + a3 * a4 * a1 + b2 * a4 * a1 + b3 * b2 * a1
     in [Hz^3]
+# Cycle rate (obtaining by writing any one of the four flux equations: they all
+# give the same result so that the pump count is conserved).
 r = (a1 * a2 * a3 * a4 - b1 * b2 * b3 * b4) / (x1 + x2 + x3 + x4)
     in [1/s]
+# INaK current
 JnakNa = 3 * r
     in [1/s]
 JnakK = -2 * r
