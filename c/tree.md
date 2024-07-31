@@ -67,6 +67,8 @@ Bits:
 Bits:
 - INa based on Ebihara 1980
 
+[*Updated* Matlab code](https://rudylab.wustl.edu/code-downloads/)
+
 ## 1991 Noble GV
 ## 1991 Wilders mS
 ## 1993 Karma mV
@@ -97,12 +99,20 @@ Base: Luo 1994
 
 ## 1998 Espinosa LV
 ## 1998 Fenton mV
+
 ## 1998 Jaffri GV
+[Jafri, Rice, Winslow (1998) Cardiac Ca2 Dynamics; The Roles of Ryanodine Receptor Adaptation and Sarcoplasmic Reticulum Load](https://doi.org/10.1016/s0006-3495(98)77832-4)
+
+Base: Luo 1994
+
 ## 1998 Noble GV
+
 ## 1998 Nygren HA - included
 Base: Lindblad 1996
+
 ## 1998 Priebe HV - included
 Base: Luo 1994
+
 ## 1998 Riemer GV
 ## 1999 Clancy INa + 2001, 2002. Include?
 ## 1999 Demir RS
@@ -110,13 +120,28 @@ Base: Luo 1994
 ## 1999 Irvine INA Include?
 ## 1999 Rice GV
 ## 1999 Viswanathan GV
+
 ## 1999 Winslow CV
+[Winslow, Rice et al., O'Rourke (1999) Mechanisms of Altered Excitation-Contraction Coupling in Canine Tachycardia-Induced Heart Failure, II Model Studies](https://doi.org/10.1161/01.res.84.5.571)
+
+Base: Jaffri 1998
+
 ## 2000 Faber GV
+
+[Original code](https://rudylab.wustl.edu/code-downloads/)
+
 ## 2000 Greenstein CV
+
 ## 2000 Ramirez CA
+[Ramirez, Nattel, Courtemanche (2000) Mathematical analysis of canine atrial action potentials; rate, regional factors, and electrical remodeling](https://doi.org/10.1152/ajpheart.2000.279.4.h1767)
+
+Base: Courtemanche 1998
+
 ## 2000 Sakmann GV
+
 ## 2000 Zhang RS
-Zhang, Holden et al., Boyett (2000) Mathematical models of action potentials in the periphery and center of the rabbit sinoatrial node
+[Zhang, Holden et al., Boyett (2000) Mathematical models of action potentials in the periphery and center of the rabbit sinoatrial node](https://doi.org/10.1152/ajpheart.2000.279.1.h397)
+
 ## 2001 Boyett
 ## 2001 Mazhari CV
 ## 2001 Noble GP
@@ -132,10 +157,14 @@ Reduces: Priebe 1998
 ## 2002 Fenton mV
 ## 2002 Fox CV
 ## 2002 Greenstein CV
+
 ## 2002 Kneller CA
-Kneller, Ramirez et al., Nattel (2002) Time-dependent transients in an ionically based mathematical model of the canine atrial action potential
+[Kneller, Ramirez et al., Nattel (2002) Time-dependent transients in an ionically based mathematical model of the canine atrial action potential](https://doi.org/10.1152/ajpheart.00489.2001)
+Base: Ramirez 2000
+
 ## 2002 Kurata
-Kurata, Hisatome, Imanishi, Shibamoto (2002) Dynamical description of sinoatrial node pacemaking; improved mathematical model for primary pacemaker cell
+[Kurata, Hisatome, Imanishi, Shibamoto (2002) Dynamical description of sinoatrial node pacemaking; improved mathematical model for primary pacemaker cell](https://doi.org/10.1152/ajpheart.00900.2001)
+
 ## 2003 Cabo CV
 ## 2003 Garny
 ## 2003 Matsuoka mV
@@ -147,7 +176,23 @@ Bits:
 ## 2003 Saucerman LV
 ## 2003 Seemann HV
 ## 2004 Bondarenko MV
+
 ## 2004 Hund CV
+Hund, Rudy (2004) Rate Dependence and Regulation of Action Potential and Calcium Transient in a Canine Cardiac Ventricular Cell Model
+https://doi.org/10.1161/01.cir.0000147231.69595.d3
+[*Updated* code](https://rudylab.wustl.edu/code-downloads/)
+
+Base: Luo 1994 (arguably, most of the formulations are new, but the supplement is written in a way that strongly suggests this model was based on Luo 1994).
+
+Bits:
+- CaMKII from Hanson et al 1994
+- INaCa from Weber et al 2001
+- INa from Luo 1994
+- INaL from Luo 1994 and Maltsev et al 2001
+- Cl regulation from Baumgarten et al [28]
+- Iup, Ileak, Itr from Luo 1994
+- INaK, IKp, IK1, IpCa from Luo 1994
+
 
 ## 2004 Iyer HV - included
 Base: Winslow 1999 and others
@@ -155,12 +200,15 @@ Base: Winslow 1999 and others
 ## 2004 Lovell RS
 
 ## 2004 Shannon RV
+[Shannon, Wang et al., Bers (2004) A mathematical treatment of integrated Ca dynamics within the ventricular myocyte](https://doi.org/10.1529/biophysj.104.047449)
+
 Base: LR94? And Puglisi and Bers, 2001 ?
 
-Shannon, Wang et al., Bers (2004) A mathematical treatment of integrated Ca dynamics within the ventricular myocyte
 Modifications:
 - Rescaled gK1
 - ...
+
+[Likely original code](https://github.com/drgrandilab/Shannon-et-al-2004-Rabbit-Ventricular-Model)
 
 ## 2004 Smith INaK
 
@@ -201,8 +249,11 @@ Modifications:
 ## 2007 Cherry 2007 LA
 ## 2007 Faber
 
+[Original code](https://rudylab.wustl.edu/code-downloads/)
+
 ## 2007 Livshitz CV - included
 Base: Hund 2004
+[Original code](https://rudylab.wustl.edu/code-downloads/)
 
 ## 2007 Niederer LV
 ## 2007 Terkildsen GV
@@ -223,6 +274,8 @@ Modifications:
 ## 2008 Hund CV
 Base: Livshitz 2007
 
+[Original code](https://rudylab.wustl.edu/code-downloads/)
+
 ## 2008 Mahajan RV
 ## 2008 Pasek GV
 ## 2008 Terkildsen RV
@@ -235,6 +288,8 @@ Base: Pandit et al. 2001, and Niederer 2006 and Hinch 2004
 
 ## 2009 Decker CV - included
 Base: Hund 2008
+
+[Original code](https://rudylab.wustl.edu/code-downloads/)
 
 ## 2009 Grandi HV
 Base: Ten Tusscher 2004 (not 2006!)
@@ -275,15 +330,21 @@ Modifications:
 ## 2011 Heijman CV - included
 Base: Decker 2009
 
+[Original code](https://rudylab.wustl.edu/code-downloads/)
+
 ## 2011 Koivumaki HA - included
 Base: Nygren 1998
 
 ## 2011 Pan CP
 
+[Original code](https://rudylab.wustl.edu/code-downloads/)
+
 ## 2011 O'Hara HV - included
 Base: Hund 2004
 Bits:
 - INaK from Smith 2004, with reparametrisation
+
+[Original matlab and C++ code](https://rudylab.wustl.edu/code-downloads/)
 
 --- Noble 2012 cut-off -------------------------------------------------------
 
@@ -291,6 +352,10 @@ Bits:
 
 ## 2012 Paci He
 Base: Grandi 2009
+
+## Adeniran 2013
+Adeniran, Hancox, Zhang (2013) Effect of cardiac ventricular mechanical contraction on the characteristics of the ECG: a simulation study
+J Biomed Sci Eng. 2013;6(12):47-­60.
 
 ## 2013 Colman HA
 Base: Colman Courtemanche 1998
@@ -345,6 +410,10 @@ Kernik, Morotti et al., Clancy (2019) A computational model of induced pluripote
 [Tomek, Bueno-Orovio et al., Rodriguez (2019) Development, calibration, and validation of a novel human ventricular myocyte model in health, disease, and drug block](https://doi.org/10.7554/elife.48890)
 Base: O'Hara 2011
 [Original Matlab and official CellML](https://github.com/jtmff/torord/commit/4ffab13b48f0923d38b0315f26be466a6fad8b70)
+
+## Bartolucci 2020
+[Bartolucci, Passini et al., Severi (2020) Simulation of the effects of extracellular calcium changes leads to a novel computational model of human ventricular action potential with a revised calcium handling](https://doi.org/10.3389/fphys.2020.00314)
+
 ## 2020 Paci Hi - included
 [Paci, Passini et al., Entcheva (2020) All-Optical Electrophysiology Refines Populations of In Silico Human iPSC-CMs for Drug Evaluation](https://doi.org/10.1016/j.bpj.2020.03.018)
 Base: Paci 2018
@@ -395,5 +464,5 @@ See also? Mazhar, Regazzoni et al., Severi (2022) A Novel Human Atrial Electrome
 
 Base: Himeno 2015
 
-# 2022 Moise
-Moise, Weinberg (2022) Emergent Electrical Activity, Tissue Heterogeneity, and Robustness in a Calcium Feedback Regulatory Model of the Sinoatrial Node
+## 2022 Moise
+[Moise, Weinberg (2022) Emergent Electrical Activity, Tissue Heterogeneity, and Robustness in a Calcium Feedback Regulatory Model of the Sinoatrial Node](https://doi.org/10.1016/j.bpj.2023.03.024)
