@@ -354,9 +354,11 @@ Base: Tomek 2019
 [Original Matlab and official CellML](https://github.com/jtmff/torord)
 ## 2020 Trovato HP - included
 [Trovato, Passini et al., Rodriguez (2020) Human Purkinje in silico model enables mechanistic investigations into automaticity and pro-arrhythmic abnormalities](https://doi.org/10.1016/j.yjmcc.2020.04.001)
+
 Base: O'Hara 2011 (HV) and Pan 2011 (CP)
 Modifications (partial):
 - INa from Dutta 2017; Passini 2016
+
 ## 2021 Akwaboah Hi - included
 Base: Kurata 2002 and Courtemanche 1998
 Bits:
@@ -375,13 +377,23 @@ Bits:
 - IbNa from Courtemanche 1998
 - IpCa from Courtemanche 1998
 - Calcium handling from Kurata 2002
+
 ## 2021 Gaur PV
-Gaur, Qi et al., Vigmond (2021) A computational model of pig ventricular cardiomyocyte electrophysiology and calcium handling; Translation from pig to human electrophysiology
+[Gaur, Qi et al., Vigmond (2021) A computational model of pig ventricular cardiomyocyte electrophysiology and calcium handling; Translation from pig to human electrophysiology](https://doi.org/10.1371/journal.pcbi.1009137)
+
 ## 2022 Bartolucci HV
+[Bartolucci, Forouzandemehr, Severi, Paci (2022) A Novel In Silico Electromechanical Model of Human Ventricular Cardiomyocyte](https://doi.org/10.3389/fphys.2022.906146)
+
 Base: O'Hara 2011
-Bartolucci, Forouzandemehr, Severi, Paci (2022) A Novel In Silico Electromechanical Model of Human Ventricular Cardiomyocyte
 CODE AVAILABLE, ORG CELLML AVAILABLE
+
+See also? Mazhar, Regazzoni et al., Severi (2022) A Novel Human Atrial Electromechanical Cardiomyocyte Model with Mechano-Calcium Feedback Effect
+
+
 ## 2022 Kohjitani Hi
 [Kohjitani, Koda et al., Kimura (2022) Gradient-based parameter optimization method to determine membrane ionic current composition in human induced pluripotent stem cell-derived cardiomyocytes](https://doi.org/10.1038/s41598-022-23398-0)
+
 Base: Himeno 2015
 
+# 2022 Moise
+Moise, Weinberg (2022) Emergent Electrical Activity, Tissue Heterogeneity, and Robustness in a Calcium Feedback Regulatory Model of the Sinoatrial Node
