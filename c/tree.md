@@ -1,38 +1,32 @@
 # Model tree
 
 ## Abbrev
+Type
+- A Atrial
+- V Ventricular
+- e embryonic stem cell
+- i induced pluripotent stem cell
+- S SA node
+- N AV node
 
-A Atrial
-V Ventricular
-e embryonic stem cell
-i induced pluripotent stem cell
-S SA node
-N AV node
+Species
+- C Canine
+- F Frog
+- G Guinea pig
+- H Human
+- L Rat
+- M Mouse
+- P Pig
+- R Rabbit
+- m Mammal
 
-C Canine
-F Frog
-G Guinea pig
-H Human
-L Rat
-M Mouse
-P Pig
-R Rabbit
-m Mammal
-
-f fibre recordings, not really single cell?
-
-## Families (provisional, starting in ~90s)
-
-Luo-Rudy
-Ten Tusscher
-Courtemanche (Luo-Rudy)
-Nygren (Lindblad)
-Iyer?
-O'Hara? (Luo-Rudy)
-Himeno?
+Recording type
+- f fibre recordings (not isolated cell)
 
 ## 1962 Noble mPf
 Noble (1962) A Modification of the Hodgkin-Huxley Equations Applicable to Purkinje Fibre Action and Pacemaker Potentials
+https://doi.org/10.1113/jphysiol.1962.sp006849
+
 ## 1966 Krause
 Krause, Antoni, Fleckenstein (1966) An electronic model for the formation of local and transmitted stimuli on the myocardium fibers based upon variable current-voltage characteristics for potassium and sodium ions
 ## 1975 Hunter mPf
