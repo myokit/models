@@ -121,7 +121,8 @@ Base: Mostly new?
 
 ## 1997 Endresen mS
 
-## 1998 Courtemanche HA - included
+## 1998 Courtemanche HA
+**Included**
 Courtemanche, Ramirez, Nattel (1998) Ionic mechanisms underlying human atrial action potential properties; insights from a mathematical model
 [Paper](https://doi.org/10.1152/ajpheart.1998.275.1.h301)
 
@@ -138,13 +139,15 @@ Base: Luo 1994
 
 ## 1998 Noble GV
 
-## 1998 Nygren HA - included
+## 1998 Nygren HA
+**Included**
 Nygren, Fiset et al., Giles (1998) Mathematical model of an adult human atrial cell; the role of K-currents in repolarization
 [Paper](https://doi.org/10.1161/01.res.82.1.63)
 
 Base: Lindblad 1996
 
-## 1998 Priebe HV - included
+## 1998 Priebe HV
+**Included**
 Priebe, Beuckelmann (1998) Simulation study of cellular electric properties in heart failure
 [Paper](https://doi.org/10.1161/01.res.82.11.1206)
 
@@ -247,7 +250,8 @@ Bits:
 - INaK, IKp, IK1, IpCa from Luo 1994
 
 
-## 2004 Iyer HV - included
+## 2004 Iyer HV
+**Included**
 Iyer, Mazhari, Winslow (2004) A computational model of the human left-ventricular epicardial myocyte
 [Paper](https://doi.org/10.1529/biophysj.104.043299)
 
@@ -269,7 +273,8 @@ Modifications:
 
 ## 2004 Smith INaK
 
-## 2004 Ten Tusscher HV - included
+## 2004 Ten Tusscher HV
+**Included**
 Ten Tusscher, Noble, Noble, Panfilov (2004) A Model for Human Ventricular Tissue
 [Paper](https://doi.org/10.1152/ajpheart.00794.2003)
 
@@ -296,7 +301,8 @@ Kurata, Hisatome, Matsuda, Shibamoto (2005) Dynamical Mechanisms of Pacemaker Ge
 ## 2006 Sato CV
 ## 2006 Simitev HA
 
-## 2006a Ten Tusscher HV - included
+## 2006a Ten Tusscher HV
+**Included**
 Ten Tusscher, Panfilov (2006) Alternans and spiral breakup in a human ventricular tissue model
 [Paper](https://doi.org/10.1152/ajpheart.00109.2006)
 
@@ -326,7 +332,8 @@ Faber, Silva, Livshitz, Rudy (2007) Kinetic Properties of the Cardiac L-Type Ca 
 [Paper](https://doi.org/10.1529/biophysj.106.088807)
 [Original code](https://rudylab.wustl.edu/code-downloads/)
 
-## 2007 Livshitz CV - included
+## 2007 Livshitz CV
+**Included**
 Livshitz, Rudy (2007) Regulation of Ca and electrical alternans in cardiac myocytes; role of CAMKII and repolarizing currents
 [Paper](https://doi.org/10.1152/ajpheart.01347.2006)
 [Original code](https://rudylab.wustl.edu/code-downloads/)
@@ -342,7 +349,8 @@ Bits:
 ## 2008 Benson CV
 ## 2008 Bueno-Orovio HV
 
-## 2008 Fink HV - included
+## 2008 Fink HV
+**Included**
 Fink, Noble et al., Giles (2008) Contributions of HERG K current to repolarization of the human ventricular action potential
 [Paper](https://doi.org/10.1016/j.pbiomolbio.2007.07.011)
 
@@ -370,7 +378,8 @@ Base: Pandit et al. 2001, and Niederer 2006 and Hinch 2004
 ## 2009a Aslanidi RA
 ## 2009b Aslanidi CP
 
-## 2009 Decker CV - included
+## 2009 Decker CV
+**Included**
 Base: Hund 2008
 
 [Original code](https://rudylab.wustl.edu/code-downloads/)
@@ -397,12 +406,14 @@ Livshitz, Rudy (2009) Uniqueness and Stability of Action Potential Models during
 Base: Kurata 2002, Shannon 2004
 Maltsev, Lakatta (2009) Synergism of coupled subsarcolemmal Ca2 clocks and sarcolemmal voltage clocks confers robust and flexible pacemaker function in a novel pacemaker cell model
 
-## 2009 Stewart HP - included
+## 2009 Stewart HP
+**Included**
 Base: Ten Tusscher 2006
 
 ## 2009 Tran reduced
 
-## 2010 Grandi HV - included
+## 2010 Grandi HV
+**Included**
 Base: Shannon 2004
 Modifications:
 - Scaled gK1
@@ -410,32 +421,37 @@ Modifications:
 
 ## 2010 Li MV
 
-## 2010 Sampson HP - included
+## 2010 Sampson HP
+**Included**
 Base: Iyer 2004
 
 ## 2011 Aslanidi HA
 ## 2011 Carro HV
 ## 2011 Corrias RP
 
-## 2011 Grandi-Pandit-Voigt HA - included
+## 2011 Grandi-Pandit-Voigt HA
+**Included**
 Base: Grandi 2010
 Modifications:
 - Scaled gK1
 - ...
 
-## 2011 Heijman CV - included
+## 2011 Heijman CV
+**Included**
 Base: Decker 2009
 
 [Original code](https://rudylab.wustl.edu/code-downloads/)
 
-## 2011 Koivumaki HA - included
+## 2011 Koivumaki HA
+**Included**
 Base: Nygren 1998
 
 ## 2011 Pan CP
 
 [Original code](https://rudylab.wustl.edu/code-downloads/)
 
-## 2011 O'Hara HV - included
+## 2011 O'Hara HV
+**Included**
 Base: Hund 2004
 Bits:
 - INaK from Smith 2004, with reparametrisation
@@ -456,10 +472,12 @@ J Biomed Sci Eng. 2013;6(12):47-­60.
 ## 2013 Colman HA
 Base: Colman Courtemanche 1998
 
-## 2013 Paci Hi - included
+## 2013 Paci Hi
+**Included**
 Base: Paci 2012
 
-## 2013 Voigt-Heijman HA - included
+## 2013 Voigt-Heijman HA
+**Included**
 Base: Grandi 2011
 Modifications:
 - Added IKAch (Kneller et al. 2002)
@@ -471,7 +489,8 @@ Bases: Several! Interesting one to look at
 
 ## 2015 Schmidt
 
-## 2016 Gray RV - included
+## 2016 Gray RV
+**Included**
 Base: New!
 Gray, Pathmanathan (2016) A Parsimonious Model of the Rabbit Action Potential Elucidates the Minimal Physiological Requirements for Alternans and Spiral Wave Breakup
 ## 2016 Morotti HA
@@ -479,7 +498,8 @@ Base: Grandi-Pandit-Voigt 2011
 
 ## 2016 Varela CA
 
-## 2017 Chang 2017 "ORd-cipa-v1" HV - included
+## 2017 Chang 2017 "ORd-cipa-v1" HV
+**Included**
 Base: O'Hara 2011
 [Official CellML](https://models.cellml.org/e/4e8/ohara_rudy_cipa_v1_2017.cellml/view)
 
@@ -489,17 +509,20 @@ Base: Colman 2013
 ## 2017 Ellinwood
 ## 2017 Fabbri
 
-## 2017 Ni HA - included
+## 2017 Ni HA
+**Included**
 Base: Colman 2017
 Bits:
 - Calcium subspaces based on Koivumaki 2011
 
-## 2018 Paci Hi - included
+## 2018 Paci Hi
+**Included**
 Base: Paci 2013
 Paci, Polonen et al., Hyttinen (2018) Automatic optimization of an in silico model of human iPSC derived cardiomyocytes recapitulating calcium handling abnormalities
 ## 2018 Sutanto HA
 
-## 2019 Kernik Hi - included
+## 2019 Kernik Hi
+**Included**
 Bases: Shannon 2004, Ten Tusscher 2004, Maltsev 2009
 Kernik, Morotti et al., Clancy (2019) A computational model of induced pluripotent stem‐cell derived cardiomyocytes incorporating experimental variability from multiple data sources
 
@@ -514,7 +537,8 @@ Base: O'Hara 2011
 Bartolucci, Passini et al., Severi (2020) Simulation of the effects of extracellular calcium changes leads to a novel computational model of human ventricular action potential with a revised calcium handling
 [Paper](https://doi.org/10.3389/fphys.2020.00314)
 
-## 2020 Paci Hi - included
+## 2020 Paci Hi
+**Included**
 Paci, Passini et al., Entcheva (2020) All-Optical Electrophysiology Refines Populations of In Silico Human iPSC-CMs for Drug Evaluation
 [Paper](https://doi.org/10.1016/j.bpj.2020.03.018)
 
@@ -527,7 +551,8 @@ Tomek, Bueno-Orovio, Rodriguez (2020) ToR-ORd-dynCl; an update of the ToR-ORd mo
 
 Base: Tomek 2019
 
-## 2020 Trovato HP - included
+## 2020 Trovato HP
+**Included**
 [Trovato, Passini et al., Rodriguez (2020) Human Purkinje in silico model enables mechanistic investigations into automaticity and pro-arrhythmic abnormalities](https://doi.org/10.1016/j.yjmcc.2020.04.001)
 
 Base: O'Hara 2011 (HV) and Pan 2011 (CP)
@@ -535,7 +560,8 @@ Base: O'Hara 2011 (HV) and Pan 2011 (CP)
 Modifications (partial):
 - INa from Dutta 2017; Passini 2016
 
-## 2021 Akwaboah Hi - included
+## 2021 Akwaboah Hi
+**Included**
 Base: Kurata 2002 and Courtemanche 1998
 Bits:
 - INa from Luo 1991, with partial reparameterisation
@@ -559,24 +585,24 @@ Gaur, Qi et al., Vigmond (2021) A computational model of pig ventricular cardiom
 [Paper](https://doi.org/10.1371/journal.pcbi.1009137)
 
 ## 2022 Bartolucci HV
-Bartolucci, Forouzandemehr, Severi, Paci (2022) A Novel In Silico Electromechanical Model of Human Ventricular Cardiomyocyte
+Base: [O'Hara 2011](#ohara-2011-hv)
 [Paper](https://doi.org/10.3389/fphys.2022.906146)
+Bartolucci, Forouzandemehr, Severi, Paci (2022) A Novel In Silico Electromechanical Model of Human Ventricular Cardiomyocyte
 
-Base: O'Hara 2011
 CODE AVAILABLE, ORG CELLML AVAILABLE
 
 See also? Mazhar, Regazzoni et al., Severi (2022) A Novel Human Atrial Electromechanical Cardiomyocyte Model with Mechano-Calcium Feedback Effect
 
 
 ## 2022 Kohjitani Hi
-Kohjitani, Koda et al., Kimura (2022) Gradient-based parameter optimization method to determine membrane ionic current composition in human induced pluripotent stem cell-derived cardiomyocytes
+Base: [Himeno 2015](#2015-himeno-hv)
 [Paper](https://doi.org/10.1038/s41598-022-23398-0)
+Kohjitani, Koda et al., Kimura (2022) Gradient-based parameter optimization method to determine membrane ionic current composition in human induced pluripotent stem cell-derived cardiomyocytes
 
-Base: Himeno 2015
 
 ## 2022 Moise
-Moise, Weinberg (2022) Emergent Electrical Activity, Tissue Heterogeneity, and Robustness in a Calcium Feedback Regulatory Model of the Sinoatrial Node
 [Paper](https://doi.org/10.1016/j.bpj.2023.03.024)
+Moise, Weinberg (2022) Emergent Electrical Activity, Tissue Heterogeneity, and Robustness in a Calcium Feedback Regulatory Model of the Sinoatrial Node
 
 
 
