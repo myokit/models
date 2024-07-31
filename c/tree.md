@@ -39,7 +39,7 @@ Krause, Antoni, Fleckenstein (1966) An electronic model for the formation of loc
 Hunter, McNaughton, Noble (1975) Analytical models of propagation in excitable cells
 ## 1975 McAllister HPf
 McAllister, Noble, Tsien (1975) Reconstruction of the electrical activity of cardiac Purkinje fibres
-## Beeler 1977 HVf
+## Beeler 1977 mVf
 Introduces INa j gate (based on work w. Haas)
 Beeler, Reuter (1977) Reconstruction of the action potential of ventricular myocardial fibres
 ## 1980 Ebihara INa
@@ -318,8 +318,9 @@ Base: Grandi-Pandit-Voigt 2011
 
 ## 2016 Varela CA
 
-## 2017 Cipa HV - included
+## 2017 Chang 2017 "ORd-cipa-v1" HV - included
 Base: O'Hara 2011
+[Official CellML](https://models.cellml.org/e/4e8/ohara_rudy_cipa_v1_2017.cellml/view)
 
 ## 2017 Colman HA
 Base: Colman 2013
@@ -341,21 +342,21 @@ Paci, Polonen et al., Hyttinen (2018) Automatic optimization of an in silico mod
 Bases: Shannon 2004, Ten Tusscher 2004, Maltsev 2009
 Kernik, Morotti et al., Clancy (2019) A computational model of induced pluripotent stem‐cell derived cardiomyocytes incorporating experimental variability from multiple data sources
 ## 2019 Tomek HV
+[Tomek, Bueno-Orovio et al., Rodriguez (2019) Development, calibration, and validation of a novel human ventricular myocyte model in health, disease, and drug block](https://doi.org/10.7554/elife.48890)
 Base: O'Hara 2011
-Tomek, Bueno-Orovio et al., Rodriguez (2019) Development, calibration, and validation of a novel human ventricular myocyte model in health, disease, and drug block
-ORG CELLML AVAILABLE
+[Original Matlab and official CellML](https://github.com/jtmff/torord/commit/4ffab13b48f0923d38b0315f26be466a6fad8b70)
 ## 2020 Paci Hi - included
+[Paci, Passini et al., Entcheva (2020) All-Optical Electrophysiology Refines Populations of In Silico Human iPSC-CMs for Drug Evaluation](https://doi.org/10.1016/j.bpj.2020.03.018)
 Base: Paci 2018
-Paci, Passini et al., Entcheva (2020) All-Optical Electrophysiology Refines Populations of In Silico Human iPSC-CMs for Drug Evaluation
 ## 2020 Tomek HV
+[Tomek, Bueno-Orovio, Rodriguez (2020) ToR-ORd-dynCl; an update of the ToR-ORd model of human ventricular cardiomyocyte with dynamic intracellular chloride](https://doi.org/10.1101/2020.06.01.127043)
 Base: Tomek 2019
-Tomek, Bueno-Orovio, Rodriguez (2020) ToR-ORd-dynCl; an update of the ToR-ORd model of human ventricular cardiomyocyte with dynamic intracellular chloride
-ORG CELLML AVAILABLE
+[Original Matlab and official CellML](https://github.com/jtmff/torord)
 ## 2020 Trovato HP - included
+[Trovato, Passini et al., Rodriguez (2020) Human Purkinje in silico model enables mechanistic investigations into automaticity and pro-arrhythmic abnormalities](https://doi.org/10.1016/j.yjmcc.2020.04.001)
 Base: O'Hara 2011 (HV) and Pan 2011 (CP)
 Modifications (partial):
 - INa from Dutta 2017; Passini 2016
-Trovato, Passini et al., Rodriguez (2020) Human Purkinje in silico model enables mechanistic investigations into automaticity and pro-arrhythmic abnormalities
 ## 2021 Akwaboah Hi - included
 Base: Kurata 2002 and Courtemanche 1998
 Bits:
@@ -374,7 +375,6 @@ Bits:
 - IbNa from Courtemanche 1998
 - IpCa from Courtemanche 1998
 - Calcium handling from Kurata 2002
-
 ## 2021 Gaur PV
 Gaur, Qi et al., Vigmond (2021) A computational model of pig ventricular cardiomyocyte electrophysiology and calcium handling; Translation from pig to human electrophysiology
 ## 2022 Bartolucci HV
@@ -382,6 +382,6 @@ Base: O'Hara 2011
 Bartolucci, Forouzandemehr, Severi, Paci (2022) A Novel In Silico Electromechanical Model of Human Ventricular Cardiomyocyte
 CODE AVAILABLE, ORG CELLML AVAILABLE
 ## 2022 Kohjitani Hi
+[Kohjitani, Koda et al., Kimura (2022) Gradient-based parameter optimization method to determine membrane ionic current composition in human induced pluripotent stem cell-derived cardiomyocytes](https://doi.org/10.1038/s41598-022-23398-0)
 Base: Himeno 2015
-Kohjitani, Koda et al., Kimura (2022) Gradient-based parameter optimization method to determine membrane ionic current composition in human induced pluripotent stem cell-derived cardiomyocytes
 
