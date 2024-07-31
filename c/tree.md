@@ -432,11 +432,11 @@ Bits:
 - INaK from Smith 2004, with reparametrisation
 
 
-
 ------------------
+
 Noble 2012 cut-off
-------------------
 
+------------------
 
 
 ## 2012 Davies
