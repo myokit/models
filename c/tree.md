@@ -297,12 +297,10 @@ Kurata, Hisatome, Matsuda, Shibamoto (2005) Dynamical Mechanisms of Pacemaker Ge
 
 ## 2006a Ten Tusscher HV
 **Included**
-Ten Tusscher, Panfilov (2006) Alternans and spiral breakup in a human ventricular tissue model
-[Paper](https://doi.org/10.1152/ajpheart.00109.2006)
+| Base: [Ten Tusscher 2004](#2004-ten-tusscher-hv)
+| [Paper](https://doi.org/10.1152/ajpheart.00109.2006) Ten Tusscher, Panfilov (2006) Alternans and spiral breakup in a human ventricular tissue model
 
 Known as: TP 2006
-
-Base: Ten Tusscher 2004
 
 Modifications:
 - Added dyadic subspace
@@ -317,7 +315,7 @@ Modifications:
 
 
 ## 2006b Ten Tusscher reduced
-Base: Ten Tusscher 2006
+Base: [Ten Tusscher 2006](#2006-ten-tusscher-hv)
 
 ## 2007 Cherry 2007 LA
 
@@ -328,11 +326,10 @@ Faber, Silva, Livshitz, Rudy (2007) Kinetic Properties of the Cardiac L-Type Ca 
 
 ## 2007 Livshitz CV
 **Included**
-Livshitz, Rudy (2007) Regulation of Ca and electrical alternans in cardiac myocytes; role of CAMKII and repolarizing currents
-[Paper](https://doi.org/10.1152/ajpheart.01347.2006)
-[Original code](https://rudylab.wustl.edu/code-downloads/)
+| Base: [Hund 2004](#2004-hund-cv)
+| [Original code](https://rudylab.wustl.edu/code-downloads/)
+| [Paper](https://doi.org/10.1152/ajpheart.01347.2006) Livshitz, Rudy (2007) Regulation of Ca and electrical alternans in cardiac myocytes; role of CAMKII and repolarizing currents
 
-Base: Hund 2004
 
 ## 2007 Niederer LV
 
@@ -345,10 +342,8 @@ Bits:
 
 ## 2008 Fink HV
 **Included**
-Fink, Noble et al., Giles (2008) Contributions of HERG K current to repolarization of the human ventricular action potential
-[Paper](https://doi.org/10.1016/j.pbiomolbio.2007.07.011)
-
-Base: Ten Tusscher 2006
+| Base: Ten Tusscher 2006
+| [Paper](https://doi.org/10.1016/j.pbiomolbio.2007.07.011) Fink, Noble et al., Giles (2008) Contributions of HERG K current to repolarization of the human ventricular action potential
 
 Modifications:
 - New IK1 formulation, based on Yan & Ishihara 2005
@@ -356,11 +351,8 @@ Modifications:
 - Rescaled IKs
 
 ## 2008 Hund CV
-[Original code?](https://rudylab.wustl.edu/code-downloads/)
-
 Base: Livshitz 2007
-
-
+| [Original code?](https://rudylab.wustl.edu/code-downloads/)
 
 ## 2008 Mahajan RV
 ## 2008 Pasek GV
@@ -374,12 +366,12 @@ Base: Pandit et al. 2001, and Niederer 2006 and Hinch 2004
 
 ## 2009 Decker CV
 **Included**
-Base: Hund 2008
+| Base: [Hund 2008](#2008-hund-cv)
+| [Original code](https://rudylab.wustl.edu/code-downloads/)
 
-[Original code](https://rudylab.wustl.edu/code-downloads/)
 
 ## 2009 Grandi HV
-Base: Ten Tusscher 2004 (not 2006!)
+Base: [Ten Tusscher 2004](#2004-ten-tusscher-hv)
 
 ## 2009 Inada mA
 ## 2009 Koivumaki MV
@@ -397,7 +389,7 @@ Livshitz, Rudy (2009) Uniqueness and Stability of Action Potential Models during
 ## 2009 Maleckar HA
 
 ## 2009 Maltsev HS
-Base: Kurata 2002, Shannon 2004
+Base: Kurata 2002, [Shannon 2004](#2004-shannon-rv)
 Maltsev, Lakatta (2009) Synergism of coupled subsarcolemmal Ca2 clocks and sarcolemmal voltage clocks confers robust and flexible pacemaker function in a novel pacemaker cell model
 
 ## 2009 Stewart HP
@@ -408,7 +400,7 @@ Base: Ten Tusscher 2006
 
 ## 2010 Grandi HV
 **Included**
-Base: Shannon 2004
+Base: [Shannon 2004](#2004-shannon-rv)
 Modifications:
 - Scaled gK1
 - ...
@@ -417,7 +409,7 @@ Modifications:
 
 ## 2010 Sampson HP
 **Included**
-Base: Iyer 2004
+Base: [Iyer 2004](#2004-iyer-hv)
 
 ## 2011 Aslanidi HA
 ## 2011 Carro HV
@@ -425,34 +417,37 @@ Base: Iyer 2004
 
 ## 2011 Grandi-Pandit-Voigt HA
 **Included**
-Base: Grandi 2010
+| Base: [Grandi 2010](#2010-grandi-hv)
+
 Modifications:
 - Scaled gK1
 - ...
 
 ## 2011 Heijman CV
 **Included**
-Base: Decker 2009
-
-[Original code](https://rudylab.wustl.edu/code-downloads/)
+| Base: [Decker 2009](#2009-decker-cv)
+| [Original code](https://rudylab.wustl.edu/code-downloads/)
 
 ## 2011 Koivumaki HA
 **Included**
 Base: Nygren 1998
 
 ## 2011 Pan CP
-
 [Original code](https://rudylab.wustl.edu/code-downloads/)
 
 ## 2011 O'Hara HV
 **Included**
-Base: Hund 2004
+| Base: [Hund 2004](#2004-hund-cv)
+| [Original matlab and C++ code](https://rudylab.wustl.edu/code-downloads/)
+
 Bits:
 - INaK from Smith 2004, with reparametrisation
 
-[Original matlab and C++ code](https://rudylab.wustl.edu/code-downloads/)
 
---- Noble 2012 cut-off -------------------------------------------------------
+------------------
+Noble 2012 cut-off
+------------------
+
 
 ## 2012 Davies
 
@@ -511,29 +506,28 @@ Bits:
 
 ## 2018 Paci Hi
 **Included**
-Base: Paci 2013
-Paci, Polonen et al., Hyttinen (2018) Automatic optimization of an in silico model of human iPSC derived cardiomyocytes recapitulating calcium handling abnormalities
+| Base: Paci 2013
+| [Paper](https://doi.org/10.3389/fphys.2018.00709) Paci, Polonen et al., Hyttinen (2018) Automatic optimization of an in silico model of human iPSC derived cardiomyocytes recapitulating calcium handling abnormalities
+
 ## 2018 Sutanto HA
 
 ## 2019 Kernik Hi
 **Included**
-Bases: Shannon 2004, Ten Tusscher 2004, Maltsev 2009
-Kernik, Morotti et al., Clancy (2019) A computational model of induced pluripotent stem‐cell derived cardiomyocytes incorporating experimental variability from multiple data sources
+| Base: [Shannon 2004](#2004-shannon-rv), [Ten Tusscher 2004](#2004-ten-tusscher-hv), [Maltsev 2009](#2009-maltsev-hs)
+| [Paper](https://doi.org/10.1113/jp277724) Kernik, Morotti et al., Clancy (2019) A computational model of induced pluripotent stem‐cell derived cardiomyocytes incorporating experimental variability from multiple data sources
 
 ## 2019 Tomek HV
-Tomek, Bueno-Orovio et al., Rodriguez (2019) Development, calibration, and validation of a novel human ventricular myocyte model in health, disease, and drug block
-[Paper](https://doi.org/10.7554/elife.48890)
-[Original Matlab and official CellML](https://github.com/jtmff/torord/commit/4ffab13b48f0923d38b0315f26be466a6fad8b70)
+Base: [O'Hara 2011](2011-ohara-hv)
+| [Original Matlab and official CellML](https://github.com/jtmff/torord/commit/4ffab13b48f0923d38b0315f26be466a6fad8b70)
+| [Paper](https://doi.org/10.7554/elife.48890) Tomek, Bueno-Orovio et al., Rodriguez (2019) Development, calibration, and validation of a novel human ventricular myocyte model in health, disease, and drug block
 
-Base: O'Hara 2011
 
 ## Bartolucci 2020
-Bartolucci, Passini et al., Severi (2020) Simulation of the effects of extracellular calcium changes leads to a novel computational model of human ventricular action potential with a revised calcium handling
-[Paper](https://doi.org/10.3389/fphys.2020.00314)
+[Paper](https://doi.org/10.3389/fphys.2020.00314) Bartolucci, Passini et al., Severi (2020) Simulation of the effects of extracellular calcium changes leads to a novel computational model of human ventricular action potential with a revised calcium handling
 
 ## 2020 Paci Hi
 **Included**
-| Base: Paci 2018
+| Base: [Paci 2018](#2018-paci-hi)
 | [Paper](https://doi.org/10.1016/j.bpj.2020.03.018) Paci, Passini et al., Entcheva (2020) All-Optical Electrophysiology Refines Populations of In Silico Human iPSC-CMs for Drug Evaluation
 
 ## 2020 Tomek HV
