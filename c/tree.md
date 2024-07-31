@@ -596,13 +596,13 @@ See also? Mazhar, Regazzoni et al., Severi (2022) A Novel Human Atrial Electrome
 
 ## 2022 Kohjitani Hi
 Base: [Himeno 2015](#2015-himeno-hv)
-[Paper](https://doi.org/10.1038/s41598-022-23398-0)
+| [Paper](https://doi.org/10.1038/s41598-022-23398-0)
 Kohjitani, Koda et al., Kimura (2022) Gradient-based parameter optimization method to determine membrane ionic current composition in human induced pluripotent stem cell-derived cardiomyocytes
 
 
 ## 2022 Moise
 [Paper](https://doi.org/10.1016/j.bpj.2023.03.024)
-Moise, Weinberg (2022) Emergent Electrical Activity, Tissue Heterogeneity, and Robustness in a Calcium Feedback Regulatory Model of the Sinoatrial Node
+| Moise, Weinberg (2022) Emergent Electrical Activity, Tissue Heterogeneity, and Robustness in a Calcium Feedback Regulatory Model of the Sinoatrial Node
 
 
 
