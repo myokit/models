@@ -533,30 +533,26 @@ Bartolucci, Passini et al., Severi (2020) Simulation of the effects of extracell
 
 ## 2020 Paci Hi
 **Included**
-Paci, Passini et al., Entcheva (2020) All-Optical Electrophysiology Refines Populations of In Silico Human iPSC-CMs for Drug Evaluation
-[Paper](https://doi.org/10.1016/j.bpj.2020.03.018)
-
-Base: Paci 2018
+| Base: Paci 2018
+| [Paper](https://doi.org/10.1016/j.bpj.2020.03.018) Paci, Passini et al., Entcheva (2020) All-Optical Electrophysiology Refines Populations of In Silico Human iPSC-CMs for Drug Evaluation
 
 ## 2020 Tomek HV
-Tomek, Bueno-Orovio, Rodriguez (2020) ToR-ORd-dynCl; an update of the ToR-ORd model of human ventricular cardiomyocyte with dynamic intracellular chloride
-[Paper](https://doi.org/10.1101/2020.06.01.127043)
-[Original Matlab and official CellML](https://github.com/jtmff/torord)
+Base: [Tomek 2019](#2019-tomek-hv)
+| [Original Matlab and official CellML](https://github.com/jtmff/torord)
+| [Paper](https://doi.org/10.1101/2020.06.01.127043) Tomek, Bueno-Orovio, Rodriguez (2020) ToR-ORd-dynCl; an update of the ToR-ORd model of human ventricular cardiomyocyte with dynamic intracellular chloride
 
-Base: Tomek 2019
 
 ## 2020 Trovato HP
 **Included**
-| Base: O'Hara 2011 (HV) and Pan 2011 (CP)
+| Base: [O'Hara 2011](2011-ohara-hv) and [Pan 2011](2011-pan-cp)
 | [Paper](https://doi.org/10.1016/j.yjmcc.2020.04.001) Trovato, Passini et al., Rodriguez (2020) Human Purkinje in silico model enables mechanistic investigations into automaticity and pro-arrhythmic abnormalities
-
 
 Modifications (partial):
 - INa from Dutta 2017; Passini 2016
 
 ## 2021 Akwaboah Hi
 **Included**
-| Base: [Kurata 2002](2002-kurata-rs) and [Courtemanche 1998](1998-courtemanche-ha)
+| Base: [Kurata 2002](#2002-kurata-rs) and [Courtemanche 1998](#1998-courtemanche-ha)
 
 Bits:
 - INa from Luo 1991, with partial reparameterisation
@@ -579,7 +575,7 @@ Bits:
 [Paper](https://doi.org/10.1371/journal.pcbi.1009137) Gaur, Qi et al., Vigmond (2021) A computational model of pig ventricular cardiomyocyte electrophysiology and calcium handling; Translation from pig to human electrophysiology
 
 ## 2022 Bartolucci HV
-Base: [O'Hara 2011](#ohara-2011-hv)
+Base: [O'Hara 2011](#2011-ohara-hv)
 | CODE AVAILABLE, ORG CELLML AVAILABLE
 | [Paper](https://doi.org/10.3389/fphys.2022.906146) Bartolucci, Forouzandemehr, Severi, Paci (2022) A Novel In Silico Electromechanical Model of Human Ventricular Cardiomyocyte
 
