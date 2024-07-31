@@ -168,24 +168,20 @@ Winslow, Rice et al., O'Rourke (1999) Mechanisms of Altered Excitation-Contracti
 Base: Jaffri 1998
 
 ## 2000 Faber GV
-Faber, Rudy (2000) Action Potential and Contractility in [Na+]i Overloaded Cardiac Myocytes
-[Paper](https://doi.org/10.1016/s0006-3495(00)76783-x)
 
 [Original code](https://rudylab.wustl.edu/code-downloads/)
+[Paper](https://doi.org/10.1016/s0006-3495(00)76783-x) Faber, Rudy (2000) Action Potential and Contractility in [Na+]i Overloaded Cardiac Myocytes
 
 ## 2000 Greenstein CV
 
 ## 2000 Ramirez CA
-Ramirez, Nattel, Courtemanche (2000) Mathematical analysis of canine atrial action potentials; rate, regional factors, and electrical remodeling
-[Paper](https://doi.org/10.1152/ajpheart.2000.279.4.h1767)
-
-Base: Courtemanche 1998
+Base: [Courtemanche 1998](1998-courtemanche-ha)
+| [Paper](https://doi.org/10.1152/ajpheart.2000.279.4.h1767) Ramirez, Nattel, Courtemanche (2000) Mathematical analysis of canine atrial action potentials; rate, regional factors, and electrical remodeling
 
 ## 2000 Sakmann GV
 
 ## 2000 Zhang RS
-Zhang, Holden et al., Boyett (2000) Mathematical models of action potentials in the periphery and center of the rabbit sinoatrial node
-[Paper](https://doi.org/10.1152/ajpheart.2000.279.1.h397)
+[Paper](https://doi.org/10.1152/ajpheart.2000.279.1.h397) Zhang, Holden et al., Boyett (2000) Mathematical models of action potentials in the periphery and center of the rabbit sinoatrial node
 
 ## 2001 Boyett
 ## 2001 Mazhari CV
@@ -193,7 +189,6 @@ Zhang, Holden et al., Boyett (2000) Mathematical models of action potentials in 
 ## 2001 Pandit LV
 
 ## 2001 Puglisi GV
-
 Base: Luo 1994
 
 Modifications:
@@ -208,14 +203,13 @@ Reduces: Priebe 1998
 ## 2002 Greenstein CV
 
 ## 2002 Kneller CA
-Kneller, Ramirez et al., Nattel (2002) Time-dependent transients in an ionically based mathematical model of the canine atrial action potential
-[Paper](https://doi.org/10.1152/ajpheart.00489.2001)
-
 Base: Ramirez 2000
+| [Paper](https://doi.org/10.1152/ajpheart.00489.2001) Kneller, Ramirez et al., Nattel (2002) Time-dependent transients in an ionically based mathematical model of the canine atrial action potential
 
-## 2002 Kurata
-Kurata, Hisatome, Imanishi, Shibamoto (2002) Dynamical description of sinoatrial node pacemaking; improved mathematical model for primary pacemaker cell
-[Paper](https://doi.org/10.1152/ajpheart.00900.2001)
+
+## 2002 Kurata RS
+Base: Demir 1994, Dokos 1996, Wilders 1991, Zhang 2000
+| [Paper](https://doi.org/10.1152/ajpheart.00900.2001) Kurata, Hisatome, Imanishi, Shibamoto (2002) Dynamical description of sinoatrial node pacemaking; improved mathematical model for primary pacemaker cell
 
 ## 2003 Cabo CV
 ## 2003 Garny
@@ -553,16 +547,17 @@ Base: Tomek 2019
 
 ## 2020 Trovato HP
 **Included**
-[Trovato, Passini et al., Rodriguez (2020) Human Purkinje in silico model enables mechanistic investigations into automaticity and pro-arrhythmic abnormalities](https://doi.org/10.1016/j.yjmcc.2020.04.001)
+| Base: O'Hara 2011 (HV) and Pan 2011 (CP)
+| [Paper](https://doi.org/10.1016/j.yjmcc.2020.04.001) Trovato, Passini et al., Rodriguez (2020) Human Purkinje in silico model enables mechanistic investigations into automaticity and pro-arrhythmic abnormalities
 
-Base: O'Hara 2011 (HV) and Pan 2011 (CP)
 
 Modifications (partial):
 - INa from Dutta 2017; Passini 2016
 
 ## 2021 Akwaboah Hi
 **Included**
-Base: Kurata 2002 and Courtemanche 1998
+| Base: [Kurata 2002](2002-kurata-rs) and [Courtemanche 1998](1998-courtemanche-ha)
+
 Bits:
 - INa from Luo 1991, with partial reparameterisation
 - Ito from Grandi 2010, with partial reparametrisation
@@ -581,28 +576,24 @@ Bits:
 - Calcium handling from Kurata 2002
 
 ## 2021 Gaur PV
-Gaur, Qi et al., Vigmond (2021) A computational model of pig ventricular cardiomyocyte electrophysiology and calcium handling; Translation from pig to human electrophysiology
-[Paper](https://doi.org/10.1371/journal.pcbi.1009137)
+[Paper](https://doi.org/10.1371/journal.pcbi.1009137) Gaur, Qi et al., Vigmond (2021) A computational model of pig ventricular cardiomyocyte electrophysiology and calcium handling; Translation from pig to human electrophysiology
 
 ## 2022 Bartolucci HV
 Base: [O'Hara 2011](#ohara-2011-hv)
-[Paper](https://doi.org/10.3389/fphys.2022.906146)
-Bartolucci, Forouzandemehr, Severi, Paci (2022) A Novel In Silico Electromechanical Model of Human Ventricular Cardiomyocyte
+| CODE AVAILABLE, ORG CELLML AVAILABLE
+| [Paper](https://doi.org/10.3389/fphys.2022.906146) Bartolucci, Forouzandemehr, Severi, Paci (2022) A Novel In Silico Electromechanical Model of Human Ventricular Cardiomyocyte
 
-CODE AVAILABLE, ORG CELLML AVAILABLE
 
 See also? Mazhar, Regazzoni et al., Severi (2022) A Novel Human Atrial Electromechanical Cardiomyocyte Model with Mechano-Calcium Feedback Effect
 
 
 ## 2022 Kohjitani Hi
 Base: [Himeno 2015](#2015-himeno-hv)
-| [Paper](https://doi.org/10.1038/s41598-022-23398-0)
-Kohjitani, Koda et al., Kimura (2022) Gradient-based parameter optimization method to determine membrane ionic current composition in human induced pluripotent stem cell-derived cardiomyocytes
+| [Paper](https://doi.org/10.1038/s41598-022-23398-0) Kohjitani, Koda et al., Kimura (2022) Gradient-based parameter optimization method to determine membrane ionic current composition in human induced pluripotent stem cell-derived cardiomyocytes
 
 
 ## 2022 Moise
-[Paper](https://doi.org/10.1016/j.bpj.2023.03.024)
-| Moise, Weinberg (2022) Emergent Electrical Activity, Tissue Heterogeneity, and Robustness in a Calcium Feedback Regulatory Model of the Sinoatrial Node
+[Paper](https://doi.org/10.1016/j.bpj.2023.03.024) Moise, Weinberg (2022) Emergent Electrical Activity, Tissue Heterogeneity, and Robustness in a Calcium Feedback Regulatory Model of the Sinoatrial Node
 
 
 
