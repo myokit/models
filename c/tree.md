@@ -196,7 +196,13 @@ Base: [Wilders 1991](#1991-wilders-ms), [Demir 1994](#1994-demir-rs), [Dokos 199
 ## 2003 Garny
 
 ## 2003 Matsuoka mV
+[Original code](https://web.archive.org/web/20070819084149/http://www.card.med.kyoto-u.ac.jp/simulation/)
+| [Paper](https://doi.org/10.2170/jjphysiol.53.105) Matsuoka, Sarai et al., Noma (2003) Role of individual ionic current systems in ventricular cells hypothesized by a model study
+
+Known as: Kyoto model
+
 Bits:
+- Contraction from Negroni 1996
 - INaK novel reduced formulation, based on INaCa
 
 ## 2003 Mitchell mV
@@ -205,6 +211,10 @@ Bits:
 [Paper](https://doi.org/10.1016/s0006-3495(03)74902-9) Pandit, Giles, Demir (2003) A Mathematical Model of the Electrophysiological Alterations in Rat Ventricular Myocytes in Type-I Diabetes
 
 ## 2003 Sarai mS
+Base: [Matsuoka 2003](#2003-matsuoka-mV)
+| [Original code](https://web.archive.org/web/20070819084149/http://www.card.med.kyoto-u.ac.jp/simulation/)
+| [Paper](https://doi.org/10.2170/jjphysiol.53.125) Sarai, Matsuoka et al., Noma (2003) Role of individual ionic current systems in the SA node hypothesized by a model study
+
 ## 2003 Saucerman LV
 ## 2003 Seemann HV
 ## 2004 Bondarenko MV
@@ -234,8 +244,10 @@ Bits:
 
 ## 2004 Shannon RV
 Base: [Luo 1994](#1994-luo-gv)? and [Puglisi 2001](#2001-puglisi-gv) ?
-| [Likely original code](https://github.com/drgrandilab/Shannon-et-al-2004-Rabbit-Ventricular-Model)
+| [Likely original matlab code](https://github.com/drgrandilab/Shannon-et-al-2004-Rabbit-Ventricular-Model)
 | [Paper](https://doi.org/10.1529/biophysj.104.047449) Shannon, Wang et al., Bers (2004) A mathematical treatment of integrated Ca dynamics within the ventricular myocyte
+
+Known as: Chicago model
 
 Modifications:
 - Rescaled gK1
@@ -297,6 +309,10 @@ Base: [Ten Tusscher 2006](#2006-ten-tusscher-hv)
 [Original code](https://rudylab.wustl.edu/code-downloads/)
 | [Paper](https://doi.org/10.1529/biophysj.106.088807) Faber, Silva, Livshitz, Rudy (2007) Kinetic Properties of the Cardiac L-Type Ca Channel and Its Role in Myocyte Electrophysiology; A Theoretical Investigation
 
+## 2007 Grandi RV
+Base: [Shannon 2004](#2004-shannon-rv)
+| [Paper](https://doi.org/10.1529/biophysj.107.114868) Grandi, Puglisi et al., Bers (2007) Simulation of Ca-calmodulin-dependent protein kinase II on rabbit ventricular myocyte ion currents and action potentials
+
 ## 2007 Livshitz CV
 **Included**
 | Base: [Hund 2004](#2004-hund-cv)
@@ -321,6 +337,10 @@ Modifications:
 - New IK1 formulation, based on Yan & Ishihara 2005
 - New IKr formulation
 - Rescaled IKs
+
+## 2008 Himeno GS
+Base: [Sarai 2003](#2003-sarai-ms)
+| [Paper](https://doi.org/10.2170/physiolsci.RP015207) Himeno, Sarai, Matsuoka, Noma (2008) Ionic mechanisms underlying the positive chronotropy induced by beta1-adrenergic stimulation in guinea pig sinoatrial node cells
 
 ## 2008 Hund CV
 Base: [Livshitz 2007](#2007-livshitz-cv)
@@ -371,7 +391,7 @@ Base: [Kurata 2002](#2002-kurata-rs), [Shannon 2004](#2004-shannon-rv)
 ## 2010 Grandi HV
 **Included**
 | Base: [Shannon 2004](#2004-shannon-rv)
-| [Original code](https://github.com/drgrandilab/Grandi-et-al-2010-Human-Ventricular-Model)
+| [Original matlab code](https://github.com/drgrandilab/Grandi-et-al-2010-Human-Ventricular-Model)
 | [Paper](https://doi.org/10.1016/j.yjmcc.2009.09.019) Grandi, Pasqualini, Bers (2010) A novel computational model of the human ventricular action potential and Ca transient
 
 Known as: Grandi-Pasqualini-Bers human ventricular model
@@ -400,7 +420,7 @@ Modifications:
 ## 2011 Grandi-Pandit-Voigt HA
 **Included**
 | Base: [Grandi 2010](#2010-grandi-hv)
-| [Original code](https://github.com/drgrandilab/Grandi-et-al-2011-Human-Atrial-Model)
+| [Original matlab code](https://github.com/drgrandilab/Grandi-et-al-2011-Human-Atrial-Model)
 | [Paper](https://doi.org/10.1161/CIRCRESAHA.111.253955) Grandi, Pandit et al., Bers (2011) Human atrial action potential and Ca model; sinus rhythm and chronic atrial fibrillation
 
 Known as: Grandi 2011 model. But note Grandi, Pandit, and Voigt share first authorship of the paper.
@@ -413,6 +433,10 @@ Modifications:
 **Included**
 | Base: [Decker 2009](#2009-decker-cv)
 | [Original code](https://rudylab.wustl.edu/code-downloads/)
+
+## 2011 Kharche MS
+Base: Many
+| [Paper](https://doi.org/10.1152/ajpheart.00143.2010) Kharche, Yu, Lei, Zhang (2011) A mathematical model of action potentials of mouse sinoatrial node cells with molecular bases
 
 ## 2011 Koivumaki HA
 **Included**
@@ -431,20 +455,12 @@ Modifications:
 Bits:
 - INaK from Smith 2004, with reparametrisation
 
-
-------------------
-
-Noble 2012 cut-off
-
-------------------
-
-
 ## 2012 Davies
 
 ## 2012 Morotti 2012 RV
 Base: [Shannon 2004](#2004-shannon-rv)
-| [Original code](https://github.com/drgrandilab/Morotti-et-al-2012-Rabbit-Ventricular-Model-with-Updated-ICaL)
-| [Paper](https://doi.org/10.1113/jphysiol.2012.231886) Morotti, Grandi et al. Bers (2012) Theoretical Study of L-type Ca2+ Current Inactivation Kinetics during Action Potential Repolarization and Early Afterdepolarizations
+| [Original matlab code](https://github.com/drgrandilab/Morotti-et-al-2012-Rabbit-Ventricular-Model-with-Updated-ICaL)
+| [Paper](https://doi.org/10.1113/jphysiol.2012.231886) Morotti, Grandi et al., Bers (2012) Theoretical Study of L-type Ca2+ Current Inactivation Kinetics during Action Potential Repolarization and Early Afterdepolarizations
 
 Modifications:
 - ICaL model adapted and modified from Mahajan
@@ -452,8 +468,18 @@ Modifications:
 ## 2012 Paci He
 Base: [Grandi 2009](#2009-grandi-hv)
 
+## 2012 Severi RS
+Base: [Maltsev 2009](#2009-maltsev-hs)
+| [Paper](10.1113/jphysiol.2012.229435) Severi, Fantini, Charawi, DiFrancesco (2012) An updated computational model of rabbit sinoatrial action potential to investigate the mechanisms of heart rate modulation
+
+## 2012 Yang HV
+Base: [O'Hara 2011](#2011-ohara-hv)
+| [Modified code](https://github.com/drgrandilab/Fogli-Iseppe-et-al-2021-TdP-prediction)
+| [Paper](https://doi.org/10.3389/fphys.2012.00360) Yang, Clancy (2012) In silico Prediction of Sex-Based Differences in Human Susceptibility to Cardiac Ventricular Tachyarrhythmias
+
 ## 2013 Colman HA
 Base: [Courtemanche 1998](#1998-courtemanche-ha)
+| [Paper](https://doi.org/10.1113/jphysiol.2013.254987) Colman, Aslanidi et al., Zhang (2013) Pro-arrhythmogenic effects of atrial fibrillation-induced electrical remodelling: insights from the three-dimensional virtual human atria
 
 ## 2013 Paci Hi
 **Included**
@@ -469,13 +495,23 @@ Modifications:
 - Replaced INa with Courtemanche 1998 one
 - Modified IK1 (changed gK1 and a)
 
-## Morotti 2014 MV
+## 2014 Morotti MV
 Base: [Soltis 2010](#2010-soltis-rv)
-| [Original code](https://github.com/drgrandilab/Morotti-et-al-2014-Mouse-Ventricular-Model)
+| [Original matlab code](https://github.com/drgrandilab/Morotti-et-al-2014-Mouse-Ventricular-Model)
 | [Paper](https://doi.org/10.1113/jphysiol.2013.266676) Morotti, Edwards et al., Grandi (2014) A novel computational model of mouse myocyte electrophysiology to assess the synergy between Na+ loading and CaMKII
 
 ## 2015 Himeno HV
 Base: Several! Interesting one to look at
+
+## 2015 Negroni RV
+Base: [Shannon 2004](#2004-shannon-rv), [Soltis 2010](#2010-soltis-rv)
+| [Original matlab code](https://github.com/drgrandilab/Negroni-et-al-2015-Rabbit-Ventricular-Model-with-Myofilament-Contraction)
+| [Paper](https://doi.org/10.1016/j.yjmcc.2015.02.014) Negroni, Morotti et al., Bers (2015) Beta-adrenergic effects on cardiac myofilaments and contraction in an integrated rabbit ventricular myocyte model
+
+Bits:
+- New myofilament contraction
+- Currents, Ca-handling, Na-handling: Shannon 2004
+- CaMKII, PKA: Soltis 2010
 
 ## 2015 Schmidt
 
@@ -486,8 +522,21 @@ Base: Several! Interesting one to look at
 
 ## 2016 Morotti HA
 Base: [Grandi 2011](#2011-grandi-pandit-voigt-ha)
+| [Original matlab code](https://github.com/drgrandilab/Morotti-et-al-2016-Human-Atrial-Model-with-Updated-INa)
+| [Paper](https://doi.org/10.1016/j.yjmcc.2015.07.030) Morotti, McCulloch et al., Grandi (2016) Atrial-selective targeting of arrhythmogenic phase-3 earlyafterdepolarizations in human myocytes
+
+Bits:
+ - Na modified from Grandi 2007, and (not included): Wagner 2009 & Moreno 2013
 
 ## 2016 Varela CA
+
+## 2017 Bartos RV
+Base: [Negroni 2015](#2015-negroni-rv)
+| [Original matlab code](https://github.com/drgrandilab/Bartos-et-al-2017-Rabbit-Ventricular-Model-with-Updated-IKs)
+| [Paper](https://doi.org/10.1113/JP273676) Bartos, Morotti et al., Bers (2017) Quantitative analysis of the Ca2+-dependent regulation of delayed rectifier K+ current IKs in rabbit ventricular myocytes
+
+Bits:
+- New IKs with Ca regulation
 
 ## 2017 Chang 2017 HV
 **Included**
@@ -498,9 +547,20 @@ Known as: ORd-cipa-v1
 
 ## 2017 Colman HA
 Base: [Colman 2013](#2013-colman-ha)
+| [Paper](https://doi.org/10.1371/journal.pcbi.1005587) Colman, Ni et al., Zhang (2017) In silico assessment of genetic variation in KCNA5 reveals multiple mechanisms of human atrial arrhythmogenesis
 
-## 2017 Ellinwood
-## 2017 Fabbri
+## 2017 Ellinwood HA
+Base: [Morotti 2016](#2016-morotti-ha)
+| [Original matlab code](https://github.com/drgrandilab/Ellinwood-et-al-2017-Human-Atrial-Model-with-Updated-IKur)
+| [Paper](https://doi.org/10.1063/1.5000226) Ellinwood, Dobrev, Morotti, Grandi (2017) Revealing kinetics and state-dependent binding properties of IKur-targeting drugs that maximize atrial fibrillation selectivity [Erratum](https://doi.org/10.1063/1.5007051)
+
+Bits:
+- IKur adapted from 
+Zhou et al. (PLoS ONE 2012; e42295)
+
+## 2017 Fabbri HS
+Base: [Severi 2012](2012-severi-rs)
+| [Paper](https://doi.org/10.1113/JP273259) Fabbri, Fantini, Wilders, Severi (2017) Computational analysis of the human sinus node action potential; model development and effects of mutations
 
 ## 2017 Gokhale (other)
 **Included**
@@ -508,13 +568,22 @@ Base: [Colman 2013](#2013-colman-ha)
 ## 2017 Ni HA
 **Included**
 | Base: [Colman 2017](#2017-colman-ha)
+| [Paper](https://doi.org/10.3389/fphys.2017.00946) Ni, Whittaker et al., Zhang (2017) Synergistic Anti-arrhythmic Effects in Human Atria with Combined Use of Sodium Blockers and Acacetin
 
 Bits:
 - Calcium subspaces based on Koivumaki 2011
 
+## 2017 Surdo MV
+Base: [Morotti 2014](#2014-morotti-mv) 
+| [Original matlab code](https://github.com/drgrandilab/Surdo-et-al-2017-Mouse-Ventricular-Model-with-Myofilament-Contraction)
+| [Paper](https://doi.org/10.1038/ncomms15031) Surdo, Berrera et al., Zaccolo (2017) FRET biosensor uncovers cAMP nano-domains at beta-adrenergic targets that dictate precise tuning of cardiac contractility
+
+Bits:
+- Myofilament contraction from Negroni 2015
+
 ## 2018 Paci Hi
 **Included**
-| Base: Paci 2013
+| Base: [Paci 2013](#2013-paci-hi)
 | [Paper](https://doi.org/10.3389/fphys.2018.00709) Paci, Polonen et al., Hyttinen (2018) Automatic optimization of an in silico model of human iPSC derived cardiomyocytes recapitulating calcium handling abnormalities
 
 ## 2018 Sutanto HA
@@ -572,8 +641,18 @@ Bits:
 - IpCa from Courtemanche 1998
 - Calcium handling from Kurata 2002
 
+## 2021 Fogli Iseppe HV
+Base: [Yang 2012](#2012-yang-hv)
+| [Original C++ code](https://github.com/drgrandilab/Fogli-Iseppe-et-al-2021-TdP-prediction)
+| [Paper](https://doi.org/10.1002/cpt.2240) Fogli Iseppe, Ni et al., Grandi (2021) Sex-specific classification of drug-induced Torsade de Pointes susceptibility using cardiac simulations and machine learning
+
 ## 2021 Gaur PV
 [Paper](https://doi.org/10.1371/journal.pcbi.1009137) Gaur, Qi et al., Vigmond (2021) A computational model of pig ventricular cardiomyocyte electrophysiology and calcium handling; Translation from pig to human electrophysiology
+
+## 2021 Morotti MS
+Base: [Kharche 2011](#2011-kharche-ms)
+| [Original matlab code](https://github.com/drgrandilab/Morotti-et-al-2021-mouse-sinoatrial-model)
+| [Paper](https://doi.org/10.3390/ijms22115645) Morotti, Ni et al., Grandi (2021) Intracellular Na+ Modulates Pacemaking Activity in Murine Sinoatrial Node Myocytes: An In Silico Analysis
 
 ## 2022 Bartolucci HV
 Base: [O'Hara 2011](#2011-ohara-hv)
@@ -593,8 +672,22 @@ Base: [Himeno 2015](#2015-himeno-hv)
 [Paper](https://doi.org/10.1016/j.bpj.2023.03.024) Moise, Weinberg (2022) Emergent Electrical Activity, Tissue Heterogeneity, and Robustness in a Calcium Feedback Regulatory Model of the Sinoatrial Node
 
 
+## 2023 Heijman HA
+Base: Grandi 2011? Or voigt-heijman?
+| [Original matlab code](https://github.com/drgrandilab/Heijman-et-al-2023-Human-Atrial-Model)
+| [Paper](https://doi.org/10.1161/CIRCRESAHA.122.321858) Heijman, Zhou et al., Dobrev (2023) Enhanced Ca-Dependent SK-Channel Gating and Membrane Trafficking in Human Atrial Fibrillation
 
+## 2023 Herrera HA
+Base: [Ellinwood 2017](#2017-ellinwood-ha)
+| [Original matlab code](https://github.com/drgrandilab/Herrera-et-al-2023-Human-Atrial-Model)
+| [Paper](https://doi.org/10.1152/ajpheart.00362.2023) Herrera, Zhang et al., Morotti (2023) Dual effects of the small-conductance Ca-activated K current on human atrial electrophysiology and Ca-driven arrhythmogenesis; an in silico study
 
+Also cites a 2020 Ni paper, but that refers to Ellinwood.
+
+## Ni 2023 HA
+Base: [Morotti 2017](#2016-morotti-ha)
+| [Original C++ code](https://github.com/drgrandilab/Ni-et-al-2023-Human-Atrial-Signaling-Model)
+| [Paper](https://doi.org/10.1093/cvr/cvad118) Ni, Morotti et al., Grandi (2023) Integrative human atrial modelling unravels interactive PKA and CaMKII signalling as key determinants of atrial arrhythmogenesis
 
 
 
