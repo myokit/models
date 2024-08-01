@@ -8,6 +8,7 @@ Type
 - N AV node
 - e embryonic stem cell
 - i induced pluripotent stem cell
+- d Developing cardiomyocyte
 
 Species
 - C Canine
@@ -177,6 +178,10 @@ Modifications:
 
 ## 1996 Dokos RS
 
+## 1996 Katsnelson
+Katsnelson, L.B., Markhasin, V.S., 1996. Mathematical modeling of relations between the kinetics of free
+intracellular calcium and mechanical function of myocardium
+
 ## 1996 Lindblad RA
 Base: Mostly new?
 | [Paper](https://doi.org/10.1152/ajpheart.1996.271.4.h1666) Lindblad, Murphey, Clark Giles (1996) A model of the action potential and underlying membrane currents in a rabbit atrial cell
@@ -288,6 +293,10 @@ Base: [Matsuoka 2003](#2003-matsuoka-mV)
 ## 2003 Saucerman LV
 ## 2003 Seemann HV
 
+## 2003 Solovyova
+Solovyova, O., et al., 2003. Mechanical interaction of heterogeneous cardiac muscle segments in silico:
+effects on Ca2+ handling and action potential. Int. J. Bifurcat. Chaos 13(12), 3757–3782.
+
 ## 2004 Bondarenko MV
 Base: [Luo 1994](#1994-luo-gv), but many new formulations
 | [Paper](https://doi.org/10.1152/ajpheart.00185.2003) Bondarenko, Szigeti et al., Rasmusson (2004) Computer model of action potential of mouse ventricular myocytes
@@ -314,6 +323,12 @@ Bits:
 | [Paper](https://doi.org/10.1529/biophysj.104.043299) Iyer, Mazhari, Winslow (2004) A computational model of the human left-ventricular epicardial myocyte
 
 Known as: Iyer-Mazhari-Winslow
+
+## 2004 Katsnelson
+Base: Solovyova 2003
+
+Katsnelson, L.B., et al., 2004. Influence of viscosity on myocardium mechanical activity: a mathematical model
+J. Theor. Biol. 230(3), 385–405.
 
 ## 2004 Lovell RS
 
@@ -420,6 +435,10 @@ Base: [Sarai 2003](#2003-sarai-ms)
 Base: [Livshitz 2007](#2007-livshitz-cv)
 | [Original code?](https://rudylab.wustl.edu/code-downloads/)
 
+## 2008 Korhonen Md
+Base: [Dokos 1996](#1996-dokos-rs), [Bondarenko 2004](#2004-bondarenko-mv)
+| [Paper](https://doi.org/10.1085/jgp.200809961) Korhonen, Rapila, Tavi (2008) Mathematical model of mouse embryonic cardiomyocyte excitation-contraction coupling
+
 ## 2008 Kurata RS
 
 ## 2008 Mahajan RV
@@ -436,6 +455,10 @@ Base: [Ten Tusscher 2006](#2006-ten-tusscher-hv)
 Base: [Pandit 2001](#2001-pandit-lv), Niederer 2006(?), Hinch 2004
 
 ## 2008 Saucerman LV
+
+## 2008 Sulman
+[Paper](https://doi.org/10.1007/s11538-007-9285-y) Sulman, Katsnelson, Solovyova, Markhasin (2008) Mathematical modeling of mechanically modulated rhythm disturbances in homogeneous and heterogeneous myocardium with attenuated activity of Na-K pump
+
 ## 2008 Wang LV
 ## 2009a Aslanidi RA
 ## 2009b Aslanidi CP
@@ -451,6 +474,10 @@ Base: [Ten Tusscher 2004](#2004-ten-tusscher-hv)
 ## 2009 Inada mA
 Base: [Lindblad 1996](#1996-lindblad-ra), [Kurata 2002](#2002-kurata-rs)
 | [Paper](https://doi.org/10.1016/j.bpj.2009.06.056) Inada, Hancox, Zhang, Boyett (2009) One-Dimensional Mathematical Model of the Atrioventricular Node Including Atrio-Nodal, Nodal, and Nodal-His Cells
+
+## 2009 Korhonen Ld
+Base: [Pandit 2001](#2001-pandit-lv), [Bondarenko 2004](#2004-bondarenko-mv)
+| [Paper](https://doi.org/10.1016/j.bpj.2008.10.026) Korhonen, Hanninen, Tavi (2009) Model of excitation-contraction coupling of rat neonatal ventricular myocytes
 
 ## 2009 Koivumaki MV
 
@@ -489,6 +516,10 @@ Note: Also credited as 2009 due to publication date being listed as 2009 and dat
 Modifications:
 - Scaled gK1
 - ...
+
+## 2010 Korhonen Md
+Base: [Korhonen 2008]
+[Paper](https://doi.org/10.1113/jphysiol.2009.185173) Korhonen, Rapila et al., Tavi (2010) Local Ca releases enable rapid heart rates in developing cardiomyocytes
 
 ## 2010 Li MV
 
@@ -615,10 +646,15 @@ Bits:
 
 ## 2015 Schmidt
 
+## 2016 Gattoni
+Base: Pandit 2001
+
 ## 2016 Gray RV
 **Included**
 | Base: New
 | [Paper](https://doi.org/10.1371/journal.pcbi.1005087) Gray, Pathmanathan (2016) A Parsimonious Model of the Rabbit Action Potential Elucidates the Minimal Physiological Requirements for Alternans and Spiral Wave Breakup
+
+## 2016 Majumder RA
 
 ## 2016 Morotti HA
 Base: [Grandi 2011](#2011-grandi-pandit-voigt-ha)
@@ -713,6 +749,11 @@ Base: This model has 4 variants
 | [Original code](https://github.com/michaelcolman/hAM_WL)
 | [Paper](https://doi.org/10.3389/fphys.2018.01211) Colman, Saxena, Kettlewell, Workman (2018) Description of the Human Atrial Action Potential Derived From a Single, Congruent Data Source; Novel Computational Models for Integrated Experimental-Numerical Study of Atrial Arrhythmia Mechanisms
 
+## 2018 Koivumaki Hi
+Base: Korhonen 2010, Paci 2015
+| [Paper]()
+Koivumaki, Naumenko et al., Tavi (2018) Structural Immaturity of Human iPSC-Derived Cardiomyocytes; In Silico Investigation of Effects on Function and Disease Modeling
+
 ## 2018 Paci Hi
 **Included**
 | Base: [Paci 2013](#2013-paci-hi)
@@ -734,6 +775,10 @@ Base: [Fabbri 2017](#2017-fabbri-hs)
 Base: [O'Hara 2011](#2011-ohara-hv)
 | [Original Matlab and official CellML](https://github.com/jtmff/torord/commit/4ffab13b48f0923d38b0315f26be466a6fad8b70)
 | [Paper](https://doi.org/10.7554/elife.48890) Tomek, Bueno-Orovio et al., Rodriguez (2019) Development, calibration, and validation of a novel human ventricular myocyte model in health, disease, and drug block
+
+## 2020 Balakina-Vikulova HV
+Base: Ten Tusscher 2006, Sulman 2008
+| [Paper](https://doi.org/10.1186/s12576-020-00741-6) Balakina-Vikulova, Panfilov, Solovyova, Katsnelson (2020) Mechano-calcium and mechano-electric feedbacks in the human cardiomyocyte analyzed in a mathematical model
 
 ## 2020 Bartolucci HV
 Base: [Dutta 2017](#2017-dutta-hv)
@@ -821,13 +866,10 @@ Base: [Koivumaki 2011](#2011-koivumaki-ha), Regazzoni 2020
 
 Known as: MBS2023
 
-
-
-
-
 ## 2022 Moise
-[Paper](https://doi.org/10.1016/j.bpj.2023.03.024) Moise, Weinberg (2022) Emergent Electrical Activity, Tissue Heterogeneity, and Robustness in a Calcium Feedback Regulatory Model of the Sinoatrial Node
-
+Base: [Severi 2012](#2012-severi-rs)
+| [Original matlab code](https://github.com/SHWeinberg/SAN_FeedbackModel)
+| [Paper](https://doi.org/10.1016/j.bpj.2023.03.024) Moise, Weinberg (2022) Emergent Electrical Activity, Tissue Heterogeneity, and Robustness in a Calcium Feedback Regulatory Model of the Sinoatrial Node
 
 ## 2023 Heijman HA
 Base: Grandi 2011? Or voigt-heijman?
