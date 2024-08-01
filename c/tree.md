@@ -1,6 +1,5 @@
 # Model tree
 
-## Abbrev
 Type
 - A Atrial
 - V Ventricular
@@ -349,6 +348,11 @@ Base: [Livshitz 2007](#2007-livshitz-cv)
 ## 2008 Mahajan RV
 
 ## 2008 Pasek GV
+
+## 2008 Ten Tusscher HP
+Base: [Ten Tusscher 2006](#2006-ten-tusscher-hv)
+| [Paper](https://doi.org/10.1016/j.pbiomolbio.2007.07.026) Ten Tusscher, Panfilov (2008) Modelling of the ventricular conduction system
+
 ## 2008 Terkildsen RV
 Base: [Pandit 2001](#2001-pandit-lv), Niederer 2006(?), Hinch 2004
 
@@ -422,9 +426,9 @@ Modifications:
 **Included**
 | Base: [Grandi 2010](#2010-grandi-hv)
 | [Original matlab code](https://github.com/drgrandilab/Grandi-et-al-2011-Human-Atrial-Model)
-| [Paper](https://doi.org/10.1161/CIRCRESAHA.111.253955) Grandi, Pandit et al., Bers (2011) Human atrial action potential and Ca model; sinus rhythm and chronic atrial fibrillation
+| [Paper](https://doi.org/10.1161/CIRCRESAHA.111.253955) Grandi*, Pandit*, Voigt* et al., Bers (2011) Human atrial action potential and Ca model; sinus rhythm and chronic atrial fibrillation (*shared first authorship)
 
-Known as: Grandi 2011 model. But note Grandi, Pandit, and Voigt share first authorship of the paper.
+Known as: Grandi 2011 model. 
 
 Modifications:
 - Scaled gK1
@@ -499,6 +503,11 @@ Modifications:
 - Added IKAch (Kneller et al. 2002)
 - Replaced INa with Courtemanche 1998 one
 - Modified IK1 (changed gK1 and a)
+
+## 2014 Chang HA
+Base: [Grandi 2011](#2011-grandi-pandit-voigt-ha)
+| [Paper](https://doi.org/10.1371/journal.pcbi.1004011) Chang, Bayer, Trayanova (2014) Disrupted calcium release as a mechanism for atrial alternans associated with human atrial fibrillation
+
 
 ## 2014 Morotti MV
 Base: [Soltis 2010](#2010-soltis-rv)
@@ -610,6 +619,11 @@ Base: [Morotti 2014](#2014-morotti-mv)
 
 Bits:
 - Myofilament contraction from Negroni 2015
+
+## 2018 Colman HA
+Base: This model has 4 variants
+| [Original code](https://github.com/michaelcolman/hAM_WL)
+| [Paper](https://doi.org/10.3389/fphys.2018.01211) Colman, Saxena, Kettlewell, Workman (2018) Description of the Human Atrial Action Potential Derived From a Single, Congruent Data Source; Novel Computational Models for Integrated Experimental-Numerical Study of Atrial Arrhythmia Mechanisms
 
 ## 2018 Paci Hi
 **Included**
@@ -738,7 +752,7 @@ Base: [Ellinwood 2017](#2017-ellinwood-ha)
 
 Also cites a 2020 Ni paper, but that refers to Ellinwood.
 
-## Ni 2023 HA
+## 2023 Ni HA
 Base: [Morotti 2017](#2016-morotti-ha)
 | [Original C++ code](https://github.com/drgrandilab/Ni-et-al-2023-Human-Atrial-Signaling-Model)
 | [Paper](https://doi.org/10.1093/cvr/cvad118) Ni, Morotti et al., Grandi (2023) Integrative human atrial modelling unravels interactive PKA and CaMKII signalling as key determinants of atrial arrhythmogenesis
