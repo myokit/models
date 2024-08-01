@@ -385,6 +385,7 @@ Base: [Kurata 2002](#2002-kurata-rs), [Shannon 2004](#2004-shannon-rv)
 ## 2009 Stewart HP
 **Included**
 | Base: [Ten Tusscher 2006](#2006-ten-tusscher-hv)
+| [Original CellML](https://models.cellml.org/workspace/stewart_aslanidi_noble_noble_boyett_zhang_2009)
 
 ## 2009 Tran reduced
 
@@ -432,7 +433,7 @@ Modifications:
 ## 2011 Heijman CV
 **Included**
 | Base: [Decker 2009](#2009-decker-cv)
-| [Original code](https://rudylab.wustl.edu/code-downloads/)
+| [Original matlab code](https://rudylab.wustl.edu/code-downloads/)
 
 ## 2011 Kharche MS
 Base: Many
@@ -443,8 +444,12 @@ Base: Many
 | Base: [Nygren 1998](#1998-nygren-ha)
 | [Paper](https://doi.org/10.1371/journal.pcbi.1001067) Koivumaki, Korhonen, Tavi (2011) Impact of Sarcoplasmic Reticulum Calcium Release on Calcium Dynamics and Action Potential Morphology in Human Atrial Myocytes; A Computational Study
 
-## 2011 Pan CP
-[Original code](https://rudylab.wustl.edu/code-downloads/)
+## 2011 Li CP
+Base: [Decker 2009](#2009-decker-cv)
+| [Original c++ code](https://rudylab.wustl.edu/code-downloads/)
+| [Paper](https://doi.org/10.1161/CIRCRESAHA.111.246512) Li, Rudy (2011) A model of canine purkinje cell electrophysiology and Ca2 cycling; rate dependence, triggered activity, and comparison to ventricular myocytes
+
+Known as: PRd
 
 ## 2011 O'Hara HV
 **Included**
@@ -528,6 +533,17 @@ Base: [Grandi 2011](#2011-grandi-pandit-voigt-ha)
 Bits:
  - Na modified from Grandi 2007, and (not included): Wagner 2009 & Moreno 2013
 
+## 2016 Passini HV
+Base: [O'Hara 2011](#2011-ohara-hv)
+[Paper](https://doi.org/10.1016/j.yjmcc.2015.09.003) Passini, Minchole et al. Bueno-Orovio (2016 ) Mechanisms of Pro-Arrhythmic Abnormalities in Ventricular Repolarisation and Anti-Arrhythmic Therapies in Human Hypertrophic Cardiomyopathy
+
+Modifications:
+- Rescaled Ito
+- Changed concentrations
+- Constant EK
+- Shifted act/inact curves INa, INaL, IK1
+- Modified INa steady states
+
 ## 2016 Varela CA
 
 ## 2017 Bartos RV
@@ -538,16 +554,19 @@ Base: [Negroni 2015](#2015-negroni-rv)
 Bits:
 - New IKs with Ca regulation
 
-## 2017 Chang 2017 HV
+## 2017 Colman HA
+Base: [Colman 2013](#2013-colman-ha)
+| [Paper](https://doi.org/10.1371/journal.pcbi.1005587) Colman, Ni et al., Zhang (2017) In silico assessment of genetic variation in KCNA5 reveals multiple mechanisms of human atrial arrhythmogenesis
+
+## 2017 Dutta HV
 **Included**
-| Base: O'Hara 2011
+| Base: [Li 2017](#2017-li-hv)
 | [Official CellML](https://models.cellml.org/e/4e8/ohara_rudy_cipa_v1_2017.cellml/view)
 
 Known as: ORd-cipa-v1
 
-## 2017 Colman HA
-Base: [Colman 2013](#2013-colman-ha)
-| [Paper](https://doi.org/10.1371/journal.pcbi.1005587) Colman, Ni et al., Zhang (2017) In silico assessment of genetic variation in KCNA5 reveals multiple mechanisms of human atrial arrhythmogenesis
+Modifications:
+- Rescaling of conductances to better predict drug effects
 
 ## 2017 Ellinwood HA
 Base: [Morotti 2016](#2016-morotti-ha)
@@ -560,10 +579,21 @@ Zhou et al. (PLoS ONE 2012; e42295)
 
 ## 2017 Fabbri HS
 Base: [Severi 2012](2012-severi-rs)
+| [Official CellML](https://www.mcbeng.it/en/downloads/software/hap-san.html)
+| [Physiome reproduction](https://doi.org/10.36903/physiome.16550526)
 | [Paper](https://doi.org/10.1113/JP273259) Fabbri, Fantini, Wilders, Severi (2017) Computational analysis of the human sinus node action potential; model development and effects of mutations
 
 ## 2017 Gokhale (other)
 **Included**
+
+## 2017 Li 2017 HV
+**Included**
+| Base: [O'Hara 2011](#2011-ohara-hv)
+
+Known as: IKr-dynamic ORd model, original IKr-dyn ORd model
+
+Modifications:
+- New IKr model with drug trapping
 
 ## 2017 Ni HA
 **Included**
@@ -598,8 +628,17 @@ Base: [O'Hara 2011](#2011-ohara-hv)
 | [Original Matlab and official CellML](https://github.com/jtmff/torord/commit/4ffab13b48f0923d38b0315f26be466a6fad8b70)
 | [Paper](https://doi.org/10.7554/elife.48890) Tomek, Bueno-Orovio et al., Rodriguez (2019) Development, calibration, and validation of a novel human ventricular myocyte model in health, disease, and drug block
 
-## Bartolucci 2020
-[Paper](https://doi.org/10.3389/fphys.2020.00314) Bartolucci, Passini et al., Severi (2020) Simulation of the effects of extracellular calcium changes leads to a novel computational model of human ventricular action potential with a revised calcium handling
+## 2020 Bartolucci HV
+Base: [Dutta 2017](#2017-dutta-hv)
+| [Original matlab code](https://www.mcbeng.it/en/downloads/software/16-bps2020-model.html)
+| [Official CellML](https://models.physiomeproject.org/workspace/5fd)
+| [Paper](https://doi.org/10.3389/fphys.2020.00314) Bartolucci, Passini et al., Severi (2020) Simulation of the effects of extracellular calcium changes leads to a novel computational model of human ventricular action potential with a revised calcium handling
+
+Known as: BPS2020
+
+Modifications:
+- New ICaL formulation
+- ...
 
 ## 2020 Paci Hi
 **Included**
@@ -613,11 +652,12 @@ Base: [Tomek 2019](#2019-tomek-hv)
 
 ## 2020 Trovato HP
 **Included**
-| Base: [O'Hara 2011](#2011-ohara-hv) and [Pan 2011](#2011-pan-cp)
+| Base: [O'Hara 2011](#2011-ohara-hv), [Li 2011](#2011-li-cp)
+| [Original Matlab and official CellML](https://www.cs.ox.ac.uk/insilicocardiotox/purkinje-models)
 | [Paper](https://doi.org/10.1016/j.yjmcc.2020.04.001) Trovato, Passini et al., Rodriguez (2020) Human Purkinje in silico model enables mechanistic investigations into automaticity and pro-arrhythmic abnormalities
 
 Modifications:
-- INa from Dutta 2017; Passini 2016
+- INa from Passini 2016
 - ...
 
 ## 2021 Akwaboah Hi
@@ -655,17 +695,31 @@ Base: [Kharche 2011](#2011-kharche-ms)
 | [Paper](https://doi.org/10.3390/ijms22115645) Morotti, Ni et al., Grandi (2021) Intracellular Na+ Modulates Pacemaking Activity in Murine Sinoatrial Node Myocytes: An In Silico Analysis
 
 ## 2022 Bartolucci HV
-Base: [O'Hara 2011](#2011-ohara-hv)
+Base: [Bartoluci 2020](#2020-bartolucci-hv)
 | CODE AVAILABLE, ORG CELLML AVAILABLE
 | [Paper](https://doi.org/10.3389/fphys.2022.906146) Bartolucci, Forouzandemehr, Severi, Paci (2022) A Novel In Silico Electromechanical Model of Human Ventricular Cardiomyocyte
 
+Known as: BPSLand
 
-See also? Mazhar, Regazzoni et al., Severi (2022) A Novel Human Atrial Electromechanical Cardiomyocyte Model with Mechano-Calcium Feedback Effect
+Modifications:
+- Added Land 2017 contraction model
+- ...
+
+
 
 
 ## 2022 Kohjitani Hi
 Base: [Himeno 2015](#2015-himeno-hv)
 | [Paper](https://doi.org/10.1038/s41598-022-23398-0) Kohjitani, Koda et al., Kimura (2022) Gradient-based parameter optimization method to determine membrane ionic current composition in human induced pluripotent stem cell-derived cardiomyocytes
+
+## 2022 Mahzar HA
+Base: [Koivumaki 2011](#2011-koivumaki-ha), Regazzoni 2020
+| [Paper](https://doi.org/10.1113/JP283974) Mazhar, Bartolucci et al., Severi (2023) A detailed mathematical model of the human atrial cardiomyocyte: integration of electrophysiology and cardiomechanics
+
+Known as: MBS2023
+
+
+
 
 
 ## 2022 Moise
