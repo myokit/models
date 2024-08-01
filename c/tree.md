@@ -381,6 +381,8 @@ Base: [Ten Tusscher 2004](#2004-ten-tusscher-hv)
 | [Paper](https://doi.org/10.1016/j.bpj.2009.05.062) Livshitz, Rudy (2009) Uniqueness and Stability of Action Potential Models during Rest, Pacing, and Conduction Using Problem-Solving Environment
 
 ## 2009 Maleckar HA
+Base: [Nygren 1998](#1998-nygren-ha)
+| [Paper](https://doi.org/10.1152/ajpheart.00411.2009) Maleckar, Greenstein, Giles, Trayanova (2009) K current changes account for the rate dependence of the action potential in the human atrial myocyte
 
 ## 2009 Maltsev HS
 Base: [Kurata 2002](#2002-kurata-rs), [Shannon 2004](#2004-shannon-rv)
@@ -390,6 +392,7 @@ Base: [Kurata 2002](#2002-kurata-rs), [Shannon 2004](#2004-shannon-rv)
 **Included**
 | Base: [Ten Tusscher 2006](#2006-ten-tusscher-hv)
 | [Original CellML](https://models.cellml.org/workspace/stewart_aslanidi_noble_noble_boyett_zhang_2009)
+| [Paper](https://doi.org/10.1098/rsta.2008.0283) Stewart, Aslanidi et al., Zhang (2009) Mathematical model of the electrical action potential of Purkinje fibre cells
 
 ## 2009 Tran reduced
 
@@ -428,8 +431,6 @@ Modifications:
 | [Original matlab code](https://github.com/drgrandilab/Grandi-et-al-2011-Human-Atrial-Model)
 | [Paper](https://doi.org/10.1161/CIRCRESAHA.111.253955) Grandi*, Pandit*, Voigt* et al., Bers (2011) Human atrial action potential and Ca model; sinus rhythm and chronic atrial fibrillation (*shared first authorship)
 
-Known as: Grandi 2011 model. 
-
 Modifications:
 - Scaled gK1
 - ...
@@ -438,6 +439,7 @@ Modifications:
 **Included**
 | Base: [Decker 2009](#2009-decker-cv)
 | [Original matlab code](https://rudylab.wustl.edu/code-downloads/)
+| [Paper](https://doi.org/10.1016/j.yjmcc.2011.02.007) Heijman, Volders, Westra, Rudy (2011) Local control of beta-adrenergic stimulation; effects on ventricular myocyte electrophysiology and Ca transient
 
 ## 2011 Kharche MS
 Base: Many
@@ -506,8 +508,8 @@ Modifications:
 
 ## 2014 Chang HA
 Base: [Grandi 2011](#2011-grandi-pandit-voigt-ha)
+| [Original OpenCARP code](https://doi.org/10.6084/m9.figshare.1201512)
 | [Paper](https://doi.org/10.1371/journal.pcbi.1004011) Chang, Bayer, Trayanova (2014) Disrupted calcium release as a mechanism for atrial alternans associated with human atrial fibrillation
-
 
 ## 2014 Morotti MV
 Base: [Soltis 2010](#2010-soltis-rv)
@@ -587,7 +589,7 @@ Bits:
 Zhou et al. (PLoS ONE 2012; e42295)
 
 ## 2017 Fabbri HS
-Base: [Severi 2012](2012-severi-rs)
+Base: [Severi 2012](#2012-severi-rs)
 | [Official CellML](https://www.mcbeng.it/en/downloads/software/hap-san.html)
 | [Physiome reproduction](https://doi.org/10.36903/physiome.16550526)
 | [Paper](https://doi.org/10.1113/JP273259) Fabbri, Fantini, Wilders, Severi (2017) Computational analysis of the human sinus node action potential; model development and effects of mutations
@@ -619,6 +621,11 @@ Base: [Morotti 2014](#2014-morotti-mv)
 
 Bits:
 - Myofilament contraction from Negroni 2015
+
+## 2018 Bai HA
+Base: [Ten Tusscher 2006](#2006-ten-tusscher-hv)
+| [Official CellML](https://models.cellml.org/workspace/520)
+| [Paper](https://doi.org/10.1038/s41598-018-33958-y) Bai, Gladding et al., Zhao (2018) Ionic and cellular mechanisms underlying TBX5-PITX2 insufficiency-induced atrial fibrillation; Insights from mathematical models of human atrial cells
 
 ## 2018 Colman HA
 Base: This model has 4 variants
@@ -710,7 +717,6 @@ Base: [Kharche 2011](#2011-kharche-ms)
 
 ## 2022 Bartolucci HV
 Base: [Bartoluci 2020](#2020-bartolucci-hv)
-| CODE AVAILABLE, ORG CELLML AVAILABLE
 | [Paper](https://doi.org/10.3389/fphys.2022.906146) Bartolucci, Forouzandemehr, Severi, Paci (2022) A Novel In Silico Electromechanical Model of Human Ventricular Cardiomyocyte
 
 Known as: BPSLand
@@ -718,9 +724,6 @@ Known as: BPSLand
 Modifications:
 - Added Land 2017 contraction model
 - ...
-
-
-
 
 ## 2022 Kohjitani Hi
 Base: [Himeno 2015](#2015-himeno-hv)
