@@ -201,6 +201,10 @@ Base: [Luo 1994](#1994-luo-gv)
 | [Paper](https://doi.org/10.1016/s0006-3495(98)77832-4) Jafri, Rice, Winslow (1998) Cardiac Ca2 Dynamics; The Roles of Ryanodine Receptor Adaptation and Sarcoplasmic Reticulum Load
 
 ## 1998 Noble GV
+Base: [Noble 1991](#1991-noble-gv)
+| Code for this paper is inside "Oxsoft Heart"
+| [Paper (not online)](https://pubmed.ncbi.nlm.nih.gov/9487284/) Noble, Varghese, Kohl, Noble (1998) Improved guinea-pig ventricular cell model incorporating a diadic space, IKr and IKs, and length- and tension-dependent processes
+| [Correction (not online)](https://www.dpag.ox.ac.uk/publications/1249778)
 
 ## 1998 Nygren HA
 **Included**
@@ -291,11 +295,19 @@ Base: [Matsuoka 2003](#2003-matsuoka-mV)
 | [Paper](https://doi.org/10.2170/jjphysiol.53.125) Sarai, Matsuoka et al., Noma (2003) Role of individual ionic current systems in the SA node hypothesized by a model study
 
 ## 2003 Saucerman LV
+Base: [Puglisi 2001](#2001-puglisi-gv)
+| [Original matlab code](https://github.com/saucermanlab/model-archive)
+| [Paper](https://doi.org/10.1074/jbc.M308362200) Saucerman, Brunton, Michailova, McCulloc (2003) Modeling beta-adrenergic control of cardiac myocyte contractility in silico
+
 ## 2003 Seemann HV
 
-## 2003 Solovyova
-Solovyova, O., et al., 2003. Mechanical interaction of heterogeneous cardiac muscle segments in silico:
-effects on Ca2+ handling and action potential. Int. J. Bifurcat. Chaos 13(12), 3757–3782.
+## 2003 Solovyova GV
+Base: [Noble 1998](#1998-noble-gv)
+| [Paper](https://doi.org/10.1142/S0218127403008983) Solovyova, Vikulova et al., Noble (2003) Mechanical interaction of heterogeneous cardiac muscle segments in silico; effects on Ca handling and action potential
+
+Known as: Ekaterinburg-Oxford (EO) model
+
+## 2004 Bassani
 
 ## 2004 Bondarenko MV
 Base: [Luo 1994](#1994-luo-gv), but many new formulations
@@ -332,8 +344,18 @@ J. Theor. Biol. 230(3), 385–405.
 
 ## 2004 Lovell RS
 
+## 2004 Saucerman LV
+Base: [Saucerman 2003](#2003-saucerman-lv)
+| [Original matlab code](https://github.com/saucermanlab/model-archive)
+| [Paper](https://doi.org/10.1016/j.pbiomolbio.2004.01.005) Saucerman, McCulloch (2004) Mechanistic systems models of cell signaling networks; a case study of myocyte adrenergic regulation
+
+## 2004 Saucerman RV
+Base: [Puglisi 2001](#2001-puglisi-gv)
+| [Original matlab code](https://github.com/saucermanlab/model-archive)
+| [Paper](https://doi.org/10.1161/01.RES.0000150055.06226.4e) Saucerman, Healy et al., McCulloch (2004) Proarrhythmic consequences of a KCNQ1 AKAP-binding domain mutation; computational models of whole cells and heterogeneous tissue
+
 ## 2004 Shannon RV
-Base: [Luo 1994](#1994-luo-gv)? and [Puglisi 2001](#2001-puglisi-gv) ?
+Base: [Puglisi 2001](#2001-puglisi-gv)
 | [Likely original matlab code](https://github.com/drgrandilab/Shannon-et-al-2004-Rabbit-Ventricular-Model)
 | [Paper](https://doi.org/10.1529/biophysj.104.047449) Shannon, Wang et al., Bers (2004) A mathematical treatment of integrated Ca dynamics within the ventricular myocyte
 
@@ -454,9 +476,13 @@ Base: [Ten Tusscher 2006](#2006-ten-tusscher-hv)
 ## 2008 Terkildsen RV
 Base: [Pandit 2001](#2001-pandit-lv), Niederer 2006(?), Hinch 2004
 
-## 2008 Saucerman LV
+## 2008 Saucerman RV
+Base: [Shannon 2004](#2004-shannon-rv)
+| [Original matlab code](https://github.com/saucermanlab/model-archive)
+| [Paper](https://doi.org/10.1529/biophysj.108.128728) Saucerman, Bers (2008) Calmodulin mediates differential sensitivity of CaMKII and calcineurin to local Ca2 in cardiac myocytes
 
 ## 2008 Sulman
+Base: Solovyova 2003
 [Paper](https://doi.org/10.1007/s11538-007-9285-y) Sulman, Katsnelson, Solovyova, Markhasin (2008) Mathematical modeling of mechanically modulated rhythm disturbances in homogeneous and heterogeneous myocardium with attenuated activity of Na-K pump
 
 ## 2008 Wang LV
@@ -530,7 +556,9 @@ Base: [Korhonen 2008]
 | [Paper](https://doi.org/10.1113/jphysiol.2010.187328) Sampson, Iyer, Marks, Kass (2010). A computational model of Purkinje fibre single cell electrophysiology: implications for the long QT syndrome
 
 ## 2010 Soltis RV
-[Paper](https://doi.org/10.1016/j.bpj.2010.08.016) Soltis, Saucerman (2010) Synergy between CaMKII Substrates and beta-Adrenergic Signaling in Regulation of Cardiac Myocyte Ca2+ Handling
+Base: [Saucerman 2008](#2008-saucerman-rv)
+| [Original matlab code](https://github.com/saucermanlab/model-archive)
+| [Paper](https://doi.org/10.1016/j.bpj.2010.08.016) Soltis, Saucerman (2010) Synergy between CaMKII Substrates and beta-Adrenergic Signaling in Regulation of Cardiac Myocyte Ca2+ Handling
 
 ## 2011 Aslanidi HA
 ## 2011 Carro HV
@@ -592,12 +620,17 @@ Base: [Grandi 2009](#2009-grandi-hv)
 
 ## 2012 Severi RS
 Base: [Maltsev 2009](#2009-maltsev-hs)
-| [Paper](10.1113/jphysiol.2012.229435) Severi, Fantini, Charawi, DiFrancesco (2012) An updated computational model of rabbit sinoatrial action potential to investigate the mechanisms of heart rate modulation
+| [Paper](https://doi.org/10.1113/jphysiol.2012.229435) Severi, Fantini, Charawi, DiFrancesco (2012) An updated computational model of rabbit sinoatrial action potential to investigate the mechanisms of heart rate modulation
 
 ## 2012 Yang HV
 Base: [O'Hara 2011](#2011-ohara-hv)
 | [Modified code](https://github.com/drgrandilab/Fogli-Iseppe-et-al-2021-TdP-prediction)
 | [Paper](https://doi.org/10.3389/fphys.2012.00360) Yang, Clancy (2012) In silico Prediction of Sex-Based Differences in Human Susceptibility to Cardiac Ventricular Tachyarrhythmias
+
+## 2012 Yang MV
+Base: [Bondarenko 2004](#2004-bondarenko-mv)
+| [Original matlab code](https://github.com/saucermanlab/model-archive)
+| [Paper](https://doi.org/10.1016/j.yjmcc.2011.12.015) Yang, Saucerman (2012) Phospholemman is a negative feed-forward regulator of Ca in beta-adrenergic signaling, accelerating beta-adrenergic inotropy
 
 ## 2013 Colman HA
 Base: [Courtemanche 1998](#1998-courtemanche-ha)
@@ -630,6 +663,11 @@ Base: [Bondarenko 2004](#2004-bondarenko-mv)
 Base: [Soltis 2010](#2010-soltis-rv)
 | [Original matlab code](https://github.com/drgrandilab/Morotti-et-al-2014-Mouse-Ventricular-Model)
 | [Paper](https://doi.org/10.1113/jphysiol.2013.266676) Morotti, Edwards et al., Grandi (2014) A novel computational model of mouse myocyte electrophysiology to assess the synergy between Na+ loading and CaMKII
+
+## Yang 2014 MV
+Base: [Yang 2012 mouse](2012-yang-mv)
+| [Original matlab code](https://github.com/saucermanlab/model-archive)
+| [Paper](https://doi.org/10.1016/j.yjmcc.2013.11.001) Yang, Polanowska-Grabowska et al., Saucerman (2014) PKA catalytic subunit compartmentation regulates contractile and hypertrophic responses to beta-adrenergic signaling
 
 ## 2015 Himeno HV
 Base: Several! Interesting one to look at
