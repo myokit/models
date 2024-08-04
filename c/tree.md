@@ -57,6 +57,11 @@ Some CaRU-based models:
 - Greenstein 2002
 - Tanskanen 2005
 
+Two software packages are referenced, because they contain models.
+Both packages experimented with re-use of model code, making the models difficult to extract.
+- Oxsoft Heart (1984-1999) was a DOS program released by Denis Noble and his group, and contained Noble-group models in that period. It was succeded by COR (and then OpenCOR) and CellML. The Oxsoft models were all converted to CellML.
+- simBio (2005-2008) was a Windows program released by Sarai et al., and contained the "Kyoto model" family. It can still be downloaded from https://sourceforge.net/projects/simbio/files/simBio. It was succeded (I think) by e-Heart (http://www.eheartsim.com).
+
 ## 1962 Noble mPf
 Base: HH1952
 | [Paper](https://doi.org/10.1113/jphysiol.1962.sp006849) Noble (1962) A Modification of the Hodgkin-Huxley Equations Applicable to Purkinje Fibre Action and Pacemaker Potentials
@@ -305,8 +310,10 @@ Base: [Wilders 1991](#1991-wilders-ms), [Demir 1994](#1994-demir-rs), [Dokos 199
 ## 2003 Cabo CV
 ## 2003 Garny
 
-## 2003 Matsuoka mV
-[Original code](https://web.archive.org/web/20070819084149/http://www.card.med.kyoto-u.ac.jp/simulation/)
+## 2003 Matsuoka GV
+Base: [Luo 1991](#1991-luo-gv), but lots of new things
+| [Original code](https://web.archive.org/web/20070819084149/http://www.card.med.kyoto-u.ac.jp/simulation/)
+| [Reimplementation in simBio](http://www.sim-bio.org/model/index.html#Kyoto+model)
 | [Paper](https://doi.org/10.2170/jjphysiol.53.105) Matsuoka, Sarai et al., Noma (2003) Role of individual ionic current systems in ventricular cells hypothesized by a model study
 
 Known as: Kyoto model
@@ -314,6 +321,7 @@ Known as: Kyoto model
 Bits:
 - Contraction from Negroni 1996
 - INaK novel reduced formulation, based on INaCa
+- ...
 
 ## 2003 Mitchell mV
 
@@ -322,8 +330,12 @@ Bits:
 
 ## 2003 Sarai mS
 Base: [Matsuoka 2003](#2003-matsuoka-mV)
-| [Original code](https://web.archive.org/web/20070819084149/http://www.card.med.kyoto-u.ac.jp/simulation/)
+| [Original code (archived)](https://web.archive.org/web/20070819084149/http://www.card.med.kyoto-u.ac.jp/simulation/)
+| [Reimplementation in simBio](http://www.sim-bio.org/model/index.html#Kyoto+model)
 | [Paper](https://doi.org/10.2170/jjphysiol.53.125) Sarai, Matsuoka et al., Noma (2003) Role of individual ionic current systems in the SA node hypothesized by a model study
+
+Based mostly on Rabbit and Guinea pig data.
+The C++ code for this model is the same as that for Matsuoka 2003, but it has a mode switch.
 
 ## 2003 Saucerman LV
 Base: [Puglisi 2001](#2001-puglisi-gv)
@@ -375,6 +387,14 @@ J. Theor. Biol. 230(3), 385–405.
 
 ## 2004 Lovell RS
 
+## 2004 Matsuoka GV
+Base: [Matsuoka 2003](#2003-matsuoka-gv)
+| [Reimplementation in simBio](http://www.sim-bio.org/model/index.html#Kyoto+model)
+| [Paper](https://doi.org/10.1016/j.pbiomolbio.2004.01.006) Matsuoka, Sarai, Jo, Noma (2004) Simulation of ATP metabolism in cardiac excitation-contraction coupling
+
+Modifications:
+- Added mitochondrial model
+
 ## 2004 Saucerman LV
 Base: [Saucerman 2003](#2003-saucerman-lv)
 | [Original matlab code](https://github.com/saucermanlab/model-archive)
@@ -414,7 +434,9 @@ Bits:
 ## 2005 Krogh-Madsen
 
 ## 2005 Kurata HV
-[Paper](https://doi.org/10.1529/biophysj.105.060830) Kurata, Hisatome, Matsuda, Shibamoto (2005) Dynamical Mechanisms of Pacemaker Generation in IK1-Downregulated Human Ventricular Myocytes; Insights from Bifurcation Analyses of a Mathematical Model
+Base: [Priebe 1998](#1998-priebe-hv)
+| [Original simBio code](http://www.sim-bio.org/model/index.html#Kurata+model)
+| [Paper](https://doi.org/10.1529/biophysj.105.060830) Kurata, Hisatome, Matsuda, Shibamoto (2005) Dynamical Mechanisms of Pacemaker Generation in IK1-Downregulated Human Ventricular Myocytes; Insights from Bifurcation Analyses of a Mathematical Model
 
 ## 2005 Michailova CV
 ## 2006 Cortassa mV
@@ -450,6 +472,20 @@ Modifications:
 - Changed Ileak and Iup rate
 - Added transfer equations for new subspace
 
+# 2006 Takeuchi GV
+Base: [Terashima 2006](#2006-terashima-gv)
+| [Original simBio code](http://www.sim-bio.org/model/takeuchi_et_al_2006.html)
+| [Paper](https://doi.org/10.1085/jgp.200609646) Takeuchi, Tatsumi et al., Noma (2006) Ionic Mechanisms of Cardiac Cell Swelling Induced by Blocking NaK Pump As Revealed by Experiments and Simulation
+
+## 2006 Terashima GV
+Base: [Matsuoka 2004](#2004-matsuoka-gv)
+| [Original simBio code](http://www.sim-bio.org/model/index.html#Kyoto+model)
+| [Paper](https://doi.org/10.1098/rsta.2006.1767) Terashima, Takeuchi et al., Noma (2006) Modelling Cl homeostasis and volume regulation of the cardiac cell
+
+Modifications:
+- Chloride dynamics
+- Cell volume dynamics
+
 ## 2007 Cherry 2007 LA
 
 ## 2007 Faber
@@ -465,6 +501,15 @@ Base: [Shannon 2004](#2004-shannon-rv)
 ## 2007 Iyer HV
 Base: [Iyer 2004](#2004-iyer-hv)
 | [Paper](https://doi.org/10.1161/01.res.0000258468.31815.42) Iyer, Hajjar, Armoundas (2007) Mechanisms of Abnormal Calcium Homeostasis in Mutations Responsible for Catecholaminergic Polymorphic Ventricular Tachycardia
+
+## 2007 Kuzumoto GV
+Base: [Takeuchi 2006](2006-takeuchi-gv)
+| [Original simBio code](http://www.sim-bio.org/model/kuzumoto_et_al_2007.html)
+| [Paper](https://doi.org/10.1016/j.pbiomolbio.2007.07.005) Kuzumoto, Takeuchi et al., Matsuoka (2008) Simulation analysis of intracellular Na and Cl homeostasis during beta1-adrenergic stimulation of cardiac myocyte
+
+Modifications: 
+- Beta-adrenergic signalling
+- ...
 
 ## 2007 Livshitz CV
 **Included**
@@ -492,7 +537,8 @@ Modifications:
 - Rescaled IKs
 
 ## 2008 Himeno GS
-Base: [Sarai 2003](#2003-sarai-ms)
+Base: [Kuzumoto 2007](#2007-kuzumoto-gv), [Sarai 2003](#2003-sarai-ms)
+| [Original simBio code](http://www.sim-bio.org/model)
 | [Paper](https://doi.org/10.2170/physiolsci.RP015207) Himeno, Sarai, Matsuoka, Noma (2008) Ionic mechanisms underlying the positive chronotropy induced by beta1-adrenergic stimulation in guinea pig sinoatrial node cells
 
 ## 2008 Hund CV
@@ -699,9 +745,12 @@ Modifications:
 - Replaced INa with Courtemanche 1998 one
 - Modified IK1 (changed gK1 and a)
 
-## Asakura 2014 HV
+## 2014 Asakura HV
 Base: [Grandi 2010](#2010-grandi-hv), CaRU reduction used by [Greenstein 2006](#2006-greenstein-cv)
+| [Original visual basic code](http://www.eheartsim.com/?wpdmdl=244)
 | [Paper](https://doi.org/10.1016/j.pbiomolbio.2014.08.008) Asakura, Cha et al., Noma (2014) EAD and DAD mechanisms analyzed by developing a new human ventricular cell model
+
+Known as: HuVECI (this terminology starts with Himeno 2015)
 
 Modifications:
 - Contraction from Negroni and Lascano, 2008
@@ -731,7 +780,12 @@ Base: [Yang 2012 mouse](2012-yang-mv)
 
 ## 2015 Himeno HV
 Base: [Asakura 2014](#2014-asakura-hv)
-Not sure if simulating individual CaRUs or not!
+| [Original visual basic code (HuVECII)](http://www.eheartsim.com/?wpdmdl=280)
+| [Original C code](http://www.eheartsim.com/?wpdmdl=442)
+| [Updated visual basic code (HuVECIII, 2017)](http://www.eheartsim.com/?wpdmdl=500)
+| [Paper](https://doi.org/10.1016/j.bpj.2015.06.017) Himeno, Asakura et al., Noma (2015) A human ventricular myocyte model with a refined representation of excitation-contraction coupling
+
+Known as: HuVEC, or HuVECII
 
 ## 2015 Negroni RV
 Base: [Shannon 2004](#2004-shannon-rv), [Soltis 2010](#2010-soltis-rv)
@@ -776,7 +830,7 @@ Modifications:
 
 ## 2016 Varela CA
 
-## Aguilar 2017 A
+## 2017 Aguilar HA
 Base: [Courtemanche 1998](#1998-courtemanche-ha)
 | [Paper](https://doi.org/) Aguilar, Feng et al., Nattel (2017) Rate-dependent role of IKur in human atrial repolarization and atrial fibrillation maintenance
 
