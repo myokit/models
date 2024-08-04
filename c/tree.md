@@ -66,7 +66,7 @@ Both packages experimented with re-use of model code, making the models difficul
 Base: HH1952
 | [Paper](https://doi.org/10.1113/jphysiol.1962.sp006849) Noble (1962) A Modification of the Hodgkin-Huxley Equations Applicable to Purkinje Fibre Action and Pacemaker Potentials
 
-## 1966 Krause
+## 1966 Krause mVf
 Krause, Antoni, Fleckenstein (1966) An electronic model for the formation of local and transmitted stimuli on the myocardium fibers based upon variable current-voltage characteristics for potassium and sodium ions
 
 Note: In german. Can't find it online
@@ -454,7 +454,7 @@ Modifications:
 ## 2006 Sato CV
 ## 2006 Simitev HA
 
-## 2006a Ten Tusscher HV
+## 2006 Ten Tusscher HV
 **Included**
 | Base: [Ten Tusscher 2004](#2004-ten-tusscher-hv)
 | [Paper](https://doi.org/10.1152/ajpheart.00109.2006) Ten Tusscher, Panfilov (2006) Alternans and spiral breakup in a human ventricular tissue model
@@ -472,7 +472,7 @@ Modifications:
 - Changed Ileak and Iup rate
 - Added transfer equations for new subspace
 
-# 2006 Takeuchi GV
+## 2006 Takeuchi GV
 Base: [Terashima 2006](#2006-terashima-gv)
 | [Original simBio code](http://www.sim-bio.org/model/takeuchi_et_al_2006.html)
 | [Paper](https://doi.org/10.1085/jgp.200609646) Takeuchi, Tatsumi et al., Noma (2006) Ionic Mechanisms of Cardiac Cell Swelling Induced by Blocking NaK Pump As Revealed by Experiments and Simulation
@@ -503,7 +503,7 @@ Base: [Iyer 2004](#2004-iyer-hv)
 | [Paper](https://doi.org/10.1161/01.res.0000258468.31815.42) Iyer, Hajjar, Armoundas (2007) Mechanisms of Abnormal Calcium Homeostasis in Mutations Responsible for Catecholaminergic Polymorphic Ventricular Tachycardia
 
 ## 2007 Kuzumoto GV
-Base: [Takeuchi 2006](2006-takeuchi-gv)
+Base: [Takeuchi 2006](#2006-takeuchi-gv)
 | [Original simBio code](http://www.sim-bio.org/model/kuzumoto_et_al_2007.html)
 | [Paper](https://doi.org/10.1016/j.pbiomolbio.2007.07.005) Kuzumoto, Takeuchi et al., Matsuoka (2008) Simulation analysis of intracellular Na and Cl homeostasis during beta1-adrenergic stimulation of cardiac myocyte
 
@@ -774,7 +774,7 @@ Base: [Soltis 2010](#2010-soltis-rv)
 | [Paper](https://doi.org/10.1113/jphysiol.2013.266676) Morotti, Edwards et al., Grandi (2014) A novel computational model of mouse myocyte electrophysiology to assess the synergy between Na+ loading and CaMKII
 
 ## Yang 2014 MV
-Base: [Yang 2012 mouse](2012-yang-mv)
+Base: [Yang 2012 mouse](#2012-yang-mv)
 | [Original matlab code](https://github.com/saucermanlab/model-archive)
 | [Paper](https://doi.org/10.1016/j.yjmcc.2013.11.001) Yang, Polanowska-Grabowska et al., Saucerman (2014) PKA catalytic subunit compartmentation regulates contractile and hypertrophic responses to beta-adrenergic signaling
 
