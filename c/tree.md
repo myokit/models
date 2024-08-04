@@ -31,6 +31,32 @@ Models are omitted if they contain spatial propagation, either in larger tissues
 Whether or not a modification counts as a "model" is entirely subjective.
 No strict criteria are used here, I just tried to make it useful.
 
+See also:
+ - [Noble, Garny, Noble (2012) How the Hodgkin-Huxley equations inspired the Cardiac Physiome Project](https://doi.org/10.1113/jphysiol.2011.224238)
+ - [Amuzescu, Airini et al., Radu (2021) Evolution of mathematical models of cardiomyocyte electrophysiology](https://doi.org/10.1016/j.mbs.2021.108567)
+
+Some reductions:
+- Fitzugh 1961 reduces HH to a "Bonhoeffer-Van der Pol" model
+- Nagumo 1962 makes Fitzhugh 1961 suitable for propagation
+- Morris & Lecar 1981 create a reduced HH-like model of a Ca-driven AP
+- Winfree 1991 provides a great overview of spiral wave models, including Belousov-Zhabotinsky
+- Varghese 1993 reduces DiFrancesco 1985
+- Aliev & Panfilov 1996
+- Fenton & Karma 1998 derive an FN-like model
+- Bernus 2002 reduces Priebe 1998
+- Mitchell & Schaeffer 2003
+- Ten Tusscher 2006b reduces Ten Tusscher 2006
+- Bueno-Orovio 2008 adds an equation to Fenton 1998
+- Tran 2009 reduces Luo 1991
+- Balakrishnan 2015 develop a reduced whole heart model
+- Gray & Pathmanathan 2016 create a minimal but fully parametrisable AP model
+- Corrado 2017, Carrado & Niederer 2016, Corrado 2018
+- ...
+
+Some CaRU-based models:
+- Greenstein 2002
+- Tanskanen 2005
+
 ## 1962 Noble mPf
 Base: HH1952
 | [Paper](https://doi.org/10.1113/jphysiol.1962.sp006849) Noble (1962) A Modification of the Hodgkin-Huxley Equations Applicable to Purkinje Fibre Action and Pacemaker Potentials
@@ -166,6 +192,7 @@ Modifications:
 - INaK new formulation
 - Rescaled gK1
 - ...
+- CICR
 
 ## 1995 Zeng GV
 Base: [1994 Luo GV](#1994-luo-gv)
@@ -200,6 +227,9 @@ Base: Mostly new?
 Base: [Luo 1994](#1994-luo-gv)
 | [Paper](https://doi.org/10.1016/s0006-3495(98)77832-4) Jafri, Rice, Winslow (1998) Cardiac Ca2 Dynamics; The Roles of Ryanodine Receptor Adaptation and Sarcoplasmic Reticulum Load
 
+Modifications:
+- Elements of Keizer & Levine 1996 Ca-induced Ca release model
+
 ## 1998 Noble GV
 Base: [Noble 1991](#1991-noble-gv)
 | Code for this paper is inside "Oxsoft Heart"
@@ -232,6 +262,8 @@ Base: [Jafri 1998](#1998-jafri-gv)
 | [Paper](https://doi.org/10.1016/s0006-3495(00)76783-x) Faber, Rudy (2000) Action Potential and Contractility in [Na+]i Overloaded Cardiac Myocytes
 
 ## 2000 Greenstein CV
+Base: [Winslow 1999](#1999-winslow-cv)
+| [Paper](https://doi.org/10.1161/01.res.87.11.1026) Greenstein, Wu et al., Winslow (2000) Role of the calcium-independent transient outward current Ito1 in shaping action potential morphology and duration
 
 ## 2000 Ramirez CA
 Base: [Courtemanche 1998](#1998-courtemanche-ha)
@@ -261,7 +293,6 @@ Modifications:
 
 ## 2002 Fenton mV
 ## 2002 Fox CV
-## 2002 Greenstein CV
 
 ## 2002 Kneller CA
 Base: [Ramirez 2000](#2000-ramirez-ca)
@@ -388,6 +419,13 @@ Bits:
 ## 2005 Michailova CV
 ## 2006 Cortassa mV
 ## 2006 Fink HV
+
+## 2006 Greenstein CV
+Base: [Greenstein 2000](#2000-greenstein-cv) (via Greenstein 2002 local control model)
+
+Modifications:
+- Ensemble behaviour of CaRUs using Hinch 2004 approximation
+
 ## 2006 Iribe GV
 ## 2006 Mangoni MS
 ## 2006 Pasek LV
@@ -423,6 +461,10 @@ Known as: Faber-Rudy
 ## 2007 Grandi RV
 Base: [Shannon 2004](#2004-shannon-rv)
 | [Paper](https://doi.org/10.1529/biophysj.107.114868) Grandi, Puglisi et al., Bers (2007) Simulation of Ca-calmodulin-dependent protein kinase II on rabbit ventricular myocyte ion currents and action potentials
+
+## 2007 Iyer HV
+Base: [Iyer 2004](#2004-iyer-hv)
+| [Paper](https://doi.org/10.1161/01.res.0000258468.31815.42) Iyer, Hajjar, Armoundas (2007) Mechanisms of Abnormal Calcium Homeostasis in Mutations Responsible for Catecholaminergic Polymorphic Ventricular Tachycardia
 
 ## 2007 Livshitz CV
 **Included**
@@ -596,6 +638,13 @@ Base: [Decker 2009](#2009-decker-cv)
 
 Known as: PRd
 
+## 2011 Moreno HV
+Base: [Ten Tusscher 2006](#2006-ten-tusscher-hv)
+| [Paper](https://doi.org/10.1126/scitranslmed.3002588) Moreno, Zhu et al., Clancy (2011) A computational model to predict the effects of class I anti-arrhythmic drugs on ventricular rhythms
+
+Modifications:
+- New INa model (new WT and drug-bound)
+
 ## 2011 O'Hara HV
 **Included**
 | Base: [Hund 2004](#2004-hund-cv)
@@ -650,6 +699,17 @@ Modifications:
 - Replaced INa with Courtemanche 1998 one
 - Modified IK1 (changed gK1 and a)
 
+## Asakura 2014 HV
+Base: [Grandi 2010](#2010-grandi-hv), CaRU reduction used by [Greenstein 2006](#2006-greenstein-cv)
+| [Paper](https://doi.org/10.1016/j.pbiomolbio.2014.08.008) Asakura, Cha et al., Noma (2014) EAD and DAD mechanisms analyzed by developing a new human ventricular cell model
+
+Modifications:
+- Contraction from Negroni and Lascano, 2008
+- Hinch 2004 approximation for LCC-RyR coupling
+- INa and INaL: mode-switching causes fixed fractions INa and INaL "mode"
+- IK1 from Ishihara & Yan 2007 and Yan & Ishihara 2005
+- ...
+
 ## 2014 Chang HA
 Base: [Grandi 2011](#2011-grandi-pandit-voigt-ha)
 | [Original OpenCARP code](https://doi.org/10.6084/m9.figshare.1201512)
@@ -670,7 +730,8 @@ Base: [Yang 2012 mouse](2012-yang-mv)
 | [Paper](https://doi.org/10.1016/j.yjmcc.2013.11.001) Yang, Polanowska-Grabowska et al., Saucerman (2014) PKA catalytic subunit compartmentation regulates contractile and hypertrophic responses to beta-adrenergic signaling
 
 ## 2015 Himeno HV
-Base: Several! Interesting one to look at
+Base: [Asakura 2014](#2014-asakura-hv)
+Not sure if simulating individual CaRUs or not!
 
 ## 2015 Negroni RV
 Base: [Shannon 2004](#2004-shannon-rv), [Soltis 2010](#2010-soltis-rv)
@@ -714,6 +775,10 @@ Modifications:
 - Modified INa steady states
 
 ## 2016 Varela CA
+
+## Aguilar 2017 A
+Base: [Courtemanche 1998](#1998-courtemanche-ha)
+| [Paper](https://doi.org/) Aguilar, Feng et al., Nattel (2017) Rate-dependent role of IKur in human atrial repolarization and atrial fibrillation maintenance
 
 ## 2017 Bartos RV
 Base: [Negroni 2015](#2015-negroni-rv)
@@ -827,7 +892,7 @@ Base: [Dutta 2017](#2017-dutta-hv)
 Known as: BPS2020
 
 Modifications:
-- New ICaL formulation
+- New ICaL formulation (from Passini 2012 CINC)
 - ...
 
 ## 2020 Paci Hi
@@ -835,10 +900,22 @@ Modifications:
 | Base: [Paci 2018](#2018-paci-hi)
 | [Paper](https://doi.org/10.1016/j.bpj.2020.03.018) Paci, Passini et al., Entcheva (2020) All-Optical Electrophysiology Refines Populations of In Silico Human iPSC-CMs for Drug Evaluation
 
+## 2020 Sengul Ayan LV
+Base: [Jafri 1998](#1998-jafri-gv) but mostly new
+| [Paper]() Sengul Ayan, Sircan et al., Yaras (2020) Mathematical model of the ventricular action potential and effects of isoproterenol-induced cardiac hypertrophy in rats
+
+Modifications:
+- 5 parameter reformulation of most currents
+
 ## 2020 Tomek HV
 Base: [Tomek 2019](#2019-tomek-hv)
 | [Original Matlab and official CellML](https://github.com/jtmff/torord)
 | [Paper](https://doi.org/10.1101/2020.06.01.127043) Tomek, Bueno-Orovio, Rodriguez (2020) ToR-ORd-dynCl; an update of the ToR-ORd model of human ventricular cardiomyocyte with dynamic intracellular chloride
+
+Known as: ToR-ORd-dynCl
+
+Modifications:
+- Chloride homeostasis
 
 ## 2020 Trovato HP
 **Included**
@@ -894,6 +971,11 @@ Modifications:
 - Added Land 2017 contraction model
 - ...
 
+## 2022 Doste HV
+Base: [Tomek 2020](#2020-tomek-hv), [Heijman 2011](#2011-heijman-cv)
+| [Original matlab code](https://github.com/rdoste/ToR-ORd-BARS)
+| [Paper](https://doi.org/10.1016/j.yjmcc.2022.08.361) Doste, Coppini, Bueno-Orovio (2022) Remodelling of potassium currents underlies arrhythmic action potential prolongation under beta-adrenergic stimulation in hypertrophic cardiomyopathy
+
 ## 2022 Kohjitani Hi
 Base: [Himeno 2015](#2015-himeno-hv)
 | [Paper](https://doi.org/10.1038/s41598-022-23398-0) Kohjitani, Koda et al., Kimura (2022) Gradient-based parameter optimization method to determine membrane ionic current composition in human induced pluripotent stem cell-derived cardiomyocytes
@@ -926,12 +1008,3 @@ Base: [Morotti 2017](#2016-morotti-ha)
 | [Original C++ code](https://github.com/drgrandilab/Ni-et-al-2023-Human-Atrial-Signaling-Model)
 | [Paper](https://doi.org/10.1093/cvr/cvad118) Ni, Morotti et al., Grandi (2023) Integrative human atrial modelling unravels interactive PKA and CaMKII signalling as key determinants of atrial arrhythmogenesis
 
-
-
-
-
-
-
-
-
-.
