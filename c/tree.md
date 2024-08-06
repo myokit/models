@@ -41,9 +41,12 @@ Some reductions:
 - Morris & Lecar 1981 create a reduced HH-like model of a Ca-driven AP
 - Winfree 1991 provides a great overview of spiral wave models, including Belousov-Zhabotinsky
 - Varghese 1993 reduces DiFrancesco 1985
+- Karma 1993 reduces Noble 1962 and adapts for propagation
 - Aliev & Panfilov 1996
+- Endresen 1997 adapts Morris-Lecar for rabbit SAN
 - Fenton & Karma 1998 derive an FN-like model
 - Bernus 2002 reduces Priebe 1998
+- Garny et al. 2003 implemented "a variety" of one-dimensional SAN models
 - Mitchell & Schaeffer 2003
 - Ten Tusscher 2006b reduces Ten Tusscher 2006
 - Bueno-Orovio 2008 adds an equation to Fenton 1998
@@ -53,14 +56,20 @@ Some reductions:
 - Corrado 2017, Carrado & Niederer 2016, Corrado 2018
 - ...
 
-Some CaRU-based models:
-- Greenstein 2002
-- Tanskanen 2005
+Some CaRU stochastic/spatial models:
+- Rice et al 1999 used stochastic CaRUs (called FRUs in the paper)
+- Greenstein 2002 builds on Rice 1999 and Winslow 1999
+- Lovell et al 2004 created a SAN model with a spatial gradient of heterogeneity
+- Tanskanen 2005 builds on Greenstein 2002
+- Greenstein 2006 builds on Greenstein 2002
+- Flaim et al 2006 modified Greenstein 2006
 
-Two software packages are referenced, because they contain models.
-Both packages experimented with re-use of model code, making the models difficult to extract.
+A number of software packages are referenced, because they contain models.
+Some experimented with re-use of model code, making the models difficult to extract.
 - Oxsoft Heart (1984-1999) was a DOS program released by Denis Noble and his group, and contained Noble-group models in that period. It was succeded by COR (and then OpenCOR) and CellML. The Oxsoft models were all converted to CellML.
+- LabHEART (2001-2022) was a Windows program built around Bers et al. models. It is archived at https://web.archive.org/web/20220615151709/http://www.labheart.org/
 - simBio (2005-2008) was a Windows program released by Sarai et al., and contained the "Kyoto model" family. It can still be downloaded from https://sourceforge.net/projects/simbio/files/simBio. It was succeded (I think) by e-Heart (http://www.eheartsim.com).
+- e-Heart (2014-present) is a Windows (visual basic) program released by Noma's group(?) it can be downloaded from http://www.eheartsim.com.
 
 ## 1962 Noble mPf
 Base: HH1952
@@ -88,17 +97,17 @@ Modifications:
 - Adds INa j gate based on work w. Haas
 - ...
 
-## 1980 Yanagihara mSf
+## 1980 Yanagihara RSf
 Base: Mixed
 | [Paper](https://doi.org/10.2170/jjphysiol.30.841) Yanagihara, Noma, Irisawa (1980) Reconstruction of sino-atrial node pacemaker potential based on the voltage clamp experiments
 
-## 1982 Bristow rSf
+## 1982 Bristow RSf
 Base: [McAllister 1975](#1975-mcallister-hpf)
 | [Paper](https://doi.org/10.1152/ajpheart.1982.243.2.h207) Bristow, Clark (1982) A mathematical model of primary pacemaking cell in SA node of the heart
 
 Known as: Bristow-Clark
 
-## 1982 Irisawa rSf
+## 1982 Irisawa RSf
 Base: [Yanagihara 1980](#1980-yanagihara-msf)
 | [Chapter](https://doi.org/10.1007/978-94-009-7535-4_4) Irisawa, Noma (1982) Pacemaker mechanisms of rabbit sinoatrial node cells, in: Bouman, Jongsma (Eds.), Cardiac Rate and Rhythm: Physiological, Morphological, and Developmental Aspects
 
@@ -114,20 +123,20 @@ Note: This is an adaptation of the DiFrancesco 1985 model, but was published ear
 
 ## 1985 DiFrancesco mPf
 Base: [McAllister 1975](#1975-mcallister-hpf)
-[Paper](https://doi.org/10.1098/rstb.1985.0001) DiFrancesco, Noble (1985) A Model of the Cardiac Electrical Activity Incorporating Ionic Pumps and Concentration Changes
+| [Paper](https://doi.org/10.1098/rstb.1985.0001) DiFrancesco, Noble (1985) A Model of the Cardiac Electrical Activity Incorporating Ionic Pumps and Concentration Changes
 
 Known as: DiFrancesco-Noble model
 
 Bits:
 - INaK new formulation
 
-## 1985 Reiner rSf
+## 1985 Reiner RSf
 Base: [Bristow 1982](#1982-bristow-rsf)
-| [Paper](https://doi.org/10.1152/ajpheart.1985.249.6.h1143) Reiner, Antzelevitch (1985) Phase resetting and annihilation in a mathematical model of sinus node
+| | [Paper](https://doi.org/10.1152/ajpheart.1985.249.6.h1143) Reiner, Antzelevitch (1985) Phase resetting and annihilation in a mathematical model of sinus node
 
 Known as: Reiner-Antzelevitch
 
-## 1987 Drouhard
+## 1987 Drouhard mV
 Base: [Beeler 1977](#1977-beeler-mvf)
 | [Paper](https://doi.org/10.1016/0010-4809(87)90048-6) Drouhard, Roberge (1987) Revised formulation of the Hodgkin-Huxley representation of the sodium current in cardiac cells
 
@@ -140,10 +149,19 @@ Modifications:
 Base: [DiFrancesco 1985](#1985-difrancesco-mpf)
 | [Paper](https://doi.org/10.1098/rspb.1987.0015) Hilgemann, Noble (1987) Excitation-contraction coupling and extracellular calcium transients in rabbit atrium; reconstruction of basic cellular mechanisms
 
+## 1987 Murphey RSf
+Chapter: Murphey, Clark (1987) Parasympathetic control of the SA node cell in rabbit heart; a model. In: Activation, Metabolism and Perfusion of the Heart, eds Sideman, Beyar
+
 ## 1989 Noble mS
 Chapter: "DiFrancesco, Noble, Denyer (1989) Ionic Mechanisms in Normal and Abnormal Cardiac Pacemaker Activity", in "Jacklet (Ed, 1989) Neuronal and Cellular Oscillators".
 
 Known as: Noble-DiFrancesco-Denyer
+
+## 1981 Fischmeister FPf
+Base: [McAllister 1975](#1975-mcallister-hpf)
+| [Abstract](https://pubmed.ncbi.nlm.nih.gov/7288663/) Fischmeister, Vassort (1981) The electrogenic NaCa exchange and the cardiac electrical activity; I Simulation on Purkinje fibre action potential
+
+Abstract only.
 
 ## 1990 Earm RA
 Base: [Hilgemann 1987](#1987-hilgemann-raf)
@@ -151,10 +169,16 @@ Base: [Hilgemann 1987](#1987-hilgemann-raf)
 | [Paper](https://doi.org/10.1098/rspb.1990.0028) Earm, Noble (1990) A model of the single atrial cell; relation between calcium current and calcium release
 
 ## 1990a Rasmusson FS
-[Paper](https://doi.org/10.1152/ajpheart.1990.259.2.h352) Rasmusson, Clark et al., Campbell (1990) A mathematical model of a bullfrog cardiac pacemaker cell
+Base: [DiFrancesco 1985](#1985-difrancesco-mpf), but mostly new
+| [Paper](https://doi.org/10.1152/ajpheart.1990.259.2.h352) Rasmusson, Clark et al., Campbell (1990) A mathematical model of a bullfrog cardiac pacemaker cell
+
+Novelties:
+- Single cell data, improved modelling of extracellular cleft
+- Calcium buffering
 
 ## 1990b Rasmusson FA
-[Paper](https://doi.org/10.1152/ajpheart.1990.259.2.h370) Rasmusson, Clark et al., Campbell (1990) A mathematical model of electrophysiological activity in a bullfrog atrial cell
+Base: [Rasmusson 1990a](#1990a-rasmusson-fs)
+| [Paper](https://doi.org/10.1152/ajpheart.1990.259.2.h370) Rasmusson, Clark et al., Campbell (1990) A mathematical model of electrophysiological activity in a bullfrog atrial cell
 
 ## 1991 Luo GV
 Base: [Beeler 1977](#1977-beeler-mvf)
@@ -175,17 +199,17 @@ Base: [Earm 1990](#1990-earm-ra)
 Base: [Noble 1984](#1984-noble-msf)
 | [Paper](https://doi.org/10.1016/s0006-3495(91)82155-5) Wilders, Jongsma, Van Ginneken (1991) Pacemaker activity of the rabbit sinoatrial node; A comparison of mathematical models
 
-## 1993 Karma mV
-
 ## 1993 Nordin GV
-[Paper](https://doi.org/10.1152/ajpheart.1993.265.6.H2117) Nordin (1993) Computer model of membrane current and intracellular Ca2 flux in the isolated guinea pig ventricular myocyte
+Base: [DiFrancesco 1985](#1985-difrancesco-mpf)
+| [Paper](https://doi.org/10.1152/ajpheart.1993.265.6.H2117) Nordin (1993) Computer model of membrane current and intracellular Ca2 flux in the isolated guinea pig ventricular myocyte
 **Has erratum**
 
 Bits:
 - INaK new formulation
 
-## 1993 Winslow
 ## 1994 Demir RS
+Base: [Rasmusson 1990](#1990b-rasmusson-fa)
+| [Paper](Demir, Clark, Murphey, Giles (1994) A mathematical model of a rabbit sinoatrial node cell)
 
 ## 1994 Luo GV
 Base: [Luo 1991](#1991-luo-gv)
@@ -208,25 +232,25 @@ Modifications:
 - Calcium buffering, with an analytical solution to a higher-order problem that ends up involving arccos and cos.
 - ...
 
-## 1996 Dokos RS
+## 1996a Dokos RS
+Base: [Noble 1998](#1989-noble-ms), [Wilders 1991](#1991-wilders-ms)
+| [Paper](https://doi.org/10.1006/jtbi.1996.0129) Dokos, Celler, Lovell (1996) Ion Currents Underlying Sinoatrial Node Pacemaker Activity; A New Single Cell Mathematical Model
 
-## 1996 Katsnelson
-Katsnelson, L.B., Markhasin, V.S., 1996. Mathematical modeling of relations between the kinetics of free
-intracellular calcium and mechanical function of myocardium
+## 1996b Dokos RS
+Base: [Dokos 1996a](#1996a-dokos-rs)
+| [Paper](https://doi.org/10.1006/jtbi.1996.0141) Dokos, Celler, Lovell (1996) Vagal Control of Sinoatrial Rhythm; a Mathematical Model
+
+Modifications:
+- Contains ACh storage and interaction
 
 ## 1996 Lindblad RA
-Base: Mostly new?
+Base: [Demir 1994](#1994-demir-rs)
 | [Paper](https://doi.org/10.1152/ajpheart.1996.271.4.h1666) Lindblad, Murphey, Clark Giles (1996) A model of the action potential and underlying membrane currents in a rabbit atrial cell
-
-## 1997 Endresen mS
 
 ## 1998 Courtemanche HA
 **Included**
 | Base: [Luo 1994](#1994-luo-gv)
 | [Paper](https://doi.org/10.1152/ajpheart.1998.275.1.h301) Courtemanche, Ramirez, Nattel (1998) Ionic mechanisms underlying human atrial action potential properties; insights from a mathematical model
-
-## 1998 Espinosa LV
-## 1998 Fenton mV
 
 ## 1998 Jafri GV
 Base: [Luo 1994](#1994-luo-gv)
@@ -252,18 +276,49 @@ Base: [Noble 1991](#1991-noble-gv)
 | [Paper](https://doi.org/10.1161/01.res.82.11.1206) Priebe, Beuckelmann (1998) Simulation study of cellular electric properties in heart failure
 
 ## 1998 Riemer GV
+Base: [Luo 1994](#1994-luo-gv)
+| [Paper](https://doi.org/10.1152/ajpheart.1998.275.2.h431) Riemer, Sobie, Tung (1998) Stretch-induced changes in arrhythmogenesis and excitability in experimentally based heart cell models
+
+Modifications:
+- Added stretch channel
+
+## 1999 Chudin GV
+Base: [Zeng 1995](#1995-zeng-gv)
+| [Paper](https://doi.org/10.1016/S0006-3495(99)77126-2) Chudin, Goldhaber et al., Kogan (1999) Intracellular Ca dynamics and the stability of ventricular tachycardia
+
+Modifications:
+- New calcium handling
+
 ## 1999 Demir RS
+Base: [Demir 1994](#1994-demir-rs)
+| [Paper](https://doi.org/10.1152/ajpheart.1999.276.6.H2221) Demir, Clark, Giles (1999) Parasympathetic modulation of sinoatrial node pacemaker activity in rabbit heart; a unifying model
+
+Modifications:
+- Added cAMP and ACh response
+
 ## 1999 Dumaine GV
-## 1999 Irvine INA Include?
-## 1999 Rice GV
+Base: [Luo 1994](#1994-luo-gv)
+| [Paper](https://doi.org/10.1161/01.res.85.9.803) Dumaine, Towbin et al., Antzelevitch (1999) Ionic mechanisms responsible for the electrocardiographic phenotype of the Brugada syndrome are temperature dependent
+
 ## 1999 Viswanathan GV
+Base: [Zeng 1995](#1995-zeng-gv)
+| [Paper](https://doi.org/10.1161/01.CIR.99.18.2466) Viswanathan, Shaw, Rudy (1999) Effects of IKr and IKs Heterogeneity on Action Potential Duration and Its Rate Dependence; A Simulation Study
 
 ## 1999 Winslow CV
 Base: [Jafri 1998](#1998-jafri-gv)
 | [Paper](https://doi.org/10.1161/01.res.84.5.571) Winslow, Rice et al., O'Rourke (1999) Mechanisms of Altered Excitation-Contraction Coupling in Canine Tachycardia-Induced Heart Failure, II Model Studies
 
+## 2000 Endresen RS
+Base: Rederive everything
+| [Paper](https://doi.org/10.1007/s002490050254) Endresen, Hall, Hoye, Myrheim (2000) A theory for the membrane potential of living cells
+
+Novelties:
+- The paper contains nice derivations of e.g. gating and transport equations
+- The paper uses an analytical V equation
+
 ## 2000 Faber GV
-[Original code](https://rudylab.wustl.edu/code-downloads/)
+Base: [Viswanathan 1999](#1999-viswanathan-gv)
+| [Original code](https://rudylab.wustl.edu/code-downloads/)
 | [Paper](https://doi.org/10.1016/s0006-3495(00)76783-x) Faber, Rudy (2000) Action Potential and Contractility in [Na+]i Overloaded Cardiac Myocytes
 
 ## 2000 Greenstein CV
@@ -274,17 +329,25 @@ Base: [Winslow 1999](#1999-winslow-cv)
 Base: [Courtemanche 1998](#1998-courtemanche-ha)
 | [Paper](https://doi.org/10.1152/ajpheart.2000.279.4.h1767) Ramirez, Nattel, Courtemanche (2000) Mathematical analysis of canine atrial action potentials; rate, regional factors, and electrical remodeling
 
-## 2000 Sakmann GV
-
 ## 2000 Zhang RS
-[Paper](https://doi.org/10.1152/ajpheart.2000.279.1.h397) Zhang, Holden et al., Boyett (2000) Mathematical models of action potentials in the periphery and center of the rabbit sinoatrial node
+Base: Mostly new?
+| [Paper](https://doi.org/10.1152/ajpheart.2000.279.1.h397) Zhang, Holden et al., Boyett (2000) Mathematical models of action potentials in the periphery and center of the rabbit sinoatrial node
 
-## 2001 Boyett
+## 2001 Boyett RS
+Base: [Zhang 2000](#2000-zhang-rs)
+| [Paper](https://doi.org/10.1098/rsta.2001.0818) Boyett, Zhang, Garny, Holden (2001) Control of the pacemaker activity of the sinoatrial node by intracellular Ca; Experiments and modelling
+
 ## 2001 Mazhari CV
+Base: [Winslow 1999](#1999-winslow-cv)
+| [Paper](https://doi.org/10.1161/hh1301.093633) Mazhari, Greenstein et al., Nuss (2001) Molecular interactions between two long-QT syndrome gene products, HERG and KCNE2, rationalized by in vitro and in silico analysis
+
 ## 2001 Noble GP
+Base: [Noble 1998](#1998-noble-gv)
+| Paper not online: Noble, Noble (2001) Remodelling of calcium dynamics in guinea-pig ventricular cells
 
 ## 2001 Pandit LV
-[Paper](https://doi.org/10.1016/s0006-3495(01)75943-7) Pandit, Clark, Giles, Demir (2001) A Mathematical Model of Action Potential Heterogeneity in Adult Rat Left Ventricular Myocytes
+Base: [Demir 1999](#1999-demir-rs), [Winslow 1999](#1999-winslow-cv)
+| [Paper](https://doi.org/10.1016/s0006-3495(01)75943-7) Pandit, Clark, Giles, Demir (2001) A Mathematical Model of Action Potential Heterogeneity in Adult Rat Left Ventricular Myocytes
 
 ## 2001 Puglisi GV
 Base: [Luo 1994](#1994-luo-gv)
@@ -296,8 +359,9 @@ Modifications:
 - Rescaled gK1
 - ... see Table 1
 
-## 2002 Fenton mV
 ## 2002 Fox CV
+Base: [Chudin 1999](#1999-chudin-gv)
+| [Paper](https://doi.org/10.1152/ajpheart.00612.2001) Fox, McHarg, Gilmour (2002) Ionic mechanism of electrical alternans
 
 ## 2002 Kneller CA
 Base: [Ramirez 2000](#2000-ramirez-ca)
@@ -308,7 +372,8 @@ Base: [Wilders 1991](#1991-wilders-ms), [Demir 1994](#1994-demir-rs), [Dokos 199
 | [Paper](https://doi.org/10.1152/ajpheart.00900.2001) Kurata, Hisatome, Imanishi, Shibamoto (2002) Dynamical description of sinoatrial node pacemaking; improved mathematical model for primary pacemaker cell
 
 ## 2003 Cabo CV
-## 2003 Garny
+Base: [Luo 1994](#1994-luo-gv)
+| [Paper](https://doi.org/10.1152/ajpheart.00512.2002) Cabo, Boyden (2003) Electrical remodeling of the epicardial border zone in the canine infracted heart; a computational analysis
 
 ## 2003 Matsuoka GV
 Base: [Luo 1991](#1991-luo-gv), but lots of new things
@@ -323,10 +388,9 @@ Bits:
 - INaK novel reduced formulation, based on INaCa
 - ...
 
-## 2003 Mitchell mV
-
 ## 2003 Pandit LV
-[Paper](https://doi.org/10.1016/s0006-3495(03)74902-9) Pandit, Giles, Demir (2003) A Mathematical Model of the Electrophysiological Alterations in Rat Ventricular Myocytes in Type-I Diabetes
+Base: [Pandit 2001](#2001-pandit-lv)
+| [Paper](https://doi.org/10.1016/s0006-3495(03)74902-9) Pandit, Giles, Demir (2003) A Mathematical Model of the Electrophysiological Alterations in Rat Ventricular Myocytes in Type-I Diabetes
 
 ## 2003 Sarai mS
 Base: [Matsuoka 2003](#2003-matsuoka-mV)
@@ -343,6 +407,11 @@ Base: [Puglisi 2001](#2001-puglisi-gv)
 | [Paper](https://doi.org/10.1074/jbc.M308362200) Saucerman, Brunton, Michailova, McCulloc (2003) Modeling beta-adrenergic control of cardiac myocyte contractility in silico
 
 ## 2003 Seemann HV
+Base: [Priebe 1998](#1998-priebe-hv)
+| [Paper](https://doi.org/10.1046/j.1540.8167.90314.x) Seemann, Sachse, Weiss, Doessel (2003) Quantitative reconstruction of cardiac electromechanics in human myocardium; regional heterogeneity
+
+Modifications:
+- Added force development model
 
 ## 2003 Solovyova GV
 Base: [Noble 1998](#1998-noble-gv)
@@ -350,7 +419,11 @@ Base: [Noble 1998](#1998-noble-gv)
 
 Known as: Ekaterinburg-Oxford (EO) model
 
-## 2004 Bassani
+## 2004 Bassani-Altamirano mV
+Base: [Puglisi 2001](#2001-puglisi-gv)
+| [Paper](https://doi.org/10.1113/jphysiol.2004.067959) Bassani*, Altamirano*, Puglisi, Bers (2004) Action potential duration determines sarcoplasmic reticulum Ca reloading in mammalian ventricular myocytes (*contributed equally)
+
+Note: Ferret, rabbit, and rat.
 
 ## 2004 Bondarenko MV
 Base: [Luo 1994](#1994-luo-gv), but many new formulations
@@ -379,13 +452,9 @@ Bits:
 
 Known as: Iyer-Mazhari-Winslow
 
-## 2004 Katsnelson
-Base: Solovyova 2003
-
-Katsnelson, L.B., et al., 2004. Influence of viscosity on myocardium mechanical activity: a mathematical model
-J. Theor. Biol. 230(3), 385–405.
-
-## 2004 Lovell RS
+## 2004 Katsnelson RV
+Base: [Solovyova 2003](#2003-solovyova-gv)
+| [Paper](https://doi.org/10.1016/j.jtbi.2004.05.007) Katsnelson, Nikitina et al., Markhasin (2004) Influence of viscosity on myocardium mechanical activity; a mathematical model
 
 ## 2004 Matsuoka GV
 Base: [Matsuoka 2003](#2003-matsuoka-gv)
@@ -407,7 +476,8 @@ Base: [Puglisi 2001](#2001-puglisi-gv)
 
 ## 2004 Shannon RV
 Base: [Puglisi 2001](#2001-puglisi-gv)
-| [Likely original matlab code](https://github.com/drgrandilab/Shannon-et-al-2004-Rabbit-Ventricular-Model)
+| [Archived original code](https://web.archive.org/web/20060425184747/http://www.luhs.org/depts/physio/personal_pages/bers_d/index.html)
+| [Grandi's matlab code](https://github.com/drgrandilab/Shannon-et-al-2004-Rabbit-Ventricular-Model)
 | [Paper](https://doi.org/10.1529/biophysj.104.047449) Shannon, Wang et al., Bers (2004) A mathematical treatment of integrated Ca dynamics within the ventricular myocyte
 
 Known as: Chicago model
@@ -415,8 +485,6 @@ Known as: Chicago model
 Modifications:
 - Rescaled gK1
 - ...
-
-## 2004 Smith INaK
 
 ## 2004 Ten Tusscher HV
 **Included**
@@ -429,9 +497,9 @@ Bits:
 - ICaL adapted from Luo 1994
 - INaK adapted from DiFrancesco 1985
 
-## 2005 Couto LV
-## 2005 Flaim CV
-## 2005 Krogh-Madsen
+## 2005 Krogh-Madsen small clusters of embryonic chick cells
+Base: Mostly new?
+| [Paper](https://doi.org/10.1152/ajpheart.00683.2004) Krogh-Madsen, Schaffer et al., Guevara  (2005) An ionic model for rhythmic activity in small clusters of embryonic chick ventricular cells
 
 ## 2005 Kurata HV
 Base: [Priebe 1998](#1998-priebe-hv)
@@ -440,6 +508,7 @@ Base: [Priebe 1998](#1998-priebe-hv)
 
 ## 2005 Michailova CV
 ## 2006 Cortassa mV
+
 ## 2006 Fink HV
 
 ## 2006 Greenstein CV
@@ -569,9 +638,9 @@ Base: [Shannon 2004](#2004-shannon-rv)
 | [Original matlab code](https://github.com/saucermanlab/model-archive)
 | [Paper](https://doi.org/10.1529/biophysj.108.128728) Saucerman, Bers (2008) Calmodulin mediates differential sensitivity of CaMKII and calcineurin to local Ca2 in cardiac myocytes
 
-## 2008 Sulman
-Base: Solovyova 2003
-[Paper](https://doi.org/10.1007/s11538-007-9285-y) Sulman, Katsnelson, Solovyova, Markhasin (2008) Mathematical modeling of mechanically modulated rhythm disturbances in homogeneous and heterogeneous myocardium with attenuated activity of Na-K pump
+## 2008 Sulman GV
+Base: [Solovyova 2003](#2003-solovyova-gv)
+| [Paper](https://doi.org/10.1007/s11538-007-9285-y) Sulman, Katsnelson, Solovyova, Markhasin (2008) Mathematical modeling of mechanically modulated rhythm disturbances in homogeneous and heterogeneous myocardium with attenuated activity of Na-K pump
 
 ## 2008 Wang LV
 ## 2009a Aslanidi RA
@@ -934,7 +1003,7 @@ Base: [O'Hara 2011](#2011-ohara-hv)
 | [Paper](https://doi.org/10.7554/elife.48890) Tomek, Bueno-Orovio et al., Rodriguez (2019) Development, calibration, and validation of a novel human ventricular myocyte model in health, disease, and drug block
 
 ## 2020 Balakina-Vikulova HV
-Base: Ten Tusscher 2006, Sulman 2008
+Base: [Ten Tusscher 2006](#2006-ten-tusscher-hv), [Sulman 2008](#2008-sulman-gv)
 | [Paper](https://doi.org/10.1186/s12576-020-00741-6) Balakina-Vikulova, Panfilov, Solovyova, Katsnelson (2020) Mechano-calcium and mechano-electric feedbacks in the human cardiomyocyte analyzed in a mathematical model
 
 ## 2020 Bartolucci HV
@@ -984,6 +1053,8 @@ Modifications:
 ## 2021 Akwaboah Hi
 **Included**
 | Base: [Kurata 2002](#2002-kurata-rs) and [Courtemanche 1998](#1998-courtemanche-ha)
+| [Paper](https://doi.org/10.3389/fphys.2021.675867) Akwaboah, Tsevi et al., Deo (2021) An in silico hiPSC-Derived Cardiomyocyte Model Built With Genetic Algorithm
+
 
 Bits:
 - INa from Luo 1991, with partial reparameterisation
@@ -1032,6 +1103,7 @@ Base: [Tomek 2020](#2020-tomek-hv), [Heijman 2011](#2011-heijman-cv)
 
 ## 2022 Kohjitani Hi
 Base: [Himeno 2015](#2015-himeno-hv)
+| Code not quite available, point to e-Heart
 | [Paper](https://doi.org/10.1038/s41598-022-23398-0) Kohjitani, Koda et al., Kimura (2022) Gradient-based parameter optimization method to determine membrane ionic current composition in human induced pluripotent stem cell-derived cardiomyocytes
 
 ## 2022 Mahzar HA
@@ -1040,13 +1112,13 @@ Base: [Koivumaki 2011](#2011-koivumaki-ha), Regazzoni 2020
 
 Known as: MBS2023
 
-## 2022 Moise
+## 2022 Moise RS
 Base: [Severi 2012](#2012-severi-rs)
 | [Original matlab code](https://github.com/SHWeinberg/SAN_FeedbackModel)
 | [Paper](https://doi.org/10.1016/j.bpj.2023.03.024) Moise, Weinberg (2022) Emergent Electrical Activity, Tissue Heterogeneity, and Robustness in a Calcium Feedback Regulatory Model of the Sinoatrial Node
 
 ## 2023 Heijman HA
-Base: Grandi 2011? Or voigt-heijman?
+Base: [Grandi 2011](#2011-grandi-pandit-voigt-ha)
 | [Original matlab code](https://github.com/drgrandilab/Heijman-et-al-2023-Human-Atrial-Model)
 | [Paper](https://doi.org/10.1161/CIRCRESAHA.122.321858) Heijman, Zhou et al., Dobrev (2023) Enhanced Ca-Dependent SK-Channel Gating and Membrane Trafficking in Human Atrial Fibrillation
 
