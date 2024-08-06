@@ -881,8 +881,9 @@ Base: [Zhang 2000](#2000-zhang-rs), [Kurata 2002](#2002-kurata-rs)
 Base: [Mangoni 2006](#2006-mangoni-ms)
 | [Paper](https://doi.org/10.1113/jphysiol.2012.239954) Christel, Cardona et al., Lee (2012) Distinct localization and modulation of Cav12 and Cav13 L-type Ca channels in mouse sinoatrial node
 
-## 2012 Davies
+## 2012 Davies CV
 Base: [Benson 2008](#2008-benson-cv)
+| Original matlab code provided in supplement
 | [Paper](https://doi.org/10.1152/ajpheart.00808.2011) Davies, Mistry et al., Abi-gerges (2012) An in silico canine cardiac midmyocardial action potential duration model as a tool for early drug safety assessment
 
 ## 2012 Morotti RV
