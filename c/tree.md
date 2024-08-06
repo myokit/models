@@ -38,7 +38,6 @@ Some papers with model lists or model comparison:
 - [Wilders (2007) Computer modelling of the sinoatrial node](https://doi.org/10.1007/s11517-006-0127-0)
 - [Ricci, Bartolucci, Severi (2022) The virtual sinoatrial node: What did computational models tell us about cardiac pacemaking?](https://doi.org/10.1016/j.pbiomolbio.2022.10.008)
 
-
 Some reductions and propagation models:
 - Fitzugh 1961 reduces HH to a "Bonhoeffer-Van der Pol" model
 - Nagumo 1962 makes Fitzhugh 1961 suitable for propagation
@@ -71,6 +70,10 @@ Some CaRU stochastic/spatial models:
 - Tanskanen 2005 builds on Greenstein 2002
 - Greenstein 2006 builds on Greenstein 2002
 - Flaim et al 2006 modified Greenstein 2006
+- Stern 2014 built a sparking SAN model based on Maltsev 2009
+- Voigt 2014 built a CaRU model based on Voigt 2013
+- Sutanto 2018 adapted the Voigt 2014 model
+- Maltsev 2022 build on Stern 2014
 
 A number of software packages are referenced, because they contain models.
 Some experimented with re-use of model code, making the models difficult to extract.
@@ -664,7 +667,7 @@ Modifications:
 - Rescaled IKs
 
 ## 2008 Himeno GS
-Base: [Kuzumoto 2007](#2007-kuzumoto-gv), [Sarai 2003](#2003-sarai-ms)
+Base: [Sarai 2003](#2003-sarai-ms), [Kuzumoto 2007](#2007-kuzumoto-gv)
 | [Original simBio code](http://www.sim-bio.org/model)
 | [Paper](https://doi.org/10.2170/physiolsci.RP015207) Himeno, Sarai, Matsuoka, Noma (2008) Ionic mechanisms underlying the positive chronotropy induced by beta1-adrenergic stimulation in guinea pig sinoatrial node cells
 
@@ -720,7 +723,7 @@ Base: [Lindblad 1996](#1996-lindblad-ra)
 | [Paper](https://doi.org/10.1016/j.bpj.2008.09.057) Aslanidi, Boyett et al., Zhang (2009) Mechanisms of transition from normal to reentrant electrical activity in a model of rabbit atrial tissue; interaction of tissue heterogeneity and anisotropy
 
 ## 2009b Aslanidi CP
-Base: [Benson 2008](2008-benson-cv)
+Base: [Benson 2008](#2008-benson-cv)
 | [Paper](https://doi.org/10.1016/j.bpj.2009.03.061) Aslanidi, Stewart, Boyett, Zhang (2009) Optimal Velocity and Safety of Discontinuous Conduction through the Heterogeneous Purkinje-Ventricular Junction
 
 ## 2009 Decker CV
@@ -788,7 +791,7 @@ Base: [Kurata 2002](#2002-kurata-rs)
 | [Paper](https://doi.org/10.1016/j.yjmcc.2010.03.015) Imtiaz, von der Weid, Laver, van Helden (2010) SR Ca store refill; a key factor in cardiac pacemaking
 
 ## 2010 Korhonen Md
-Base: [Korhonen 2008](2008-korhonen-md)
+Base: [Korhonen 2008](#2008-korhonen-md)
 | [Paper](https://doi.org/10.1113/jphysiol.2009.185173) Korhonen, Rapila et al., Tavi (2010) Local Ca releases enable rapid heart rates in developing cardiomyocytes
 
 ## 2010 Li MV
@@ -839,7 +842,7 @@ Modifications:
 | [Paper](https://doi.org/10.1016/j.yjmcc.2011.02.007) Heijman, Volders, Westra, Rudy (2011) Local control of beta-adrenergic stimulation; effects on ventricular myocyte electrophysiology and Ca transient
 
 ## 2011 Kharche MS
-Base: Many
+Base: [Zhang 2000](#2000-zhang-rs), [Kurata 2002](#2002-kurata-rs)
 | [Paper](https://doi.org/10.1152/ajpheart.00143.2010) Kharche, Yu, Lei, Zhang (2011) A mathematical model of action potentials of mouse sinoatrial node cells with molecular bases
 
 ## 2011 Koivumaki HA
@@ -871,7 +874,7 @@ Bits:
 - INaK from Smith 2004, with reparametrisation
 
 ## 2011 Tao LS
-Base: [Kurata 2002](#2002-kurata-rs)
+Base: [Zhang 2000](#2000-zhang-rs), [Kurata 2002](#2002-kurata-rs)
 | [Paper](https://doi.org/10.1016/j.bpj.2011.05.069) Tao, Paterson, Smith (2011) A model of cellular cardiac-neural coupling that captures the sympathetic control of sinoatrial node excitability in normotensive and hypertensive rats
 
 ## 2012 Christel MS
@@ -921,11 +924,12 @@ Base: [Courtemanche 1998](#1998-courtemanche-ha)
 ## 2013 Paci Hi
 **Included**
 | Base: [Paci 2012](#2012-paci-he)
-| [Paper]() 
+| [Paper](https://doi.org/10.1007/s10439-013-0833-3) Paci, Hyttinen, Aalto-Setala, Severi (2013) Computational Models of Ventricular and Atrial-Like Human Induced Pluripotent Stem Cell Derived Cardiomyocytes
 
 ## 2013 Voigt-Heijman HA
 **Included**
 | Base: [Grandi 2011](#2011-grandi-pandit-voigt-ha)
+| Authors provided mmt code
 | [Paper](https://doi.org/10.1016/j.yjmcc.2013.03.011) Voigt, Heijman et al., Dobrev (2013) Impaired Na-dependent regulation of acetylcholine-activated inward-rectifier K current modulates AP rate dependence in cAF
 
 Modifications:
@@ -934,11 +938,11 @@ Modifications:
 - Modified IK1 (changed gK1 and a)
 
 ## 2013a Yaniv RS
-Base:
+Base: [Yaniv 2012](#2012-yaniv-rs)
 | [Paper](https://doi.org/10.1016/j.yjmcc.2013.04.026) Yaniv, Sirenko et al., Lakatta (2013) New evidence for coupled clock regulation of the normal automaticity of sinoatrial nodal pacemaker cells; bradycardic effects of ivabradine are linked to suppression of intracellular Ca cycling
 
 ## 2013b Yaniv RS
-Base:
+Base: [Maltsev 2009](#2009-maltsev-rs)
 | [Paper](https://doi.org/10.1016/j.bpj.2013.08.024) Yaniv, Stern, Lakatta, Maltsev (2013) Mechanisms of beat-to-beat regulation of cardiac pacemaker cell function by Ca cycling dynamics
 
 ## 2014 Asakura HV
@@ -969,10 +973,6 @@ Base: [Soltis 2010](#2010-soltis-rv)
 | [Original matlab code](https://github.com/drgrandilab/Morotti-et-al-2014-Mouse-Ventricular-Model)
 | [Paper](https://doi.org/10.1113/jphysiol.2013.266676) Morotti, Edwards et al., Grandi (2014) A novel computational model of mouse myocyte electrophysiology to assess the synergy between Na+ loading and CaMKII
 
-## 2014 Stern RS
-Base:
-| [Paper](https://doi.org/10.1085/jgp.201311123) Stern, Maltseva et al., Maltsev (2014) Hierarchical clustering of ryanodine receptors enables emergence of a calcium clock in sinoatrial node cells
-
 ## 2014 Yang MV
 Base: [Yang 2012 mouse](#2012-yang-mv)
 | [Original matlab code](https://github.com/saucermanlab/model-archive)
@@ -997,30 +997,36 @@ Bits:
 - Currents, Ca-handling, Na-handling: Shannon 2004
 - CaMKII, PKA: Soltis 2010
 
-## 2015 Schmidt
-Base:
-| [Paper]() 
+## 2015 Paci Hi
+Base: [Paci 2013](#2013-paci-hi)
+| [Paper](https://doi.org/10.1111/bph.13282) Paci, Hyttinen, Rodriguez, Severi (2015) Human induced pluripotent stem cell-derived versus adult cardiomyocytes; an in silico electrophysiological study on ionic current block effects
+
+## 2015 Schmidt HA
+Base: [Voigt-Heijman 2013](#2013-voigt-heijman-ha)
+| [Paper](https://doi.org/10.1161/CIRCULATIONAHA.114.012657) 
+
+Modifications:
+- Added K2p3.1 current
 
 ## 2015 Yaniv RS
-Base:
+Base: Probably [Yaniv 2013a](#2013a-yaniv-rs)
 | [Paper](https://doi.org/10.1016/j.yjmcc.2015.07.024) Yaniv, Ganesan et al., Lakatta (2015) Real-time relationship between PKA biochemical signal network dynamics and increased action potential firing rate in heart pacemaker cells
 
 ## 2016 Behar RS
-Base:
+Base: [Yaniv 2015](#2015-yaniv-rs)
 | [Paper](https://doi.org/10.3389/fphys.2016.00419) Behar, Ganesan, Zhang, Yaniv (2016) The autonomic nervous system regulates the heart rate through cAMP-PKA dependent and independent coupled-clock pacemaker cell mechanisms
 
-## 2016 Gattoni
-Base: Pandit 2001
-| [Paper]() 
+## 2016 Gattoni LV
+Base: [Pandit 2001](#2001-pandit-lv)
+| [Paper]() Gattoni, Roe et al., Smith (2016) The calcium-frequency response in the rat ventricular myocyte; an experimental and modelling study
 
-## 2016 Gray RV
-**Included**
-| Base: New
-| [Paper](https://doi.org/10.1371/journal.pcbi.1005087) Gray, Pathmanathan (2016) A Parsimonious Model of the Rabbit Action Potential Elucidates the Minimal Physiological Requirements for Alternans and Spiral Wave Breakup
+Modifications:
+- Hinch 2004 Ca dynamics
+- Lewalle et al. 2014 INaK model (despite Smith as co-author?)
 
-## 2016 Majumder RA
-Base:
-| [Paper]() 
+## 2016 Majumder RAd
+Base: [Korhonen 2009](#2009-korhonen-ld)
+| [Paper](https://doi.org/10.1371/journal.pcbi.1004946) Majumder et al., Pijnappels, Panfilov (2016) A Mathematical Model of Neonatal Rat Atrial Monolayers with Constitutively Active Acetylcholine-Mediated K Current
 
 ## 2016 Morotti HA
 Base: [Grandi 2011](#2011-grandi-pandit-voigt-ha)
@@ -1042,12 +1048,12 @@ Modifications:
 - Modified INa steady states
 
 ## 2016 Pohl HS
-Base:
+Base: [Dokos 1996a](#1996a-dokos-rs)
 | [Paper](https://doi.org/10.1088/2057-1976/2/3/035006) Pohl, Wachter, Hatam, Leonhardt (2016) A computational model of a human single sinoatrial node cell
 
 ## 2016 Varela CA
-Base:
-| [Paper]() 
+Base: [Ramirez 2000](#2000-ramirez-ca)
+| [Paper](https://doi.org/10.1371/journal.pcbi.1005245) Varela, Colman, Hancox, Aslanidi (2016) Atrial Heterogeneity Generates Re-entrant Substrate during Atrial Fibrillation and Anti-arrhythmic Drug Action
 
 ## 2017 Aguilar HA
 Base: [Courtemanche 1998](#1998-courtemanche-ha)
@@ -1115,6 +1121,10 @@ Modifications:
 Bits:
 - Calcium subspaces based on Koivumaki 2011
 
+## 2017 Paci Hi
+Base: [Paci 2015](#2015-paci-hi)
+| [Paper](https://doi.org/10.1016/j.hrthm.2017.07.026) Paci, Passini et al., Rodriguez (2017) Phenotypic Variability in LQT3 Human induced pluripotent stem cell-derived cardiomyocytes and their response to antiarrhythmic pharmacologic therapy; an in silico approach
+
 ## 2017 Surdo MV
 Base: [Morotti 2014](#2014-morotti-mv) 
 | [Original matlab code](https://github.com/drgrandilab/Surdo-et-al-2017-Mouse-Ventricular-Model-with-Myofilament-Contraction)
@@ -1129,23 +1139,19 @@ Base: [Ten Tusscher 2006](#2006-ten-tusscher-hv)
 | [Paper](https://doi.org/10.1038/s41598-018-33958-y) Bai, Gladding et al., Zhao (2018) Ionic and cellular mechanisms underlying TBX5-PITX2 insufficiency-induced atrial fibrillation; Insights from mathematical models of human atrial cells
 
 ## 2018 Colman HA
-Base: This model has 4 variants
+Base: [Courtemanche 1998](#1998-courtemanche-ha), [Nygren 1998](#1998-nygren-ha), [Chang 2014](#2014-chang-ha)
 | [Original code](https://github.com/michaelcolman/hAM_WL)
 | [Paper](https://doi.org/10.3389/fphys.2018.01211) Colman, Saxena, Kettlewell, Workman (2018) Description of the Human Atrial Action Potential Derived From a Single, Congruent Data Source; Novel Computational Models for Integrated Experimental-Numerical Study of Atrial Arrhythmia Mechanisms
 
 ## 2018 Koivumaki Hi
-Base: Korhonen 2010, Paci 2015
+Base: [Korhonen 2010](#2010-korhonen-md), [Paci 2015](#2015-paci-hi)
 | [Paper]()
 Koivumaki, Naumenko et al., Tavi (2018) Structural Immaturity of Human iPSC-Derived Cardiomyocytes; In Silico Investigation of Effects on Function and Disease Modeling
 
 ## 2018 Paci Hi
 **Included**
-| Base: [Paci 2013](#2013-paci-hi)
+| Base: [Paci 2017](#2017-paci-hi)
 | [Paper](https://doi.org/10.3389/fphys.2018.00709) Paci, Polonen et al., Hyttinen (2018) Automatic optimization of an in silico model of human iPSC derived cardiomyocytes recapitulating calcium handling abnormalities
-
-## 2018 Sutanto HA
-Base:
-| [Paper]() 
 
 ## Loewe 2019 HS
 Base: [Fabbri 2017](#2017-fabbri-hs)
@@ -1242,8 +1248,9 @@ Base: [Yang 2012](#2012-yang-hv)
 | [Paper](https://doi.org/10.1002/cpt.2240) Fogli Iseppe, Ni et al., Grandi (2021) Sex-specific classification of drug-induced Torsade de Pointes susceptibility using cardiac simulations and machine learning
 
 ## 2021 Gaur PV
-Base:
-[Paper](https://doi.org/10.1371/journal.pcbi.1009137) Gaur, Qi et al., Vigmond (2021) A computational model of pig ventricular cardiomyocyte electrophysiology and calcium handling; Translation from pig to human electrophysiology
+Base: [O'Hara 2011](#2011-ohara-hv), but many new parts
+| Official openCARP, Myokit, and CellML code is provided in the supplement
+| [Paper](https://doi.org/10.1371/journal.pcbi.1009137) Gaur, Qi et al., Vigmond (2021) A computational model of pig ventricular cardiomyocyte electrophysiology and calcium handling; Translation from pig to human electrophysiology
 
 ## 2021 Hoekstra HS
 Base: [Fabbri 2017](#2017-fabbri-hs)
@@ -1279,10 +1286,6 @@ Base: [Koivumaki 2011](#2011-koivumaki-ha), Regazzoni 2020
 | [Paper](https://doi.org/10.1113/JP283974) Mazhar, Bartolucci et al., Severi (2023) A detailed mathematical model of the human atrial cardiomyocyte: integration of electrophysiology and cardiomechanics
 
 Known as: MBS2023
-
-## 2022 Maltsev RS
-Base:
-| [Paper](https://doi.org/10.1085/jgp.202113061) Maltsev, Stern, Maltsev (2022) Disorder in Ca release unit locations confers robustness but cuts flexibility of heart pacemaking
 
 ## 2022 Moise RS
 Base: [Severi 2012](#2012-severi-rs)
