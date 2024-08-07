@@ -1,6 +1,6 @@
 [[model]]
 name: grandi-2011
-version: 20230208
+version: 20240808
 mmt_authors: Michael Clerx
 desc: """
     The 2011 model of the human atrial AP by Grandi, Pandit, Voigt et al. [1].
@@ -9,8 +9,8 @@ desc: """
     first author [2].
 
     This implementation is based on the original Matlab code provided on the
-    Grandi lab website. It was checked against the original code numerically
-    by comparing the calculated derivatives.
+    Grandi lab website [3]. It was checked against the original code 
+    numerically by comparing the calculated derivatives.
 
     The stimulus was set to 0.5 ms and approximately twice the threshold value
     for depolarisation.
@@ -91,9 +91,9 @@ pace = 0
 RA = 0
     desc: Right atrium yes/no
 AF = 0
-    desc: AF mode
+    desc: Atrial fibrillation remodelling yes/no
 ISO = 0
-    desc: Apply ISO
+    desc: Apply isoproterenol yes/no
 
 #
 # Membrane potential
@@ -490,17 +490,17 @@ ICaL = ICaL_Ca + ICaL_Na + ICaL_K
     label I_CaL
 ICaL_Ca = ICaL_Ca_jn + ICaL_Ca_sl
     in [A/F]
-ICaL_Ca_jn = fjn_CaL * ibarca_jn * d * f * (1 - fCa_jn + fcaCaj) * Q
+ICaL_Ca_jn = fjn_CaL * ibarca_jn * d * f * (1 - fCa_jn) * Q
     in [A/F]
-ICaL_Ca_sl = fsl_CaL * ibarca_sl * d * f * (1 - fCa_sl + fcaCaMSL) * Q
+ICaL_Ca_sl = fsl_CaL * ibarca_sl * d * f * (1 - fCa_sl) * Q
     in [A/F]
 ICaL_Na = ICaL_Na_jn + ICaL_Na_sl
     in [A/F]
-ICaL_Na_jn = fjn_CaL * ibarna_jn * d * f * (1 - fCa_jn + fcaCaj) * Q
+ICaL_Na_jn = fjn_CaL * ibarna_jn * d * f * (1 - fCa_jn) * Q
     in [A/F]
-ICaL_Na_sl = fsl_CaL * ibarna_sl * d * f * (1 - fCa_sl + fcaCaMSL) * Q
+ICaL_Na_sl = fsl_CaL * ibarna_sl * d * f * (1 - fCa_sl) * Q
     in [A/F]
-ICaL_K = ibark * d * f * (fjn_CaL * (fcaCaj + (1 - fCa_jn)) + cell.fsl_CaL * (fcaCaMSL + (1 - fCa_sl))) * Q
+ICaL_K = ibark * d * f * (fjn_CaL * (1 - fCa_jn) + cell.fsl_CaL * (1 - fCa_sl)) * Q
     in [A/F]
 # Permeability
 scaling = 1
@@ -524,13 +524,6 @@ ibarna_sl = PNa * V * F * FRT * (0.75 * Na_sl * exp(V * FRT) - 0.75 * Na_o) / (e
     in [A/F]
 ibark = PK * V * F * FRT * (0.75 * K_i * exp(V * FRT) - 0.75 * K_o) / (exp(V * FRT) - 1)
     in [A/F]
-# Persistent activation terms?
-fcaCaMSL = 0
-#fcaCaMSL = 0.1 / (1 + (0.01 / Casl))
-# Commented out in original code
-fcaCaj = 0
-#fcaCaj = 0.1 / (1 + (0.01 / Caj))
-# Commented out in original code
 # Activation
 dot(d) = (inf - d) / tau
     inf = 1 / (1 + exp(-(V + 3 [mV] * ISO + 9 [mV]) / 6 [mV]))
