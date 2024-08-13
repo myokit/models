@@ -3,10 +3,11 @@ name: ellinwood-2017
 version: 20240813
 mmt_authors: Michael Clerx
 desc: """
-    The 2017 model of the human atrial AP by Ellinwood et al. [1].
+    The 2017 model of the human atrial AP by Ellinwood et al. [1, 2].
+    Based on the adaptation of the Grandi model [3] by Morotti et al. [4].
 
     This implementation is based on the original Matlab code provided on the
-    Grandi lab website [3]. It was checked against the original code numerically
+    Grandi lab website [5]. It was checked against the original code numerically
     by comparing the calculated derivatives.
 
     The stimulus was set to 0.5 ms and approximately twice the threshold value
@@ -22,14 +23,18 @@ desc: """
     [2] Erratum to [1]
         https://doi.org/10.1063/1.5007051
 
-    [3] https://github.com/drgrandilab/Ellinwood-et-al-2017-Human-Atrial-Model-with-Updated-IKur
-        Accessed on 2024-08-07
-
-    [4] *Grandi, E., *Pandit, S. V., *Voigt, N., Workman, A. J., Dobrev, D.,
+    [3] *Grandi, E., *Pandit, S. V., *Voigt, N., Workman, A. J., Dobrev, D.,
         Jalife, J., & Bers, D. M. (2011). *Shared first authors. Human Atrial
         Action Potential and Ca2+ Model: Sinus Rhythm and Chronic Atrial
         Fibrillation. Circulation Research, 109(9), 1055-1066.
         https://doi.org/10.1161/CIRCRESAHA.111.253955
+
+    [4] Morotti, S., McCulloch, A. D., Bers, D. M., Edwards, A. G., 
+        & Grandi, E. (2016) Journal of Molecular and Cellular Cardiology
+        https://doi.org/10.1016/j.yjmcc.2015.07.030
+
+    [5] https://github.com/drgrandilab/Ellinwood-et-al-2017-Human-Atrial-Model-with-Updated-IKur
+        Accessed on 2024-08-07
 
     """
 # Initial values
@@ -234,6 +239,8 @@ pNaK = 0.01833
 #
 # Fast sodium current (drug-free version)
 #
+# Added in Morotti 2016.
+#
 [ina]
 use membrane.V
 INa = INa_jn + INa_sl
@@ -391,13 +398,11 @@ r = 1 / (1 + exp((V + 74 [mV]) / 24 [mV]))
 use membrane.V
 IKs = IKs_jn + IKs_sl
     in [A/F]
-IKs_jn = cell.fjn * gKs_jn * x^2 * (V - rev.EKs)
+IKs_jn = cell.fjn * gKs * x^2 * (V - rev.EKs)
     in [A/F]
-IKs_sl = cell.fsl * gKs_sl * x^2 * (V - rev.EKs)
+IKs_sl = cell.fsl * gKs * x^2 * (V - rev.EKs)
     in [A/F]
-gKs_jn = (1 + mode.AF + 2 * mode.ISO) * gKs_base
-    in [mS/uF]
-gKs_sl = (1 + mode.AF + 2 * mode.ISO) * gKs_base
+gKs = (1 + mode.AF + 2 * mode.ISO) * gKs_base
     in [mS/uF]
 gKs_base = 0.0035 [mS/uF]
     in [mS/uF]
@@ -736,14 +741,12 @@ J_CaB_cytosol = dot(TnCL) + dot(TnCHCa) + dot(CaM) + dot(MyoCa) + dot(SRB)
 # TnCl
 Bmax_TnClow = 0.07 [mM]
     in [mM]
-    desc: TnC low affinity
 koff_tncl = 19.6e-3 [1/ms] * (1 + 0.5 * mode.ISO)
     in [1/ms]
 kon_tncl = 32.7 [1/mM/ms]
     in [1/mM/ms]
 Bmax_TnChigh = 140e-3 [mM]
     in [mM]
-    desc: TnC high affinity
 koff_tnchCa = 0.032e-3 [1/ms]
     in [1/ms]
 kon_tnchCa = 2.37 [1/mM/ms]
@@ -761,7 +764,6 @@ dot(TnCHMg) = kon_tnchMg * Mg_i * (Bmax_TnChigh - TnCHCa - TnCHMg) - koff_tnchMg
 # Calmodulin
 Bmax_CaM = 24e-3 [mM]
     in [mM]
-    desc: CaM buffering
 koff_cam = 238e-3 [1/ms]
     in [1/ms]
 kon_cam = 34 [1/mM/ms]
@@ -771,7 +773,6 @@ dot(CaM) = kon_cam * Ca_i * (Bmax_CaM - CaM) - koff_cam * CaM
 # Myosin-Ca and Myosin-Mg
 Bmax_myosin = 140e-3 [mM]
     in [mM]
-    desc: Myosin buffering
 koff_myoCa = 0.46e-3 [1/ms]
     in [1/ms]
 kon_myoCa = 13.8 [1/mM/ms]
