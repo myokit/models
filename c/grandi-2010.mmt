@@ -644,25 +644,6 @@ J_SRleak = (Ca_sr - Ca_jn) * 5.348e-6 [1/ms]
     in [mM/ms]
 
 #
-# Sodium buffering
-#
-# Supplement 1.16.1, page 9
-#
-[nabss]
-Bmax_Na_jn = 7.561 [mM]
-    in [mM]
-Bmax_Na_sl = 1.65 [mM]
-    in [mM]
-koff_na = 1e-3 [1/ms]
-    in [1/ms]
-kon_na = 1e-4 [1/mM/ms]
-    in [1/mM/ms]
-dot(NaB_jn) = kon_na * sodium.Na_jn * (Bmax_Na_jn - NaB_jn) - koff_na * NaB_jn
-    in [mM]
-dot(NaB_sl) = kon_na * sodium.Na_sl * (Bmax_Na_sl - NaB_sl) - koff_na * NaB_sl
-    in [mM]
-
-#
 # Cytosolic calcium buffering
 #
 # Supplement 1.16.2, page 9
@@ -739,7 +720,6 @@ dot(SRB) = kon_sr * Ca_i * (Bmax_SR - SRB) - koff_sr * SRB
 [cabss]
 use calcium.Ca_sl, calcium.Ca_jn
 use cell.Vmyo, cell.Vsl, cell.Vjn
-use cabct.J_CaB_cytosol
 J_CaB_jn = dot(SLL_jn) + dot(SLH_jn)
     in [mM/ms]
 J_CaB_sl = dot(SLL_sl) + dot(SLH_sl)
@@ -788,6 +768,52 @@ dot(Ca_sr) = serca.J_serca - (caleak.J_SRleak * Vmyo / Vsr + ryr.J_SRCarel) - do
     in [mM]
 
 #
+# Calcium concentrations
+#
+# Supplement 1.16.7, page 10
+#
+[calcium]
+use cell.C, phys.F
+use cell.Vjn, cell.Vsr, cell.Vsl, cell.Vmyo
+use serca.J_serca, ryr.J_SRCarel, caleak.J_SRleak
+use cabct.J_CaB_cytosol, cabss.J_CaB_jn, cabss.J_CaB_sl
+# Note: J_Ca_jsnl and J_Ca_slmyo have the values from the code here, not those
+# from the CellML files.
+J_Ca_jnsl = 1 [L] / 1.2134e12 [ms]
+    in [L/ms]
+J_Ca_slmyo = 1 [L] / 2.68510e11 [ms]
+    in [L/ms]
+I_Ca_tot_jn = ical.ICaL_Ca_jn + icab.ICaB_jn + ipca.IpCa_jn - 2 * inaca.INaCa_jn
+    in [A/F]
+I_Ca_tot_sl = ical.ICaL_Ca_sl + icab.ICaB_sl + ipca.IpCa_sl - 2 * inaca.INaCa_sl
+    in [A/F]
+dot(Ca_i) = -J_serca * Vsr / Vmyo - J_CaB_cytosol + J_Ca_slmyo / Vmyo * (Ca_sl - Ca_i)
+    in [mM]
+dot(Ca_jn) = -I_Ca_tot_jn * C / (Vjn * 2 * F) + J_Ca_jnsl / Vjn * (Ca_sl - Ca_jn) - J_CaB_jn + J_SRCarel * Vsr / Vjn + J_SRleak * Vmyo / Vjn
+    in [mM]
+dot(Ca_sl) = -I_Ca_tot_sl * C / (Vsl * 2 * F) + J_Ca_jnsl / Vsl * (Ca_jn - Ca_sl) + J_Ca_slmyo / Vsl * (Ca_i - Ca_sl) - J_CaB_sl
+    in [mM]
+
+#
+# Sodium buffering
+#
+# Supplement 1.16.1, page 9
+#
+[nabss]
+Bmax_Na_jn = 7.561 [mM]
+    in [mM]
+Bmax_Na_sl = 1.65 [mM]
+    in [mM]
+koff_na = 1e-3 [1/ms]
+    in [1/ms]
+kon_na = 1e-4 [1/mM/ms]
+    in [1/mM/ms]
+dot(NaB_jn) = kon_na * sodium.Na_jn * (Bmax_Na_jn - NaB_jn) - koff_na * NaB_jn
+    in [mM]
+dot(NaB_sl) = kon_na * sodium.Na_sl * (Bmax_Na_sl - NaB_sl) - koff_na * NaB_sl
+    in [mM]
+
+#
 # Sodium concentrations
 #
 # Supplement 1.16.5, page 10
@@ -821,32 +847,6 @@ dot(Na_i) = J_Na_slmyo / Vmyo * (Na_sl - Na_i)
 I_K_tot = ito.Ito + ikr.IKr + iks.IKs + ik1.IK1 - 2 * inak.INaK + ical.ICaL_K + ikp.IKp
     in [A/F]
 
-#
-# Calcium concentrations
-#
-# Supplement 1.16.7, page 10
-#
-[calcium]
-use cell.C, phys.F
-use cell.Vjn, cell.Vsr, cell.Vsl, cell.Vmyo
-use serca.J_serca, ryr.J_SRCarel, caleak.J_SRleak
-use cabct.J_CaB_cytosol, cabss.J_CaB_jn, cabss.J_CaB_sl
-# Note: J_Ca_jsnl and J_Ca_slmyo have the values from the code here, not those
-# from the CellML files.
-J_Ca_jnsl = 1 [L] / 1.2134e12 [ms]
-    in [L/ms]
-J_Ca_slmyo = 1 [L] / 2.68510e11 [ms]
-    in [L/ms]
-I_Ca_tot_jn = ical.ICaL_Ca_jn + icab.ICaB_jn + ipca.IpCa_jn - 2 * inaca.INaCa_jn
-    in [A/F]
-I_Ca_tot_sl = ical.ICaL_Ca_sl + icab.ICaB_sl + ipca.IpCa_sl - 2 * inaca.INaCa_sl
-    in [A/F]
-dot(Ca_i) = -J_serca * Vsr / Vmyo - J_CaB_cytosol + J_Ca_slmyo / Vmyo * (Ca_sl - Ca_i)
-    in [mM]
-dot(Ca_jn) = -I_Ca_tot_jn * C / (Vjn * 2 * F) + J_Ca_jnsl / Vjn * (Ca_sl - Ca_jn) - J_CaB_jn + J_SRCarel * Vsr / Vjn + J_SRleak * Vmyo / Vjn
-    in [mM]
-dot(Ca_sl) = -I_Ca_tot_sl * C / (Vsl * 2 * F) + J_Ca_jnsl / Vsl * (Ca_jn - Ca_sl) + J_Ca_slmyo / Vsl * (Ca_i - Ca_sl) - J_CaB_sl
-    in [mM]
 
 [[protocol]]
 # Level  Start    Length   Period   Multiplier
