@@ -1,6 +1,6 @@
 [[model]]
 name: tentusscher-2004
-version: 20230425
+version: 20240813
 mmt_authors: Michael Clerx
 display_name: Ten Tusscher et al., 2004
 desc: """
@@ -9,7 +9,9 @@ desc: """
 
     The model contains a switch for endo, epi and mid-myocardial modes.
 
-    This implementation is based on the CellML version on PMR [2].
+    This implementation is based on the CellML version on PMR by
+    Catherine Lloyd [2], but with substantial rewrites and including the
+    unit fixes described in [3].
 
     [1] Ten Tusscher, K. H. W. J., Noble, D., Noble, P. J., Panfilov, A.
         V. (2004). A model for human ventricular tissue. American Journal of
@@ -18,55 +20,10 @@ desc: """
 
     [2] https://models.physiomeproject.org/e/80c
 
-    ---------------------------------------------------------------------------
+    [3] Clerx, M., Barral, Y., Agrawal, A. & Mirams, G. R. (2020)
+        TNNP unit fixes
+        https://models.cellml.org/workspace/604/file/de5a4e600b57c8b9b0bd477695648c82351bc6dd/TNNP_unit_fixes.pdf   
 
-    A Model For Human Ventricular Tissue
-
-    Catherine Lloyd
-    Auckland Bioengineering Institute, The University of Auckland
-
-    Model Status
-
-    This variant of the model was created by Penny Noble of Oxford University,
-    and represents the parameters given for the epicardial cell variant in Ten
-    Tusscher et al. 2004. A stimulus protocol component has been added to the
-    model to allow simulation of trains of action potentials. This file is
-    known to run in OpenCell and COR to recreate the published results. The
-    units have been checked and they are consistent.
-
-    Model Structure
-
-    ABSTRACT: The experimental and clinical possibilities for studying cardiac
-    arrhythmias in human ventricular myocardium are very limited. Therefore,
-    the use of alternative methods such as computer simulations is of great
-    importance. In this article we introduce a mathematical model of the action
-    potential of human ventricular cells that, while including a high level of
-    electrophysiological detail, is computationally cost-effective enough to be
-    applied in large-scale spatial simulations for the study of reentrant
-    arrhythmias. The model is based on recent experimental data on most of the
-    major ionic currents: the fast sodium, L-type calcium, transient outward,
-    rapid and slow delayed rectifier, and inward rectifier currents. The model
-    includes a basic calcium dynamics, allowing for the realistic modeling of
-    calcium transients, calcium current inactivation, and the contraction
-    staircase. We are able to reproduce human epicardial, endocardial, and M
-    cell action potentials and show that differences can be explained by
-    differences in the transient outward and slow delayed rectifier currents.
-    Our model reproduces the experimentally observed data on action potential
-    duration restitution, which is an important characteristic for reentrant
-    arrhythmias. The conduction velocity restitution of our model is broader
-    than in other models and agrees better with available data. Finally, we
-    model the dynamics of spiral wave rotation in a two-dimensional sheet of
-    human ventricular tissue and show that the spiral wave follows a complex
-    meandering pattern and has a period of 265 ms. We conclude that the
-    proposed model reproduces a variety of electrophysiological behaviors and
-    provides a basis for studies of reentrant arrhythmias in human ventricular
-    tissue.
-
-    The original paper reference is cited below:
-
-    A model for human ventricular tissue, K.H.W.J. ten Tusscher, D. Noble, P.J.
-    Noble, and A.V. Panfilov, 2004,
-    American Journal of Physiology, 286, H1573-H1589. PubMed ID: 14656705
     """
 # Initial values (ordered as in the original code)
 membrane.V   = -86.2
@@ -91,15 +48,18 @@ jrel.g       = 1
 # Simulator variables
 #
 [engine]
-pace = 0 bind pace
-time = 0 [ms] bind time
+time = 0 [ms]
     in [ms]
+    bind time
+pace = 0
+    bind pace
 
 #
 # Membrane potential
 #
 [membrane]
-dot(V) = -(i_ion + stimulus.i_stim + i_diff)
+use stimulus.i_stim
+dot(V) = -(i_ion + i_stim + i_diff)
     in [mV]
     label membrane_potential
 i_ion = (+ ina.INa
@@ -130,7 +90,7 @@ amplitude = -52 [A/F]
     in [A/F]
 
 #
-# Cell parameters
+# Cell properties
 #
 [cell]
 type = 1
@@ -325,9 +285,9 @@ dot(fCa) = if(inf > fCa and V > -60 [mV], 0 [mS/uF], (inf - fCa) / tau)
 [inak]
 use membrane.V, phys.FRT
 use extra.Ko, sodium.Nai
-INaK = P_NaK * Ko / (Ko + K_mk) * Nai / (Nai + K_mNa) / (1 + 0.1245 * exp(-0.1 * V * FRT) + 0.0353 * exp(-V * FRT))
+INaK = PNaK * Ko / (Ko + K_mk) * Nai / (Nai + K_mNa) / (1 + 0.1245 * exp(-0.1 * V * FRT) + 0.0353 * exp(-V * FRT))
     in [A/F]
-P_NaK = 1.362 [A/F]
+PNaK = 1.362 [A/F]
     in [A/F]
 K_mNa = 40 [mM]
     in [mM]
@@ -368,7 +328,7 @@ KpCa = 0.0005 [mM]
     in [mM]
 
 #
-# Potassiump pump
+# Potassium pump
 #
 [ipk]
 use membrane.V, nernst.EK
@@ -481,7 +441,7 @@ dot(Cai) = ddt_Cai_total * f_JCai_free
 dot(CaSR) = ddt_CaSR_total * f_JCaSR_free
     in [mM]
 # Derivative of total calcium concentrations (free + buffered)
-ddt_Cai_total = -(ical.ICaL + icab.ICab + ipca.IpCa - 2 * inaca.INaCa) / (2 * Vc * F) * Cm + Jleak - Jup + Jrel
+ddt_Cai_total = -(ical.ICaL + icab.ICab + ipca.IpCa - 2 * inaca.INaCa) * Cm / (2 * Vc * F) + Jleak - Jup + Jrel
     in [mM/ms]
 ddt_CaSR_total = Vc / Vsr * (Jup - (Jrel + Jleak))
     in [mM/ms]
@@ -520,7 +480,7 @@ IK_total = ik1.IK1 + ito.Ito + ikr.IKr + iks.IKs + ipk.IpK + stimulus.i_stim - 2
 
 [[protocol]]
 # Level  Start    Length   Period   Multiplier
-1.0      10.0     1.0      1000.0   0
+1        10       1        1000.0   0
 
 [[script]]
 import matplotlib.pyplot as plt

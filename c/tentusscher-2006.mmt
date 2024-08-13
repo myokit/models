@@ -1,15 +1,17 @@
 [[model]]
 name: tentusscher-2006
-version: 20230425
+version: 20240813
 mmt_authors: Michael Clerx
 display_name: Ten Tusscher & Panfilov, 2006
 desc: """
     The 2006 update of the human ventricular myocyte AP model by ten Tusscher
-     et al. [1], adapted from the earlier 2004 model [2].
+    et al. [1], adapted from the earlier 2004 model [2].
 
     The model contains a switch for endo, epi and mid-myocardial modes.
 
-    This implementation is based on the CellML version on PMR [3].
+    This implementation is based on the CellML version on PMR by
+    Penny Noble [3], but with substantial rewrites and including the
+    unit fixes described in [4].
 
     References:
 
@@ -25,55 +27,10 @@ desc: """
 
     [3] https://models.physiomeproject.org/e/80d
 
-    The original CellML model meta data follows below.
+    [4] Clerx, M., Barral, Y., Agrawal, A. & Mirams, G. R. (2020)
+        TNNP unit fixes
+        https://models.cellml.org/workspace/604/file/de5a4e600b57c8b9b0bd477695648c82351bc6dd/TNNP_unit_fixes.pdf   
 
-    ---------------------------------------------------------------------------
-
-    Alternans and spiral breakup in a human ventricular tissue model
-
-    Penny Noble
-    Oxford University Cardiac Electrophysiology Group
-
-    Model Status
-
-    This is the EPICARDIAL CELL VARIANT of the model. This model was created by
-    Penny Noble of Oxford University and is known to read in COR and PCEnv. A
-    stimulus protocol has been added that allows the model to simulate multiple
-    action potentials at 1Hz.
-
-    Model Structure
-
-    ABSTRACT: Ventricular fibrillation (VF) is one of the main causes of death
-    in the Western world. According to one hypothesis, the chaotic excitation
-    dynamics during VF are the result of dynamical instabilities in action
-    potential duration (APD) the occurrence of which requires that the slope of
-    the APD restitution curve exceeds 1. Other factors such as electrotonic
-    coupling and cardiac memory also determine whether these instabilities can
-    develop. In this paper we study the conditions for alternans and spiral
-    breakup in human cardiac tissue. Therefore, we develop a new version of our
-    human ventricular cell model, which is based on recent experimental
-    measurements of human APD restitution and includes a more extensive
-    description of intracellular calcium dynamics. We apply this model to study
-    the conditions for electrical instability in single cells, for reentrant
-    waves in a ring of cells, and for reentry in two-dimensional sheets of
-    ventricular tissue. We show that an important determinant for the onset of
-    instability is the recovery dynamics of the fast sodium current. Slower
-    sodium current recovery leads to longer periods of spiral wave rotation and
-    more gradual conduction velocity restitution, both of which suppress
-    restitution-mediated instability. As a result, maximum restitution slopes
-    considerably exceeding 1 (up to 1.5) may be necessary for electrical
-    instability to occur. Although slopes necessary for the onset of
-    instabilities found in our study exceed 1, they are within the range of
-    experimentally measured slopes. Therefore, we conclude that steep APD
-    restitution-mediated instability is a potential mechanism for VF in the
-    human heart.
-
-    The original paper reference is cited below:
-
-    Alternans and spiral breakup in a human ventricular tissue model, K.H.W.J.
-    ten Tusscher, A.V. Panfilov, Sep 2006,
-    American Journal of Physiology, Heart and Circulatory Physiology , 291 3,
-    H1088-1100. PubMed ID: 16565318
     """
 # Initial values (ordered as in the original code)
 membrane.V   = -85.23
@@ -94,7 +51,7 @@ ical.d       = 3.373e-5
 ical.f       = 0.7888
 ical.f2      = 0.9755
 ical.fCaSS   = 0.9953
-jrel.R_prime = 0.9073
+jrel.R       = 0.9073
 
 #
 # Simulator variables
@@ -146,7 +103,7 @@ amplitude = -52 [A/F]
     in [A/F]
 
 #
-# Cell parameters
+# Cell properties
 #
 [cell]
 type = 1
@@ -361,9 +318,9 @@ dot(fCaSS) = (inf - fCaSS) / tau
 [inak]
 use membrane.V, phys.FRT
 use extra.Ko, sodium.Nai
-INaK = P_NaK * Ko / (Ko + K_mk) * Nai / (Nai + K_mNa) / (1 + 0.1245 * exp(-0.1 * V * FRT) + 0.0353 * exp(-V * FRT))
+INaK = PNaK * Ko / (Ko + K_mk) * Nai / (Nai + K_mNa) / (1 + 0.1245 * exp(-0.1 * V * FRT) + 0.0353 * exp(-V * FRT))
     in [A/F]
-P_NaK = 2.724 [A/F]
+PNaK = 2.724 [A/F]
     in [A/F]
 K_mNa = 40 [mM]
     in [mM]
@@ -484,27 +441,23 @@ use membrane.V
 use calcium.CaSS, calcium.CaSR
 Jrel = Vrel * O * (CaSR - CaSS)
     in [mM/ms]
-Vrel = 0.102 [mS/uF]
-    in [mS/uF]
-O = k1 * CaSS^2 * R_prime / (k3 + k1 * CaSS^2)
+Vrel = 0.102 [1/ms]
+    in [1/ms]
 kcasr = max_sr - (max_sr - min_sr) / (1 + (EC / CaSR)^2)
     max_sr = 2.5
     min_sr = 1
     EC = 1.5 [mM]
         in [mM]
-k1 = k1_prime / kcasr
+k1 = 0.15 [1/mM^2/ms] / kcasr
     in [1/mM^2/ms]
-k1_prime = 0.15 [1/mM^2/ms]
-    in [1/mM^2/ms]
-k2 = k2_prime * kcasr
-    in [1/mM/ms]
-k2_prime = 0.045 [1/mM/ms]
+k2 = 0.045 [1/mM/ms] * kcasr
     in [1/mM/ms]
 k3 = 0.06 [mS/uF]
     in [mS/uF]
 k4 = 0.005 [mS/uF]
     in [mS/uF]
-dot(R_prime) = -k2 * CaSS * R_prime + k4 * (1 - R_prime)
+dot(R) = -k2 * CaSS * R + k4 * (1 - R)
+O = k1 * CaSS^2 * R / (k3 + k1 * CaSS^2)
 
 #
 # Leak from the SR
@@ -535,8 +488,8 @@ K_up = 0.00025 [mM]
 use calcium.Cai, calcium.CaSS
 Jxfer = Vxfer * (CaSS - Cai)
     in [mM/ms]
-Vxfer = 0.0038 [mS/uF]
-    in [mS/uF]
+Vxfer = 0.0038 [1/ms]
+    in [1/ms]
 
 #
 # Calcium dynamics
@@ -604,7 +557,7 @@ IK_total = ik1.IK1 + ito.Ito + ikr.IKr + iks.IKs + ipk.IpK + stimulus.i_stim - 2
 
 [[protocol]]
 # Level  Start    Length   Period   Multiplier
-1.0      10.0     1.0      1000.0   0
+1        10       1        1000.0   0
 
 [[script]]
 import matplotlib.pyplot as plt
