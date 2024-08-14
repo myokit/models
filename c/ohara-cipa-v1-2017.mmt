@@ -792,8 +792,6 @@ gNaCa = 0.0008 [C/F]
 INaCa = 0.8 * fNaCa * gNaCa * allo * (JncxNa + 2 * JncxCa)
     in [A/F]
     desc: Sodium/Calcium exchange current
-INaCa_total = INaCa + inacass.INaCa_ss
-    in [A/F]
 
 #
 # INaCa_ss: Sodium/calcium exchanger current into the L-type subspace
@@ -817,7 +815,7 @@ h9 = 1 / h7
 h10 = inaca.kasymm + 1 + Na_o / kna1 * (1 + Na_o / kna2)
 h11 = Na_o * Na_o / (h10 * kna1 * kna2)
 h12 = 1 / h10
-# Parameters K
+# Parameters k
 k1 = h12 * Ca_o * inaca.kcaon
     in [1/s]
 k2 = inaca.kcaoff
@@ -952,7 +950,7 @@ r = (a1 * a2 * a3 * a4 - b1 * b2 * b3 * b4) / (x1 + x2 + x3 + x4)
 JnakNa = 3 * r
     in [1/s]
 JnakK = -2 * r
-    in [1/s]    
+    in [1/s]
 fNaK = piecewise(cell.mode == 0, 1, cell.mode == 1, 0.9, 0.7)
 PNaK = 30 [C/F]
     in [C/F]
