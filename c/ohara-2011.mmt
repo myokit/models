@@ -1,6 +1,6 @@
 [[model]]
 name: ohara-2011
-version: 20240624
+version: 20240814
 mmt_authors: Michael Clerx
 display_name: O'Hara et al., 2011
 desc: """
@@ -12,7 +12,8 @@ desc: """
     This implementation is based on the original Matlab code provided by the
     authors. It was checked against the original code by comparing the
     calculated derivatives. After this, two small changes to the INaK 
-    formulation were made (see below).
+    formulation were made (see below). The equations for phi in ICaL were
+    updated using l'hopital's rule.
 
     Comments and errata on [1]:
     
@@ -394,6 +395,8 @@ use calcium.Ca_ss, potassium.K_ss, sodium.Na_ss
 vf = V * phys.FRT
 vff = V * phys.FFRT
     in [C/mol]
+evf = exp(vf)
+evf2 = exp(2 * vf)    
 # Activation
 sd = 1 / (1 + exp((V + 3.94 [mV]) / -4.23 [mV]))
     desc: Steady-state value for activation gate of ICaL
@@ -470,11 +473,17 @@ dot(nca) = anca * k2n - nca * km2n
         in [1/ms]
     anca = 1 / (k2n / km2n + (1 + Kmn / Ca_ss)^4)
 # Total currents through L-type calcium channels
-PhiCaL = if(vf == 0, 1 [C/mol] * 4 * (Ca_ss - 0.341 * Ca_o), 4 * vff * (Ca_ss * exp(2 * vf) - 0.341 * Ca_o) / (exp(2 * vf) - 1))
+PhiCaL = if(abs(vf) < 1e-6, 
+            2 * phys.F * (Ca_ss - 0.341 * Ca_o), 
+            4 * vff * (Ca_ss * evf2 - 0.341 * Ca_o) / (evf2 - 1))
     in [mC/L]
-PhiCaNa = if(vf == 0, 1 [C/mol] * 1 * (0.75 * Na_ss - 0.75 * Na_o),  1 * vff * (0.75 * Na_ss * exp(1 * vf) - 0.75 * Na_o) / (exp(1 * vf) - 1))
+PhiCaNa = if(abs(vf) < 1e-6, 
+             0.75 * phys.F * (Na_ss - Na_o),
+             0.75 * vff * (Na_ss * evf - Na_o) / (evf - 1))
     in [mC/L]
-PhiCaK = if(vf == 0, 1 [C/mol] * 1 * (0.75 * K_ss - 0.75 * K_o), 1 * vff * (0.75 * K_ss * exp(1 * vf) - 0.75 * K_o) / (exp(1 * vf) - 1))
+PhiCaK = if(abs(vf) < 1e-6, 
+            0.75 * phys.F * (K_ss - K_o), 
+            0.75 * vff * (K_ss * evf - K_o) / (evf - 1))
     in [mC/L]
 PCa_base = 0.0001 [L/ms/F]
     in [L/ms/F]
