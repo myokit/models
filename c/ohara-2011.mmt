@@ -623,16 +623,16 @@ kna2 = 5 [mM]
 kna3 = 88.12 [mM]
     in [mM]
 kasymm = 12.5
-wna = 6e4 [Hz]
-    in [Hz]
-wca = 6e4 [Hz]
-    in [Hz]
-wnaca = 5e3 [Hz]
-    in [Hz]
-kcaon = 1.5e6 [mM/ms]
-    in [mM/ms]
-kcaoff = 5e3 [mM/ms]
-    in [mM/ms]
+wna = 6e4 [1/s]
+    in [1/s]
+wca = 6e4 [1/s]
+    in [1/s]
+wnaca = 5e3 [1/s]
+    in [1/s]
+kcaon = 1.5e6 [1/mM/s]
+    in [1/mM/s]
+kcaoff = 5e3 [1/s]
+    in [1/s]
 qna = 0.5224
 qca = 0.167
 hca = exp(qca * V * phys.FRT)
@@ -651,38 +651,38 @@ h10 = kasymm + 1 + Na_o / kna1 * (1 + Na_o / kna2)
 h11 = Na_o * Na_o / (h10 * kna1 * kna2)
 h12 = 1 / h10
 # Parameters k
-k1 = h12 * Ca_o * kcaon * 1 [1/M/mM]
-    in [Hz]
-k2 = kcaoff * 1 [1/M]
-    in [Hz]
+k1 = h12 * Ca_o * kcaon
+    in [1/s]
+k2 = kcaoff
+    in [1/s]
 k3p = h9 * wca
-    in [Hz]
+    in [1/s]
 k3pp = h8 * wnaca
-    in [Hz]
+    in [1/s]
 k3 = k3p + k3pp
-    in [Hz]
+    in [1/s]
 k4p = h3 * wca / hca
-    in [Hz]
+    in [1/s]
 k4pp = h2 * wnaca
-    in [Hz]
+    in [1/s]
 k4 = k4p + k4pp
-    in [Hz]
-k5 = kcaoff * 1 [1/M]
-    in [Hz]
-k6 = h6 * Ca_i * kcaon * 1 [1/M/mM]
-    in [Hz]
+    in [1/s]
+k5 = kcaoff
+    in [1/s]
+k6 = h6 * Ca_i * kcaon
+    in [1/s]
 k7 = h5 * h2 * wna
-    in [Hz]
+    in [1/s]
 k8 = h8 * h11 * wna
-    in [Hz]
+    in [1/s]
 x1 = k2 * k4 * (k7 + k6) + k5 * k7 * (k2 + k3)
-    in [Hz^3]
+    in [s^-3]
 x2 = k1 * k7 * (k4 + k5) + k4 * k6 * (k1 + k8)
-    in [Hz^3]
+    in [s^-3]
 x3 = k1 * k3 * (k7 + k6) + k8 * k6 * (k2 + k3)
-    in [Hz^3]
+    in [s^-3]
 x4 = k2 * k8 * (k4 + k5) + k3 * k5 * (k1 + k8)
-    in [Hz^3]
+    in [s^-3]
 E1 = x1 / (x1 + x2 + x3 + x4)
 E2 = x2 / (x1 + x2 + x3 + x4)
 E3 = x3 / (x1 + x2 + x3 + x4)
@@ -724,38 +724,38 @@ h10 = inaca.kasymm + 1 + Na_o / kna1 * (1 + Na_o / kna2)
 h11 = Na_o * Na_o / (h10 * kna1 * kna2)
 h12 = 1 / h10
 # Parameters K
-k1 = h12 * Ca_o * inaca.kcaon * 1 [1/M/mM]
-    in [Hz]
-k2 = inaca.kcaoff * 1 [1/M]
-    in [Hz]
+k1 = h12 * Ca_o * inaca.kcaon
+    in [1/s]
+k2 = inaca.kcaoff
+    in [1/s]
 k3p = h9 * inaca.wca
-    in [Hz]
+    in [1/s]
 k3pp = h8 * inaca.wnaca
-    in [Hz]
+    in [1/s]
 k3 = k3p + k3pp
-    in [Hz]
+    in [1/s]
 k4p = h3 * inaca.wca / inaca.hca
-    in [Hz]
+    in [1/s]
 k4pp = h2 * inaca.wnaca
-    in [Hz]
+    in [1/s]
 k4 = k4p + k4pp
-    in [Hz]
-k5 = inaca.kcaoff * 1 [1/M]
-    in [Hz]
-k6 = h6 * Ca_ss * inaca.kcaon * 1 [1/M/mM]
-    in [Hz]
+    in [1/s]
+k5 = inaca.kcaoff
+    in [1/s]
+k6 = h6 * Ca_ss * inaca.kcaon
+    in [1/s]
 k7 = h5 * h2 * inaca.wna
-    in [Hz]
+    in [1/s]
 k8 = h8 * h11 * inaca.wna
-    in [Hz]
+    in [1/s]
 x1 = k2 * k4 * (k7 + k6) + k5 * k7 * (k2 + k3)
-    in [Hz^3]
+    in [s^-3]
 x2 = k1 * k7 * (k4 + k5) + k4 * k6 * (k1 + k8)
-    in [Hz^3]
+    in [s^-3]
 x3 = k1 * k3 * (k7 + k6) + k8 * k6 * (k2 + k3)
-    in [Hz^3]
+    in [s^-3]
 x4 = k2 * k8 * (k4 + k5) + k3 * k5 * (k1 + k8)
-    in [Hz^3]
+    in [s^-3]
 E1 = x1 / (x1 + x2 + x3 + x4)
 E2 = x2 / (x1 + x2 + x3 + x4)
 E3 = x3 / (x1 + x2 + x3 + x4)
