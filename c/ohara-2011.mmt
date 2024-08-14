@@ -7,19 +7,19 @@ desc: """
     The 2011 model for the undiseased human ventricular AP and calcium
     transient by O'Hara et al. [1].
 
-    The model builds on several other models, including [2]. 
+    The model builds on several other models, including [2].
 
     This implementation is based on the original Matlab code provided by the
     authors. It was checked against the original code by comparing the
-    calculated derivatives. After this, two small changes to the INaK 
+    calculated derivatives. After this, two small changes to the INaK
     formulation were made (see below). The equations for phi in ICaL were
     updated using l'hopital's rule.
 
     Comments and errata on [1]:
-    
+
     1. The comment "Publisher's Note: Errors in Text S1" describes three issues
        in the supplement text, which are not present in the published model
-       code. Similarly, "Publisher's Note: Error in Figure 1, panel C, 5th 
+       code. Similarly, "Publisher's Note: Error in Figure 1, panel C, 5th
        subplot" and "Publisher's Note: Rate dependent APD curves for TP model
        were arranged incorrectly in Figure 18A" describe issues in the figures.
        No changes to the Myokit model were made based on these comments.
@@ -34,10 +34,10 @@ desc: """
        describes two errors in the INaK equations, which do not significantly
        affect model output under baseline conditions. Both are corrected in
        this Myokit model.
-    
-    Where possible, the page of the supplement to [1] that describes each 
+
+    Where possible, the page of the supplement to [1] that describes each
     component has been indicated.
-    
+
     References:
 
     [1] O'Hara, T., Virág, L., Varró, A., & Rudy, Y. (2011). Simulation of the
@@ -396,7 +396,7 @@ vf = V * phys.FRT
 vff = V * phys.FFRT
     in [C/mol]
 evf = exp(vf)
-evf2 = exp(2 * vf)    
+evf2 = exp(2 * vf)
 # Activation
 sd = 1 / (1 + exp((V + 3.94 [mV]) / -4.23 [mV]))
     desc: Steady-state value for activation gate of ICaL
@@ -473,16 +473,16 @@ dot(nca) = anca * k2n - nca * km2n
         in [1/ms]
     anca = 1 / (k2n / km2n + (1 + Kmn / Ca_ss)^4)
 # Total currents through L-type calcium channels
-PhiCaL = if(abs(vf) < 1e-6, 
-            2 * phys.F * (Ca_ss - 0.341 * Ca_o), 
+PhiCaL = if(abs(vf) < 1e-6,
+            2 * phys.F * (Ca_ss - 0.341 * Ca_o),
             4 * vff * (Ca_ss * evf2 - 0.341 * Ca_o) / (evf2 - 1))
     in [mC/L]
-PhiCaNa = if(abs(vf) < 1e-6, 
+PhiCaNa = if(abs(vf) < 1e-6,
              0.75 * phys.F * (Na_ss - Na_o),
              0.75 * vff * (Na_ss * evf - Na_o) / (evf - 1))
     in [mC/L]
-PhiCaK = if(abs(vf) < 1e-6, 
-            0.75 * phys.F * (K_ss - K_o), 
+PhiCaK = if(abs(vf) < 1e-6,
+            0.75 * phys.F * (K_ss - K_o),
             0.75 * vff * (K_ss * evf - K_o) / (evf - 1))
     in [mC/L]
 PCa_base = 0.0001 [L/ms/F]
@@ -610,7 +610,9 @@ IK1 = fK1 * gK1 * sqrt(K_o / 1 [mM]) * r * x * (V - rev.EK)
 
 #
 # INaCa: Sodium/calcium exchange current
-# page 12
+# Page 12
+#
+# Adapted from Kang & Hilgemann 2004.
 #
 [inaca]
 use membrane.V
@@ -785,7 +787,7 @@ MgATP = 9.8 [mM]    # Original
     in [mM]
     desc: Intracellular MgATP concentration
 MgADP = 0.05 [mM]   # Original
-    in [mM] 
+    in [mM]
     desc: Intracellular MgADP concentration
 eP = 4.2 [mM]       # Original
     in [mM]
@@ -797,7 +799,7 @@ H = 1e-4 [mM]       # Corrected (see below)
 Khp = 1.698e-7 [mM] # This value is suspicious! Smith and crampin paper says 6.77. Cellml says 1.69e-4
     in [mM]
     desc: Dissociation constant relating [HPi] and [H]
-Kxkur = 292 [mM]    # Original    
+Kxkur = 292 [mM]    # Original
     in [mM]
     desc: Dissociation constant relating [KPi] and [K]i
 Knap = 224 [mM]     # Original
@@ -837,7 +839,7 @@ Kmgatp = 1.698e-7 [mM]  # Refit from 2.51
     desc: Intracellular MgATP dissociation constant
 delta = -0.155          # Refit from -0.031
     desc: """A constant that "determines how the voltage dependence is
-             partitioned between intra and extracellular Na+ dissociation 
+             partitioned between intra and extracellular Na+ dissociation
              reactions."""
 # Equations 14: Voltage-dependent Na+ dissociation constants
 Knai = Knai0 * exp(delta * V * phys.FRT / 3)
@@ -885,7 +887,7 @@ r = (a1 * a2 * a3 * a4 - b1 * b2 * b3 * b4) / (x1 + x2 + x3 + x4)
 JnakNa = 3 * r
     in [1/s]
 JnakK = -2 * r
-    in [1/s]    
+    in [1/s]
 fNaK = piecewise(cell.mode == 0, 1, cell.mode == 1, 0.9, 0.7)
 PNaK = 30 [C/F]
     in [C/F]
