@@ -231,9 +231,9 @@ ENa = phys.RTF * log(extra.Na_o / sodium.Na_i)
 EK = phys.RTF * log(extra.K_o / potassium.K_i)
     in [mV]
     desc: Reversal potential for Potassium currents
-PNaK = 0.01833
+PKNa = 0.01833
     desc: Permeability ratio K+ to Na+
-EKs = phys.RTF * log((extra.K_o + PNaK * extra.Na_o) / (potassium.K_i + PNaK * sodium.Na_i))
+EKs = phys.RTF * log((extra.K_o + PKNa * extra.Na_o) / (potassium.K_i + PKNa * sodium.Na_i))
     in [mV]
     desc: Reversal potential for IKs
 EKshift = 8 [mV]

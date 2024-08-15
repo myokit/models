@@ -219,13 +219,13 @@ K_o = 5.4 [mM] : Extracellular K+ concentration
 [rev]
 ENa = phys.RTF * log(extra.Na_o / sodium.Na_i)
     in [mV]
-    desc: Reversal potential for Sodium currents
+    desc: Reversal potential for sodium currents
 EK = phys.RTF * log(extra.K_o / potassium.K_i)
     in [mV]
-    desc: Reversal potential for Potassium currents
-PNaK = 0.01833
+    desc: Reversal potential for potassium currents
+PKNa = 0.01833
     desc: Permeability ratio K+ to Na+
-EKs = phys.RTF * log((extra.K_o + PNaK * extra.Na_o) / (potassium.K_i + PNaK * sodium.Na_i))
+EKs = phys.RTF * log((extra.K_o + PKNa * extra.Na_o) / (potassium.K_i + PKNa * sodium.Na_i))
     in [mV]
     desc: Reversal potential for IKs
 
@@ -406,11 +406,6 @@ Ito = fto * gto * (V - rev.EK) * ((1 - camk.f) * a * i + camk.f * ap * ip)
 use membrane.V
 use extra.Ca_o, extra.K_o, extra.Na_o
 use calcium.Ca_ss, potassium.K_ss, sodium.Na_ss
-vf = V * phys.FRT
-vff = V * phys.FFRT
-    in [C/mol]
-evf = exp(vf)
-evf2 = exp(2 * vf)    
 # Activation
 sd = 1 / (1 + exp((V + 3.94 [mV]) / -4.23 [mV]))
     desc: Steady-state value for activation gate of ICaL
@@ -486,48 +481,49 @@ dot(nca) = anca * k2n - nca * km2n
     km2n = jca * 1 [1/ms]
         in [1/ms]
     anca = 1 / (k2n / km2n + (1 + Kmn / Ca_ss)^4)
-# Total currents through L-type calcium channels
-PhiCaL = if(abs(vf) < 1e-6, 
-            2 * phys.F * (Ca_ss - 0.341 * Ca_o), 
-            4 * vff * (Ca_ss * evf2 - 0.341 * Ca_o) / (evf2 - 1))
+# Permeabilities
+vf = V * phys.FRT
+vff = V * phys.FFRT
+    in [C/mol]
+evf = exp(vf)
+evf2 = exp(2 * vf)
+PhiCa = if(abs(vf) < 1e-6,
+           2 * phys.F * (Ca_ss - 0.341 * Ca_o),
+           4 * vff * (Ca_ss * evf2 - 0.341 * Ca_o) / (evf2 - 1))
     in [mC/L]
-PhiCaNa = if(abs(vf) < 1e-6, 
-             0.75 * phys.F * (Na_ss - Na_o),
-             0.75 * vff * (Na_ss * evf - Na_o) / (evf - 1))
+PhiNa = if(abs(vf) < 1e-6,
+           0.75 * phys.F * (Na_ss - Na_o),
+           0.75 * vff * (Na_ss * evf - Na_o) / (evf - 1))
     in [mC/L]
-PhiCaK = if(abs(vf) < 1e-6, 
-            0.75 * phys.F * (K_ss - K_o), 
-            0.75 * vff * (K_ss * evf - K_o) / (evf - 1))
+PhiK = if(abs(vf) < 1e-6,
+          0.75 * phys.F * (K_ss - K_o),
+          0.75 * vff * (K_ss * evf - K_o) / (evf - 1))
     in [mC/L]
-PCa_base = 0.0001 [L/ms/F]
-    in [L/ms/F]
+PCa_base = 0.0001 [L/F/ms]
+    in [L/F/ms]
     label gCaL
 PCa = PCa_base * piecewise(cell.mode == 0, 1, cell.mode == 1, 1.2, 2.5) * 1.007
-    in [L/ms/F]
-PCap = 1.1 * PCa
-    in [L/ms/F]
-PCaNa = 0.00125 * PCa
-    in [L/ms/F]
-PCaK = 3.574e-4 * PCa
-    in [L/ms/F]
-PCaNap = 0.00125 * PCap
-    in [L/ms/F]
-PCaKp = 3.574e-4 * PCap
-    in [L/ms/F]
-g = d * (f  * (1 - nca) + jca * fca  * nca)
-    desc: Conductivity of non-phosphorylated ICaL
-gp = d * (fp * (1 - nca) + jca * fcap * nca)
-    desc: Conductivity of phosphorylated ICaL
-ICaL = (1 - camk.f) * PCa * PhiCaL * g + camk.f * PCap * PhiCaL * gp
+    in [L/F/ms]
+PNa = 0.00125 * PCa
+    in [L/F/ms]
+PK = 3.574e-4 * PCa
+    in [L/F/ms]
+Pp = 1.1
+    desc: Permeation multiplication factor for phosphorylated channel    
+# Conductivity (weighted sum of gates)
+g = d * ((f  * (1 - nca) + jca * fca * nca) * (1 - camk.f) +
+         (fp * (1 - nca) + jca * fcap * nca) * camk.f * Pp)
+# Current
+ICaLCa = g * PCa * PhiCa
     in [A/F]
     desc: Ca-component of L-type calcium current
-ICaNa = (1 - camk.f) * PCaNa * PhiCaNa * g + camk.f * PCaNap * PhiCaNa * gp
+ICaLNa = g * PNa * PhiNa
     in [A/F]
     desc: Na-component of L-type calcium current
-ICaK = (1 - camk.f) * PCaK * PhiCaK * g + camk.f * PCaKp * PhiCaK * gp
+ICaLK = g * PK * PhiK
     in [A/F]
     desc: K-component of L-type calcium current
-ICaL_total = ICaL + ICaK + ICaNa
+ICaL = ICaLCa + ICaLK + ICaLNa
     in [A/F]
     label ICaL
 
@@ -1025,7 +1021,7 @@ dot(Jrelnp) = (inf - Jrelnp) / tau
             in [ms]
     inf = base * if(cell.mode == 2, 1.7, 1)
         in [mM/ms]
-        base = -1 [mM/ms/mV] * a_rel * ical.ICaL / (1 + (1.5 [mM] / Ca_jsr)^8)
+        base = -1 [mM/ms/mV] * a_rel * ical.ICaLCa / (1 + (1.5 [mM] / Ca_jsr)^8)
             in [mM/ms]
 btp = 1.25 * bt
     in [ms]
@@ -1039,7 +1035,7 @@ dot(Jrelp) = (inf - Jrelp) / tau
             in [ms]
     inf = base * if(cell.mode == 2, 1.7, 1)
         in [mM/ms]
-        base = -1 [mM/ms/mV] * a_relp * ical.ICaL / (1 + (1.5 [mM] / Ca_jsr)^8)
+        base = -1 [mM/ms/mV] * a_relp * ical.ICaLCa / (1 + (1.5 [mM] / Ca_jsr)^8)
             in [mM/ms]
 Jrel = (1 - camk.f) * Jrelnp + camk.f * Jrelp
     desc: SR Calcium release flux via Ryanodine receptor
@@ -1088,7 +1084,7 @@ INa_tot = ina.INa + inal.INaL + inab.INab + 3 * inaca.INaCa + 3 * inak.INaK
 dot(Na_i) = -INa_tot * AFC / vmyo + diff.JdiffNa * vss / vmyo
     desc: Intracellular Potassium concentration
     in [mM]
-INa_ss_tot = ical.ICaNa + 3 * inacass.INaCa_ss
+INa_ss_tot = ical.ICaLNa + 3 * inacass.INaCa_ss
     in [A/F]
 dot(Na_ss) = -INa_ss_tot * AFC / vss - diff.JdiffNa
     in [mM]
@@ -1108,7 +1104,7 @@ IK_tot = (
     - 2 * inak.INaK
 )
     in [A/F]
-IK_ss_tot = ical.ICaK
+IK_ss_tot = ical.ICaLK
     in [A/F]
 dot(K_i) = -(IK_tot + stimulus.i_stim) * AFC / vmyo + diff.JdiffK * vss / vmyo
     desc: Intracellular Potassium concentration
@@ -1151,7 +1147,7 @@ dot(Ca_i) = buff * (-ICa_tot * AFC / (2 * vmyo) - serca.Jup * vnsr / vmyo + diff
     in [mM]
     desc: Intracellular calcium concentration
     buff = 1 / (1 + cmdnmax * kmcmdn / (kmcmdn + Ca_i)^2 + trpnmax * kmtrpn / (kmtrpn + Ca_i)^2)
-ICa_ss_tot = ical.ICaL - 2 * inacass.INaCa_ss
+ICa_ss_tot = ical.ICaLCa - 2 * inacass.INaCa_ss
     in [A/F]
 dot(Ca_ss) = buff * (-ICa_ss_tot * AFC / (2 * vss) + ryr.Jrel * vjsr / vss - diff.Jdiff)
     in [mM]
