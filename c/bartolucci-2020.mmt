@@ -649,14 +649,12 @@ use extra.K_o
 V = membrane.V + rev.EKshift
     in [mV]
 dot(x) = (inf - x) / tau
-    desc: Activation of IK1
+    desc: Time-dependent inactivation at hyperpolarised (low) potentials
     inf = 1 / (1 + exp(-(V + 2.5538 [mV/mM] * K_o + 144.59 [mV]) / (1.5692 [mV/mM] * K_o + 3.8115 [mV])))
-        desc: Steady-state value for activation of IK1
     tau = 122.2 [ms] / (exp((V + 127.2 [mV]) / -20.36 [mV]) + exp((V + 236.8 [mV]) / 69.33 [mV]))
-        desc: Time constant for activation of IK1
         in [ms]
 r = 1 / (1 + exp((V + 105.8 [mV] - 2.6 [mV/mM] * K_o) / (1.09 * 9.493 [mV])))
-    desc: Inactivation of IK1
+    desc: Instantaneous rectification
 fK1 = piecewise(cell.mode == 0, 1, cell.mode == 1, 1.2, 1.3) * 0.71
 gK1 = 0.1908 [mS/uF]
     in [mS/uF]
