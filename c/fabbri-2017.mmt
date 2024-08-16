@@ -1,18 +1,20 @@
 [[model]]
-author: Michael Clerx, Aditi Agrawal
 name: fabbri-2017
+version: 20240816
+mmt_authors: Michael Clerx, Aditi Agrawal
+display_name: Fabbri et al., 2017
 desc: """
     Model of human sino-atrial node (SAN) cells by Fabbri et al. [1], based on
     an earlier rabbit model by Severi et al. [2].
 
     This Myokit implementation is based on the CellML code by Alan Fabbri [3],
     which was tested in a reproducibility study [4]. The Myokit implementation
-    has extensive reformatting and unit corrections, and includes a small 
+    has extensive reformatting and unit corrections, and includes a small
     offset in IKACh to avoid divide-by-zero errors, as suggested by Alan
     Fabbri. It was tested against the original CellML by comparing the
     calculated derivatives, which matched to within machine precision.
 
-    [1] Fabbri, A. Fantini, M., Wilders, R., & Severi, S. (2017) Computational 
+    [1] Fabbri, A. Fantini, M., Wilders, R., & Severi, S. (2017) Computational
         analysis of the human sinus node action potential: model development
         and effects of mutations. Journal of Physiology, 595.7 pp 2365-2396.
         https://doi.org/10.1113/JP273259
@@ -268,7 +270,7 @@ P_CaT = 0.04132 [nA/mM]
 ICaT = 2 * P_CaT * V / (RTF * (1 - exp(-1 * V * 2 / RTF))) * (calcium.Ca_sub - extra.Ca_o * exp(-2 * V / RTF)) * d * f
     in [nA]
 dot(d) = (inf - d) / tau
-    inf = 1 / (1 + exp(-(V + 38.3 [mV]) / 5.5 [mV]))    
+    inf = 1 / (1 + exp(-(V + 38.3 [mV]) / 5.5 [mV]))
     tau = 0.001 [s] / (1.068 * exp((V + 38.3 [mV]) / 30 [mV]) + 1.068 * exp(-(V + 38.3 [mV]) / 30 [mV]))
         in [s]
 dot(f) = (inf - f) / tau
@@ -370,8 +372,8 @@ dot(a) = alpha * (1 - a) - beta * a
     alpha = 0.025641 [1/s] + alpha_ach
         in [1/s]
         desc: Alpha gate with slight update to avoid divide-by-zero as suggested by Alan Fabbri
-    alpha_ach = if(ACh == 0 [mM], 0 [1/s], 
-                   (3.5988 [1/s] - 0.025641 [1/s]) / (1 + 1.2155e-6 / (ACh / 1 [mM])^1.6951))        
+    alpha_ach = if(ACh == 0 [mM], 0 [1/s],
+                   (3.5988 [1/s] - 0.025641 [1/s]) / (1 + 1.2155e-6 / (ACh / 1 [mM])^1.6951))
         in [1/s]
     beta = 10 [1/s] * exp(0.0133 [1/mV] * (V + 40 [mV]))
         in [1/s]
@@ -403,8 +405,8 @@ iso_shift = if(iso.iso > 0, 7.5 [mV], 0 [mV])
 dot(y) = (inf - y) / tau
     tau = 1 / (0.36 [1/mV/s] * (V + 148.8 [mV] - ach_shift - iso_shift) / (exp(0.066 [1/mV] * (V + 148.8 [mV] - ach_shift - iso_shift)) - 1) + 0.1 [1/mV/s] * (V + 87.3 [mV] - ach_shift - iso_shift) / (1 - exp(-0.2 [1/mV] * (V + 87.3 [mV] - ach_shift - iso_shift)))) - 0.054 [s]
         in [s]
-    inf = if(V < -(80 [mV] - ach_shift - iso_shift), 
-             0.01329 + 0.99921 / (1 + exp((V + 97.134 [mV] - ach_shift - iso_shift) / 8.1752 [mV])), 
+    inf = if(V < -(80 [mV] - ach_shift - iso_shift),
+             0.01329 + 0.99921 / (1 + exp((V + 97.134 [mV] - ach_shift - iso_shift) / 8.1752 [mV])),
              0.0002501 * exp((V - ach_shift - iso_shift) / -12.861 [mV]))
 
 #
@@ -434,7 +436,7 @@ K_NaCa = 3.343 [nA]
 INaCa = K_NaCa * r
     in [nA]
 # Cycle rate
-r = (x2 * k21 - x1 * k12) / (x1 + x2 + x3 + x4)    
+r = (x2 * k21 - x1 * k12) / (x1 + x2 + x3 + x4)
 x1 = k41 * k34 * (k23 + k21) + k21 * k32 * (k43 + k41)
 x2 = k32 * k43 * (k14 + k12) + k41 * k12 * (k34 + k32)
 x3 = k14 * k43 * (k23 + k21) + k12 * k23 * (k43 + k41)
