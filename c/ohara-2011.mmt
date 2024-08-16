@@ -507,7 +507,7 @@ x = A * xf + (1 - A) * xs
     A = 1 / (1 + exp((V + 54.81 [mV]) / 38.21 [mV]))
         desc: Fraction of IKr channels with fast activation
 r = 1 / (1 + exp((V + 55 [mV]) / 75 [mV])) * 1 / (1 + exp((V - 10 [mV]) / 30 [mV]))
-    desc: Instantaneous IKr rnactivation
+    desc: Instantaneous IKr inactivation
 fKr = piecewise(cell.mode == 0, 1, cell.mode == 1, 1.3, 0.8)
 gKr = 0.046 [mS/uF]
     in [mS/uF]
