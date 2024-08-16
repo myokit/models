@@ -1,7 +1,7 @@
 [[model]]
 name: ToRORd_dyn_chloride
 mmt_authors: Michael Clerx
-version: 20240815
+version: 20240816
 desc: """
     The Tomek et al. "ToRORd-dynCL" model of the human ventricular action
     potential [1], based on the earlier model without dynamic chloride [2],
@@ -372,7 +372,7 @@ gto = 0.16 [mS/uF]
     desc: Maximum conductance of Ito
 fto = if(cell.mode == 0, 1, 2)
 Ito = fto * gto * (V - rev.EK) * ((1 - camk.f) * a * i + camk.f * ap * ip)
-    desc: Transient outward Potassium current
+    desc: Transient outward potassium current
     in [A/F]
 
 #
@@ -399,8 +399,7 @@ fs_tau = 1000 [ms] + 1 [ms] / (3.5e-5 * exp((V + 5 [mV]) / -4 [mV]) + 3.5e-5 * e
 dot(ff) = (f_inf - ff) / ff_tau
 dot(fs) = (f_inf - fs) / fs_tau
 Aff = 0.6 : Fraction of channels with fast inactivation
-Afs = 1 - Aff : Fraction of channels with slow inactivation
-f = Aff * ff + Afs * fs : Total voltage-dependent inactivation
+f = Aff * ff + (1 - Aff) * fs : Total voltage-dependent inactivation
 # Calcium-dependent inactivation of non-phosphorylated channels
 fcaf_tau = 7 [ms] + 1 [ms] / (0.04 * exp((V - 4 [mV]) / -7 [mV]) + 0.04 * exp((V - 4 [mV]) / 7 [mV]))
     in [ms]
@@ -410,9 +409,7 @@ dot(fcaf) = (f_inf - fcaf) / fcaf_tau
 dot(fcas) = (f_inf - fcas) / fcas_tau
 Afcaf = 0.3 + 0.6 / (1 + exp((V - 10 [mV]) / 10 [mV]))
     desc: Fraction of ICaL channels with fast Ca-dependent inactivation
-Afcas = 1 - Afcaf
-    desc: Fraction of ICaL channels with slow Ca-dependent inactivation
-fca = Afcaf * fcaf + Afcas * fcas
+fca = Afcaf * fcaf + (1 - Afcaf) * fcas
     desc: Ca-dependent inactivation of non-phosphorylated ICaL
 # Recovery from Ca-dependent inactivation
 j_inf = 1 / (1 + exp((V + 18.08 [mV]) / 2.7916 [mV]))
@@ -422,11 +419,11 @@ dot(jca) = (j_inf - jca) / jca_tau
     desc: Recovery from Ca-dependent inactivation
 # Voltage-dependent inactivation of phosphorylated channels
 dot(ffp) = (f_inf - ffp) / (2.5 * ff_tau)
-fp = Aff * ffp + Afs * fs
+fp = Aff * ffp + (1 - Aff) * fs
     desc: Voltage-dependent inactivation of phosphorylated ICaL
 # Calcium-dependent inactivation of phosphorylated channels
 dot(fcafp) = (f_inf - fcafp) / (2.5 * fcaf_tau)
-fcap = Afcaf * fcafp + Afcas * fcas
+fcap = Afcaf * fcafp + (1 - Afcaf) * fcas
     desc: Ca-dependent inactivation of phosphorylated channels
 # Fraction of channels in Ca-dependent inactivation mode
 Kmn = 0.002 [mM] in [mM]
@@ -574,7 +571,7 @@ fKs = if(cell.mode == 1, 1.4, 1)
 gKs = 0.0011 [mS/uF]
     in [mS/uF]
 IKs = fKs * gKs * KsCa * x1 * x2 * (V - rev.EKs)
-    desc: Slow delayed rectifier Potassium current
+    desc: Slow delayed rectifier potassium current
     in [A/F]
 
 #
@@ -616,7 +613,6 @@ IKatp = fKatp * gKatp * a * b * (membrane.V - rev.EK)
 # from [3]. See supplement to [2] section 15.3.8.
 #
 [inaca]
-use membrane.V
 use extra.Na_o, extra.Ca_o
 use sodium.Na_i, calcium.Ca_i
 kna1 = 15 [mM]
@@ -638,9 +634,9 @@ kcaoff = 5e3 [1/s]
     in [1/s]
 qna = 0.5224
 qca = 0.167
-hca = exp(qca * V * phys.FRT)
-hna = exp(qna * V * phys.FRT)
-# Parameters h
+hca = exp(qca * membrane.V * phys.FRT)
+hna = exp(qna * membrane.V * phys.FRT)
+# h parameters
 h1 = 1 + Na_i / kna3 * (1 + hna)
 h2 = Na_i * hna / (kna3 * h1)
 h3 = 1 / h1
@@ -653,7 +649,7 @@ h9 = 1 / h7
 h10 = kasymm + 1 + Na_o / kna1 * (1 + Na_o / kna2)
 h11 = Na_o * Na_o / (h10 * kna1 * kna2)
 h12 = 1 / h10
-# Parameters k
+# k parameters
 k1 = h12 * Ca_o * kcaon
     in [1/s]
 k2 = kcaoff
@@ -711,7 +707,6 @@ INaCa = (1 - f_ss) * fNaCa * gNaCa * allo * (JncxNa + 2 * JncxCa)
 # unchanged from [3]. See supplement to [2] section 15.3.8.
 #
 [inacass]
-use membrane.V
 use extra.Na_o, extra.Ca_o
 use sodium.Na_ss, calcium.Ca_ss
 use inaca.kna1, inaca.kna2, inaca.kna3, inaca.hna
@@ -772,7 +767,7 @@ JncxCa = E2 * k2 - E1 * k1
     in [1/s]
 INaCa_ss = inaca.f_ss * inaca.fNaCa * inaca.gNaCa * allo * (JncxNa + 2 * JncxCa)
     in [A/F]
-    desc: Sodium/Calcium exchange current into the T-Tubule subspace
+    desc: Sodium/calcium exchange current into the T-Tubule subspace
 
 #
 # INaK: Sodium/potassium ATPase current
@@ -800,6 +795,7 @@ Khp = 1.698e-7 [mM]
     desc: Dissociation constant relating [HPi] and [H]
 Kxkur = 292 [mM]
     in [mM]
+    desc: Dissociation constant relating [KPi] and [K]i
 Knap = 224 [mM]
     in [mM]
     desc: Dissociation constant relating [NaPi] and [Na]i
@@ -876,7 +872,7 @@ x4 = b4 * b3 * b2 + a3 * a4 * a1 + b2 * a4 * a1 + b3 * b2 * a1
 # give the same result so that the pump count is conserved).
 r = (a1 * a2 * a3 * a4 - b1 * b2 * b3 * b4) / (x1 + x2 + x3 + x4)
     in [1/s]
-# INaK current
+# Current
 JnakNa = 3 * r
     in [1/s]
 JnakK = -2 * r
@@ -886,43 +882,43 @@ PNaK = 15.4509 [C/F]    # Down from 30 in [3]
     in [C/F]
 INaK = fNaK * PNaK * (JnakNa + JnakK)
     in [A/F]
-    desc: Sodium/Potassium ATPase current
+    desc: Sodium/potassium ATPase current
 
 #
 # IKb: Background potassium current
 # See supplement to [2] section 15.3.12.
 #
 [ikb]
-x = 1 / (1 + exp(-(membrane.V - 10.8968 [mV]) / 23.9871 [mV]))
+x = 1 / (1 + exp((membrane.V - 10.8968 [mV]) / -23.9871 [mV]))
 fKb = if(cell.mode == 1, 0.6, 1)
 gKb = 0.0189 [mS/uF]
     in [mS/uF]
 IKb = fKb * gKb * x * (membrane.V - rev.EK)
     in [A/F]
 
-
 #
 # INab: Background sodium current
 # See supplement to [2] section 15.3.14.
 #
 [inab]
-use membrane.V, phys.FRT, phys.FFRT
-PNab =  1.9239e-9 [L/F/ms]
+use membrane.V
+PNab = 1.9239e-9 [L/F/ms]
     in [L/F/ms]
-INab = PNab * V * FFRT * (sodium.Na_i * exp(V * FRT) - extra.Na_o) / (exp(V * FRT) - 1)
+INab = PNab * V * phys.FFRT * (sodium.Na_i * evf - extra.Na_o) / (evf - 1)
     in [A/F]
-
+    evf = exp(V * phys.FRT)
 
 #
 # Background calcium current
 # See supplement to [2] section 15.3.13.
 #
 [icab]
-use membrane.V, phys.FRT, phys.FFRT
+use membrane.V
 PCab = 5.9194e-8 [L/F/ms]
     in [L/F/ms]
-ICab = PCab * 4 * V * FFRT * (ical.ycai * calcium.Ca_i * exp(2 * V * FRT) - ical.ycao * extra.Ca_o) / (exp(2 * V * FRT) - 1)
+ICab = PCab * 4 * V * phys.FFRT * (ical.ycai * calcium.Ca_i * evf2 - ical.ycao * extra.Ca_o) / (evf2 - 1)
     in [A/F]
+    evf2 = exp(2 * V * phys.FRT)
 
 #
 # IpCa: Sarcolemmal calcium pump current
@@ -957,9 +953,8 @@ gClb = 0.00198 [mS/uF]
 IClb = gClb * (membrane.V - rev.ECl)
     in [A/F]
 
-
 #
-# Jrel: SR Calcium release flux via ryanodine receptor
+# Jrel: SR calcium release flux via ryanodine receptor
 # Compared to [3], this is switched to use ICaL_ss instead of ICaL,
 # the cajsr_half has increased, and overal current is scaled up.
 # See supplement to [2] section 15.3.15.
@@ -997,7 +992,7 @@ dot(Jrelp) = (inf - Jrelp) / tau
         base = -1 [mM/ms/mV] * a_relp * ICaLCa_ss / (1 + (cajsr_half / Ca_jsr)^8)
             in [mM/ms]
 Jrel = 1.5378 * ((1 - camk.f) * Jrelnp + camk.f * Jrelp)
-    desc: SR Calcium release flux via Ryanodine receptor
+    desc: SR calcium release flux via Ryanodine receptor
     in [mM/ms]
 
 #
@@ -1075,23 +1070,23 @@ cmdnmax = if(cell.mode == 1, cmdnmax_b * 1.3, cmdnmax_b)
     in [mM]
 cmdnmax_b = 0.05 [mM]
     in [mM]
+trpnmax = 0.07 [mM]
+    in [mM]
 BSRmax = 0.047 [mM]
     in [mM]
 BSLmax = 1.124 [mM]
-    in [mM]
-KmBSL = 0.0087 [mM]
-    in [mM]
-KmBSR = 0.00087 [mM]
     in [mM]
 csqnmax = 10 [mM]
     in [mM]
 kmcmdn = 0.00238 [mM]
     in [mM]
-kmcsqn = 0.8 [mM]
-    in [mM]
 kmtrpn = 0.0005 [mM]
     in [mM]
-trpnmax = 0.07 [mM]
+KmBSR = 0.00087 [mM]
+    in [mM]
+KmBSL = 0.0087 [mM]
+    in [mM]
+kmcsqn = 0.8 [mM]
     in [mM]
 Jtr = (Ca_nsr - Ca_jsr) / 60 [ms]
     in [mM/ms]
