@@ -1,6 +1,6 @@
 [[model]]
 name: fabbri-2017
-version: 20240816
+version: 20240821
 mmt_authors: Michael Clerx, Aditi Agrawal
 display_name: Fabbri et al., 2017
 desc: """
@@ -223,28 +223,28 @@ dot(d) = (inf - d) / tau
         iso_shift = piecewise(iso.iso > 0, -8 [mV], 0 [mV])
             in [mV]
         iso_slope = piecewise(iso.iso > 0, -27, 0)
-    tau = 0.001 / (alpha + beta)
+    tau = 0.001 [s/ms] / (alpha + beta)
         in [s]
         av = piecewise(V == -41.8 [mV], -41.80001 [mV], V == -6.8 [mV], -6.80001 [mV], V)
             in [mV]
         bv = piecewise(V == -1.8 [mV], -1.80001 [mV], V)
             in [mV]
-        alpha = -0.02839 [1/s/mV] * (av + 41.8 [mV]) / (exp(-(av + 41.8 [mV]) / 2.5 [mV]) - 1) - 0.0849 [1/mV/s] * (av + 6.8 [mV]) / (exp(-(av + 6.8 [mV]) / 4.8 [mV]) - 1)
-            in [1/s]
-        beta = 0.01143 [1/s/mV] * (bv + 1.8 [mV]) / (exp((bv + 1.8 [mV]) / 2.5 [mV]) - 1)
-            in [1/s]
+        alpha = -0.02839 [1/ms/mV] * (av + 41.8 [mV]) / (exp(-(av + 41.8 [mV]) / 2.5 [mV]) - 1) - 0.0849 [1/mV/ms] * (av + 6.8 [mV]) / (exp(-(av + 6.8 [mV]) / 4.8 [mV]) - 1)
+            in [1/ms]
+        beta = 0.01143 [1/ms/mV] * (bv + 1.8 [mV]) / (exp((bv + 1.8 [mV]) / 2.5 [mV]) - 1)
+            in [1/ms]
 dot(f) = (inf - f) / tau
-    tau = 0.001 * (44.3 [s] + 230 [s] * exp(-((V + 36 [mV]) / 10 [mV])^2))
+    tau = 0.001 [s/ms] * (44.3 [ms] + 230 [ms] * exp(-((V + 36 [mV]) / 10 [mV])^2))
         in [s]
     inf = 1 / (1 + exp((V + 37.4 [mV]) / (5.3 [mV])))
 dot(fCa) = (inf - fCa) / tau
     inf = Km / (Km + calcium.Ca_sub)
-    tau = 0.001 * inf / alpha
+    tau = 0.001 [s/ms] * inf / alpha
         in [s]
     Km = 0.000338 [mM]
         in [mM]
-    alpha = 0.0075 [1/s]
-        in [1/s]
+    alpha = 0.0075 [1/ms]
+        in [1/ms]
 # Block and increase
 ACh_block = 0.31 * ach.ACh / (ach.ACh + 9e-5 [mM])
 Iso_increase = if(iso.iso > 0, 1.23, 1)
@@ -289,11 +289,11 @@ Ito = gto * (V - rev.E_K) * q * r
     in [nA]
 dot(q) = (inf - q) / tau
     inf = 1 / (1 + exp((V + 49 [mV]) / 13 [mV]))
-    tau = 0.001 * 0.6 * (65.17 / (0.57 [1/s] * exp(-0.08 [1/mV] * (V + 44 [mV])) + 0.065 [1/s] * exp(0.1 [1/mV] * (V + 45.93 [mV]))) + 10.1 [s])
+    tau = 0.001 [s/ms] * 0.6 * (65.17 [ms] / (0.57 * exp(-0.08 [1/mV] * (V + 44 [mV])) + 0.065 * exp(0.1 [1/mV] * (V + 45.93 [mV]))) + 10.1 [ms])
         in [s]
 dot(r) = (inf - r) / tau
     inf = 1 / (1 + exp(-(V - 19.3 [mV]) / 15 [mV]))
-    tau = 0.001 * 0.66 * 1.4 * (15.59 [s] / (1.037 * exp(0.09 [1/mV] * (V + 30.61 [mV])) + 0.369 * exp(-0.12 [1/mV] * (V + 23.84 [mV]))) + 2.98 [s])
+    tau = 0.001 [s/ms] * 0.66 * 1.4 * (15.59 [ms] / (1.037 * exp(0.09 [1/mV] * (V + 30.61 [mV])) + 0.369 * exp(-0.12 [1/mV] * (V + 23.84 [mV]))) + 2.98 [ms])
         in [s]
 
 #
