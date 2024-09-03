@@ -1,6 +1,6 @@
 [[model]]
 name: grandi-2011
-version: 20240813
+version: 20240903
 mmt_authors: Michael Clerx
 desc: """
     The 2011 model of the human atrial AP by Grandi, Pandit, Voigt et al. [1].
@@ -99,7 +99,7 @@ ISO = 0
 # Membrane potential
 #
 [membrane]
-use stimulus.i_stim, potassium.I_K_tot
+use stimulus.i_stim
 dot(V) = -(i_ion + i_stim + i_diff)
     in [mV]
     label membrane_potential
@@ -109,7 +109,7 @@ I_Ca_tot = calcium.I_Ca_tot_jn + calcium.I_Ca_tot_sl
     in [A/F]
 I_Cl_tot = iclca.IClCa + iclb.IClB
     in [A/F]
-i_ion = I_Na_tot + I_Cl_tot + I_Ca_tot + I_K_tot
+i_ion = I_Na_tot + I_Cl_tot + I_Ca_tot + potassium.I_K_tot
     in [A/F]
     label cellular_current
 i_diff = 0 [A/F]
@@ -448,7 +448,7 @@ inf = a / (a + b)
         ) / (1 + exp(-0.5143 [1/mV] * (V - EK + 4.753 [mV])))
 
 #
-# Calcium activated Chloride current
+# Calcium activated chloride current
 #
 [iclca]
 use membrane.V
