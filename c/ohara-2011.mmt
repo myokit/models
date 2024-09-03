@@ -1,6 +1,6 @@
 [[model]]
 name: ohara-2011
-version: 20240816
+version: 20240903
 mmt_authors: Michael Clerx
 display_name: O'Hara et al., 2011
 desc: """
@@ -728,6 +728,8 @@ JncxCa = E2 * k2 - E1 * k1
 INaCa_ss = 0.2 * inaca.fNaCa * inaca.gNaCa * allo * (JncxNa + 2 * JncxCa)
     in [A/F]
     desc: Sodium/calcium exchange current into the T-Tubule subspace
+INaCa_tot = inaca.INaCa + INaCa_ss
+    in [A/F]
 
 #
 # INaK: Sodium/potassium ATPase current
