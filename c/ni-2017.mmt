@@ -1,6 +1,6 @@
 [[model]]
 name: ni-2017
-version: 20230202
+version: 20240903
 mmt_authors: Michael Clerx
 desc: """
     The 2017 model of the human atrial AP by Ni et al. [1].
@@ -138,6 +138,7 @@ i_ion = (
     in [pA]
 dot(V) = -(i_ion + i_stim + i_diff) / cell.Cm
     in [mV]
+    label membrane_potential
 i_diff = 0 [pA]
     in [pA]
     bind diffusion_current
@@ -177,6 +178,7 @@ FRT = F / R / T
 [cell]
 Cm = 100 [pF]
     in [pF]
+    label membrane_capacitance
 
 # Diffusion compartment volumes
 
