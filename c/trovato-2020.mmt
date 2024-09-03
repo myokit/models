@@ -1,6 +1,6 @@
 [[model]]
 name: trovato-2020
-version: 20240816
+version: 20240903
 mmt_authors: Michael Clerx
 desc: """
     The 2020 model of the human Purkinje cell AP by Trovato et al. [1].
@@ -655,6 +655,8 @@ JncxCa = E2 * k2 - E1 * k1
 INaCa_ss = 0.2 * inaca.gNaCa * allo * (JncxNa + 2 * JncxCa)
     in [A/F]
     desc: Sodium/calcium exchange current into the SS subspace
+INaCa_tot = INaCa_ss + inaca.INaCa
+    in [A/F]
 
 #
 # INaK: Sodium-potassium ATPase current
