@@ -1,6 +1,6 @@
 [[model]]
 name: grandi-2010
-version: 20240813
+version: 20240903
 mmt_authors: Michael Clerx
 desc: """
     The 2010 model of the human ventricular AP by Grandi et al. [1].
@@ -86,7 +86,7 @@ epi = 1
 # Supplement 1.17, page 10
 #
 [membrane]
-use stimulus.i_stim, potassium.I_K_tot
+use stimulus.i_stim
 dot(V) = -(i_ion + i_stim)
     in [mV]
     label membrane_potential
@@ -96,7 +96,7 @@ I_Ca_tot = calcium.I_Ca_tot_jn + calcium.I_Ca_tot_sl
     in [A/F]
 I_Cl_tot = iclca.IClCa + iclb.IClB
     in [A/F]
-i_ion = I_Na_tot + I_Cl_tot + I_Ca_tot + I_K_tot
+i_ion = I_Na_tot + I_Cl_tot + I_Ca_tot + potassium.I_K_tot
     in [A/F]
     label cellular_current
 
@@ -388,11 +388,9 @@ dot(ys) = (y_inf - ys) / tau
 #
 [ik1]
 use membrane.V, rev.EK
-IK1 = gK1 * inf * (V - EK)
+IK1 = gK1 * sqrt(ion.K_o / 5.4 [mM]) * inf * (V - EK)
     in [A/F]
-gK1 = sqrt(ion.K_o / 5.4 [mM]) * gK1_base
-    in [mS/uF]
-gK1_base = 0.35 [mS/uF]
+gK1 = 0.35 [mS/uF]
     in [mS/uF]
 inf = a / (a + b)
     a = 1.02 / (1 + exp(0.2385 [1/mV] * (V - EK - 59.215 [mV])))
@@ -401,7 +399,7 @@ inf = a / (a + b)
         ) / (1 + exp(-0.5143 [1/mV] * (V - EK + 4.753 [mV])))
 
 #
-# Calcium activated Chloride current
+# Calcium activated chloride current
 #
 # Supplement 1.9, page 5
 #
@@ -506,7 +504,7 @@ use sodium.Na_jn, sodium.Na_sl, ion.Na_o
 use calcium.Ca_jn, calcium.Ca_sl, ion.Ca_o
 INaCa = INaCa_jn + INaCa_sl
     in [A/F]
-INaCa_jn = cell.fjn * IbarNaCa * Q * Ka_jn * (s1 - s2) / s3 / (1 + ksat * exp((nu - 1) * V * FRT))
+INaCa_jn = cell.fjn * IbarNaCa * Q * Ka * (s1 - s2) / s3 / (1 + ksat * exp((nu - 1) * V * FRT))
     in [A/F]
     s1 = exp(nu * V * FRT) * Na_jn^3 * Ca_o
         in [mM^4]
@@ -514,7 +512,7 @@ INaCa_jn = cell.fjn * IbarNaCa * Q * Ka_jn * (s1 - s2) / s3 / (1 + ksat * exp((n
         in [mM^4]
     s3 = KmCai * Na_o^3 * (1 + (Na_jn / KmNai)^3) + KmNao^3 * Ca_jn * (1 + Ca_jn / KmCai) + KmCao * Na_jn^3 + Na_jn^3 * Ca_o + Na_o^3 * Ca_jn
         in [mM^4]
-    Ka_jn = 1 / (1 + (Kdact / Ca_jn)^2)
+    Ka = 1 / (1 + (Kdact / Ca_jn)^2)
 INaCa_sl = cell.fsl * IbarNaCa * Q * Ka * (s1 - s2) / s3 / (1 + ksat * exp((nu - 1) * V * FRT))
     in [A/F]
     s1 = exp(nu * V * FRT) * Na_sl^3 * Ca_o
@@ -547,7 +545,6 @@ nu = 0.27
 # Supplement 1.13, page 8
 #
 [ipca]
-use calcium.Ca_jn, calcium.Ca_sl
 IpCa = IpCa_jn + IpCa_sl
     in [A/F]
 IpCa_jn = cell.fjn * Q * IbarSLCaP * a / (a + b)
