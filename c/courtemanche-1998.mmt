@@ -1,6 +1,6 @@
 [[model]]
 name: courtemanche-1998
-version: 20230330
+version: 20240903
 mmt_authors: Michael Clerx
 desc: """
     Model of the human atrial action potential by Courtemanche et al. [1].
@@ -68,7 +68,7 @@ dot(V) = -(I_ion + I_diff + stimulus.I_stim)
     in [mV]
     label membrane_potential
 I_ion = (
-    ina.I_Na
+    ina.INa
     + ik1.IK1
     + ito.Ito
     + ikur.IKur
@@ -189,7 +189,7 @@ KQ10 = 3
 #
 [sodium]
 use phys.F, geom.V_i, geom.Cm
-dot(Nai) = (-3 * inak.INaK - (3 * inaca.INaCa + ib.IbNa + ina.I_Na)) * Cm / (V_i * F)
+dot(Nai) = (-3 * inak.INaK - (3 * inaca.INaCa + ib.IbNa + ina.INa)) * Cm / (V_i * F)
     in [mM]
     label Na_i
 
@@ -284,10 +284,10 @@ dot(j) = (inf - j) / tau
     tau = 1 / (alpha + beta)
         in [ms]
     inf = alpha / (alpha + beta)
-g_Na = 7.8 [nS/pF]
+gNa = 7.8 [nS/pF]
     in [nS/pF]
     desc: Maximal INa conductance
-I_Na = g_Na * m^3 * h * j * (V - nernst.ENa)
+INa = gNa * m^3 * h * j * (V - nernst.ENa)
     in [A/F]
     label I_Na
 
