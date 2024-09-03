@@ -1,7 +1,7 @@
 [[model]]
 name: tomek-2020
 mmt_authors: Michael Clerx
-version: 20240819
+version: 20240903
 desc: """
     The Tomek et al. "ToRORd-dynCL" model of the human ventricular action
     potential [1], based on the earlier model without dynamic chloride [2],
@@ -495,17 +495,19 @@ ICaLCa_ss = gs * PCa * PhiCa_ss
     in [A/F]
 ICaLCa = ICaLCa_ss + ICaLCa_i
     in [A/F]
-ICaLNa = ICaLNa_ss + ICaLNa_i
-    in [A/F]
 ICaLNa_i = gi * PNa * PhiNa_i
     in [A/F]
 ICaLNa_ss = gs * PNa * PhiNa_ss
     in [A/F]
-ICaLK = ICaLK_ss + ICaLK_i
+ICaLNa = ICaLNa_ss + ICaLNa_i
     in [A/F]
 ICaLK_i  = gi * PK * PhiK_i
     in [A/F]
 ICaLK_ss  = gs * PK * PhiK_ss
+    in [A/F]
+ICaLK = ICaLK_ss + ICaLK_i
+    in [A/F]
+ICaL_total = ICaLCa + ICaLNa + ICaLK
     in [A/F]
 
 #
