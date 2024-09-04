@@ -1,6 +1,6 @@
 [[model]]
 name: fink-2008
-version: 20230202
+version: 20240903
 mmt_authors: Michael Clerx, Chon Lok Lei
 display_name: Fink et al., 2008
 desc: """
@@ -9,8 +9,11 @@ desc: """
 
     (Note that there is a 2006 model accompanying a publication with a similar
     name.)
+    
+    In this Myokit implementation, the stimulus was set to 0.5ms and 
+    approximately twice the threshold for depolarisation.
 
-    Adapted from a CellML version [3].
+    Adapted from a CellML implementation by Catherine Lloyd [3].
 
     References:
 
@@ -26,56 +29,7 @@ desc: """
         https://doi.org/10.1152/ajpheart.00109.2006
 
     [3] https://models.physiomeproject.org/exposure/eeb81adc372c2f172399ec7160b0331e
-
-    The original CellML meta data follows below.
-
-    ---------------------------------------------------------------------------
-
-    Contributions of HERG potassium+ current to repolarization of the human
-    ventricular action potential
-
-    Catherine Lloyd
-    Bioengineering Institute, University of Auckland
-
-    This model is known to run in OpenCell and COR to reproduce the published
-    results. Units have been checked. COR reports they are balanced and
-    consistent while OpenCell is reporting some inconsistencies. OpenCell is
-    currently having unit "issues" and we believe the units are correct in this
-    CellML model.
-
-    ABSTRACT:
-    Action potential repolarization in the mammalian heart is governed by
-    interactions of a number of time- and voltage-dependent channel-mediated
-    currents, as well as contributions from the sodium+/Ca2+ exchanger and the
-    sodium+/potassium+ pump. Recent work has shown that one of the potassium+
-    currents (HERG) which contributes to repolarization in mammalian ventricle
-    is a locus at which a number of point mutations can have significant
-    functional consequences. In addition, the remarkable sensitivity of this
-    potassium+ channel isoform to inhibition by a variety of pharmacological
-    agents and clinical drugs has resulted in HERG being a major focus for
-    Safety Pharmacology requirements. For these reasons we and others have
-    attempted to define the functional role for HERG-mediated potassium+
-    currents in repolarization of the action potential in the human ventricle.
-    Here, we describe and evaluate changes in the formulations for two
-    potassium+ currents, ik1 and HERG (or IK,r), within the framework of ten
-    Tusscher model of the human ventricular action potential. In this
-    computational study, new mathematical formulations for the two nonlinear
-    potassium+ conductances, ik1 and HERG, have been developed based upon
-    experimental data obtained from electrophysiological studies of excised
-    human ventricular tissue and/or myocytes. The resulting mathematical model
-    provides much improved simulations of the relative sizes and time courses
-    of the potassium+ currents which modulate repolarization. Our new
-    formulation represents an important first step in defining the mechanism(s)
-    of repolarization of the membrane action potential in the human ventricle.
-    Our overall goal is to understand the genesis of the T-wave of the human
-    electrocardiogram.
-
-    The complete original paper reference is cited below:
-
-    Contributions of HERG potassium+ current to repolarization of the human
-    ventricular action potential
-    Martin Fink, Denis Noble, Laszlo Virag, Andras Varro, and Wayne R. Giles
-    2008 Progress in Biophysics and Molecular Biology 96, (1-3), 357-376
+    
     """
 # Initial values
 membrane.V    = -86.45
@@ -106,6 +60,9 @@ irel.R_prime  = 0.9864
 sodium.Na_i   = 7.940167
 potassium.K_i = 141.0167
 
+#
+# Simulation variables
+#
 [engine]
 time = 0 [ms]
     in [ms]
@@ -120,7 +77,18 @@ pace = 0
 dot(V) = -(i_ion + stimulus.i_stim)
     in [mV]
     label membrane_potential
-i_ion = ik1.i_K1 + ito.i_to + ikr.i_Kr + iks.i_Ks + ical.i_CaL + inak.i_NaK + ina.i_Na + inab.i_b_Na + inaca.i_NaCa + icab.i_b_Ca + ipk.i_p_K + ipca.i_p_Ca
+i_ion = (+ ik1.i_K1 
+         + ito.i_to 
+         + ikr.i_Kr 
+         + iks.i_Ks 
+         + ical.i_CaL 
+         + inak.i_NaK 
+         + ina.i_Na 
+         + inab.i_b_Na 
+         + inaca.i_NaCa 
+         + icab.i_b_Ca 
+         + ipk.i_p_K 
+         + ipca.i_p_Ca)
     in [A/F]
     label cellular_current
 
@@ -130,7 +98,7 @@ i_ion = ik1.i_K1 + ito.i_to + ikr.i_Kr + iks.i_Ks + ical.i_CaL + inak.i_NaK + in
 [stimulus]
 i_stim = engine.pace * stim_amplitude
     in [A/F]
-stim_amplitude = -12 [A/F]
+stim_amplitude = -47 [A/F] * 2
     in [A/F]
 
 #
@@ -526,7 +494,7 @@ P_kna = 0.03
 
 [[protocol]]
 # Level  Start    Length   Period   Multiplier
-1.0      100.0    3.0      1000.0   0
+1        50       0.5      1000     0
 
 [[script]]
 import matplotlib.pyplot as plt

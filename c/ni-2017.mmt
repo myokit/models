@@ -1,6 +1,6 @@
 [[model]]
 name: ni-2017
-version: 20240903
+version: 20240904
 mmt_authors: Michael Clerx
 desc: """
     The 2017 model of the human atrial AP by Ni et al. [1].
@@ -20,7 +20,8 @@ desc: """
     being sped up). This was left uncorrected, so that this implementation
     matches the published code.
 
-    The stimulus was set to 0.5 ms and -80 A/F
+    In this Myokit implementation, the stimulus was set to 0.5 ms and
+    approximately twice the threshold value for depolarisation.
 
     [1] Ni, H., Whittaker, D. G., Wang, W., Giles, W. R., Narayan, S. M., &
         Zhang, H. (2017). Synergistic Anti-arrhythmic Effects in Human Atria
@@ -149,7 +150,7 @@ i_diff = 0 [pA]
 [stimulus]
 i_stim = cell.Cm * engine.pace * amplitude
     in [pA]
-amplitude = -80 [A/F]
+amplitude = -36 [A/F] * 2
     in [pA/pF]
 
 #
@@ -707,7 +708,7 @@ dot(Ca_ss) = beta * (JCass / Vss + I_tot / (2 * Vss * phys.F))
 
 [[protocol]]
 # Level  Start    Length   Period   Multiplier
-1        100      0.5      1000     0
+1        50       0.5      1000     0
 
 [[script]]
 import matplotlib.pyplot as plt

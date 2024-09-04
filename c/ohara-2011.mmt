@@ -1,6 +1,6 @@
 [[model]]
 name: ohara-2011
-version: 20240903
+version: 20240904
 mmt_authors: Michael Clerx
 display_name: O'Hara et al., 2011
 desc: """
@@ -14,6 +14,9 @@ desc: """
     calculated derivatives. After this, two small changes to the INaK
     formulation were made (see [4]). The equations for phi in ICaL were
     updated using l'hopital's rule.
+
+    The stimulus was set to 0.5 ms and approximately twice the minimum level
+    needed for depolarisation.
 
     Comments and errata on [1]:
 
@@ -134,7 +137,7 @@ i_ion = (
 [stimulus]
 i_stim = engine.pace * amplitude
     in [A/F]
-amplitude = -80 [A/F]
+amplitude = -58 [A/F] * 2
     in [A/F]
 
 #
@@ -1088,7 +1091,7 @@ f = 1 / (1 + KmCaMK / CaMK_active)
 
 [[protocol]]
 # Level  Start    Length   Period   Multiplier
-1        10       0.5      1000     0
+1        50       0.5      1000     0
 
 [[script]]
 import matplotlib.pyplot as plt

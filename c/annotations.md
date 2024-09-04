@@ -9,8 +9,10 @@
 - `stimulus_current`, a current injected with an electrode to pace the cell.
 - `membrane_capacitance`, the modelled cell's capacitance.
 
-- `ICaL`, the L-type calcium current (all species and compartments combined).
-- `gCaL`, a variable that can be scaled up and down to scale `ICaL`.
+- `I_CaL`, the L-type calcium current (all species and compartments combined).
+- `g_CaL`, a variable that can be scaled up and down to scale `I_CaL`.
+- `I_Kr`, the rapid delayed rectifier potassium current.
+- `g_Kr`, a variable that can be scaled up or down to scale `I_Kr`.
 
 ## Model meta properties
 

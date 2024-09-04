@@ -1,6 +1,6 @@
 [[model]]
 name: tentusscher-2006
-version: 20240813
+version: 20240904
 mmt_authors: Michael Clerx
 display_name: Ten Tusscher & Panfilov, 2006
 desc: """
@@ -12,6 +12,9 @@ desc: """
     This implementation is based on the CellML version on PMR by
     Penny Noble [3], but with substantial rewrites and including the
     unit fixes described in [4].
+
+    The stimulus current was set to 0.5ms and approximately twice the threshold
+    for depolarisation.
 
     References:
 
@@ -99,7 +102,7 @@ i_diff = 0 [A/F]
 [stimulus]
 i_stim = engine.pace * amplitude
     in [A/F]
-amplitude = -52 [A/F]
+amplitude = -47 [A/F] * 2
     in [A/F]
 
 #
@@ -557,7 +560,7 @@ IK_total = ik1.IK1 + ito.Ito + ikr.IKr + iks.IKs + ipk.IpK + stimulus.i_stim - 2
 
 [[protocol]]
 # Level  Start    Length   Period   Multiplier
-1        10       1        1000.0   0
+1        50       0.5      1000     0
 
 [[script]]
 import matplotlib.pyplot as plt

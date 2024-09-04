@@ -1,13 +1,13 @@
 [[model]]
 name: koivumaki-2011
-version: 20230202
+version: 20240903
 mmt_authors: Michael Clerx
 desc: """
     The 2011 model of the human atrial AP by Koivumaki et al. [1], based on the
     earlier model by Nygren et al. [2].
 
-    The stimulus was set to 0.5 [ms] and approximately twice the threshold
-    value for depolarisation.
+    The stimulus was set to 0.5 ms and approximately twice the threshold for
+    depolarisation.
 
     This implementation is based on the original Matlab code provided by the
     authors. It was checked against the original code by comparing the
@@ -792,7 +792,7 @@ Jrelss = nuss * oss * css * SRCass * (CaSR4 - Cass)
 
 [[protocol]]
 # Level  Start    Length   Period   Multiplier
-1.0      0.05     0.0005   1        0
+1        0.05     0.0005   1        0
 
 [[script]]
 import matplotlib.pyplot as plt

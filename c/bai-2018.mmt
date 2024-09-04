@@ -1,10 +1,10 @@
 [[model]]
 name: bai-2018
-version: 20240813
+version: 20240904
 mmt_authors: Michael Clerx
 display_name: Bai et al., 2018
 desc: """
-    The human left-atrial AP model by Bai et al. [1], based on the 
+    The human left-atrial AP model by Bai et al. [1], based on the
     ventricular model by Ten Tusscher and Panfilov [2].
 
     This implementation is based on the author-provided CellML [3], but
@@ -12,10 +12,13 @@ desc: """
     numerically by comparing the calculates derivatives to the values from the
     author-provided CellML. Differences from [2] are indicated throughout.
 
+    The stimulus was set to 0.5ms and approximately twice the threshold for
+    depolarisation.
+
     References:
 
-    [1] Bai, J. Gladding, P. A., Stiles, M. K., Fedorov, V. V. & Zhao, J. 
-        (2018) Ionic and cellular mechanisms underlying TBX5/PITX2 
+    [1] Bai, J. Gladding, P. A., Stiles, M. K., Fedorov, V. V. & Zhao, J.
+        (2018) Ionic and cellular mechanisms underlying TBX5/PITX2
         insufficiency-induced atrial fibrillation: Insights from mathematical
         models of human atrial cells. Scientific Reports 8:15642
         https://doi.org/10.1038/s41598-018-33958-y
@@ -29,7 +32,7 @@ desc: """
 
     [4] Clerx, M., Barral, Y., Agrawal, A. & Mirams, G. R. (2020)
         TNNP unit fixes
-        https://models.cellml.org/workspace/604/file/de5a4e600b57c8b9b0bd477695648c82351bc6dd/TNNP_unit_fixes.pdf   
+        https://models.cellml.org/workspace/604/file/de5a4e600b57c8b9b0bd477695648c82351bc6dd/TNNP_unit_fixes.pdf
 
     """
 # Initial values
@@ -95,7 +98,7 @@ i_ion = (+ ina.INa
 [stimulus]
 i_stim = engine.pace * amplitude
     in [A/F]
-amplitude = -80 [A/F]
+amplitude = -29 [A/F] * 2
     in [A/F]
 
 #
@@ -114,6 +117,7 @@ Vsr = 1094 [um^3]
 Cm = 185 [pF]
     in [pF]
     desc: Cell capacitance
+    label cell_capacitance
 
 #
 # Physical constants
@@ -521,7 +525,7 @@ IK_total = ik1.IK1 + ito.Ito + ikr.IKr + iks.IKs + ipk.IpK + ikur.IKur + stimulu
 
 [[protocol]]
 # Level  Start    Length   Period   Multiplier
-1        10       0.5      1000.0   0
+1        50       0.5      1000.0   0
 
 [[script]]
 import matplotlib.pyplot as plt

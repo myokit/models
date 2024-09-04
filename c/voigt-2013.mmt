@@ -1,6 +1,6 @@
 [[model]]
 name: voigt-2013
-version: 20230202
+version: 20240904
 mmt_authors: Henry Sutanto, Jordi Heijman, Michael Clerx
 desc: """
     The 2013 model of the human atrial AP by Voigt & Heijman et al. [1].
@@ -13,8 +13,8 @@ desc: """
     This implementation was adapted (reformatting only) from mmt code provided
     by Henry Sutanto and Jordi Heijman.
 
-    The stimulus was set to 0.5 [ms] and approximately twice the threshold value
-    for depolarisation.
+    The stimulus was set to 0.5 [ms] and approximately twice the threshold
+    value for depolarisation.
 
     [1] *Voigt, N., *Heijman, J., Trausch, A., Mintert-Jancke, E., Pott, L.,
         Ravens, U., & Dobrev, D. (2013). *Shared first authors. Impaired
@@ -112,7 +112,7 @@ i_diff = 0 [A/F]
 # Stimulus current
 #
 [stimulus]
-amplitude = 2 * -24.10 [A/F]
+amplitude = 2 * -25 [A/F]
     in [A/F]
 I_stim = engine.pace * amplitude
     in [A/F]

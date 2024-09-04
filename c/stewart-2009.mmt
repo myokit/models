@@ -1,6 +1,6 @@
 [[model]]
 name: stewart-2009
-version: 20230419
+version: 20240904
 mmt_authors: Michael Clerx
 display_name: Stewart et al., 2009
 desc: """
@@ -16,6 +16,9 @@ desc: """
       with links to the relevant document section.
     In addition, incorrect units in F, R, Cm, gCaL, Vc, Vss, and Vsr were
     corrected.
+    
+    The stimulus was set to 0.5ms and approximately twice the threshold for
+    (immediate) depolarisation.
 
     [1] Stewart, P., Aslanidi, O. V., Noble, D., Noble, P. J., Boyett, M. R., &
         Zhang, H. (2009). Mathematical model of the electrical action potential
@@ -88,6 +91,7 @@ pace = 0
 # Membrane potential
 #
 [membrane]
+use stimulus.i_stim
 dot(V) = -(i_ion + i_stim + i_diff)
     in [mV]
     label membrane_potential
@@ -96,9 +100,14 @@ i_ion = sodium.INa_tot + potassium.IK_tot + calcium.ICa_tot
 i_diff = 0 [A/F]
     in [A/F]
     bind diffusion_current
+
+#
+# Stimulus current
+#
+[stimulus]
 i_stim = engine.pace * amplitude
     in [A/F]
-amplitude = -30 [A/F]
+amplitude = -10 [A/F] * 2
     in [A/F]
 
 #
@@ -552,7 +561,7 @@ P_kna = 0.03
 
 [[protocol]]
 # Level  Start    Length   Period   Multiplier
-1        100      0.5      1000     0
+1        50       0.5      1000     0
 
 [[script]]
 import matplotlib.pyplot as plt

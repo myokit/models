@@ -1,13 +1,13 @@
 [[model]]
 name: courtemanche-1998
-version: 20240903
+version: 20240904
 mmt_authors: Michael Clerx
 desc: """
     Model of the human atrial action potential by Courtemanche et al. [1].
-    
+
     Adapted from the CellML implementation by Penny Noble [2], and checked
     against the published equations.
-    
+
     For some constants, the CellML implementation has more digits than the
     paper. In addition, the CellML model corrects a sign error in the equation
     for ikur.ui.tau.beta (as can be seen by comparing the graph for ikr.ui.tau
@@ -15,21 +15,24 @@ desc: """
     on the original code, so this Myokit implementation follows the CellML
     file. Differences with the equations in the paper are highlighted with
     comments in the code below.
-    
+
     This implementation makes some cosmetic changes, and three larger ones:
-    
+
     1. Currents are all normalised, as in the paper.
     2. The stimulus was set to 0.5ms and approximately twice the threshold
        value for depolarisation at 1Hz pacing.
     3. To ensure that [K]i stabilised, the stimulus current was added to the
        equation for [K]i.
-    
+
+    In this Myokit implementation, the stimulus was set to 0.5 [ms] and
+    approximately twice the threshold value for depolarisation.
+
     [1] Courtemanche, M., Ramirez, R. J., & Nattel, S. (1998) Ionic mechanisms
         underlying human atrial action potential properties: insights from a
         mathematical model. American Journal of Physiology - Heart and
         Circulatory Physiology, 275, H301-H321.
         https://doi.org/10.1152/ajpheart.1998.275.1.H301
-    
+
     [2] https://models.cellml.org/exposure/0e03bbe01606be5811691f9d5de10b65
 
 """
@@ -99,7 +102,7 @@ amplitude = 2 * -4618 [pA]
     desc: """
         Under baseline conditions, at 1Hz with a 0.5ms stimulus, -4618 pA is
         approximately the smallest value that triggers three successive APs.
-        
+
         The paper mentions a 1Hz stimulus of 2ms and 2000pA, used in figure 14:
         "Figure 14 shows a model AP generated during stimulation at 1,000 ms in
         response to 2-ms pulses of 2-nA amplitude (twice diastolic threshold)."
@@ -123,7 +126,7 @@ pace = 0
 [phys]
 R = 8.3143 [J/mol/K]
     in [J/mol/K]
-    desc: 
+    desc:
 T = 310 [K]
     in [K]
     desc: Temperature
@@ -577,7 +580,7 @@ dot(v) = (inf - v) / tau
         in [ms]
     inf = 1 - (1 + exp(-(Fn - 0.2 * c1) / c2)) ^ (-1)
 dot(w) = (inf - w) / tau
-    tau = 6 [ms*mV] * if(abs(V - 7.9 [mV]) < 1e-6 [mV], 
+    tau = 6 [ms*mV] * if(abs(V - 7.9 [mV]) < 1e-6 [mV],
             2 / 13 [mV],
             (1 - exp(-(V - 7.9 [mV]) / 5 [mV])) / ((1 + 0.3 * exp(-(V - 7.9 [mV]) / 5 [mV])) * (V - 7.9 [mV]))
         )
@@ -673,7 +676,7 @@ Ca_CSQN = CSQN_max * CaRel / (CaRel + Km_CSQN)
 
 [[protocol]]
 # Level  Start    Length   Period   Multiplier
-1.0      50       0.5      1000     0
+1        50       0.5      1000     0
 
 [[script]]
 import matplotlib.pyplot as plt

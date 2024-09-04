@@ -18,6 +18,9 @@ desc: """
     Note that the CellML version uses an elevated external calcium of 2.7,
     while the paper and the matlab code use the default value of 1.8.
 
+    The stimulus was set to 0.5ms at approximately twice the threshold for
+    depolarisation.
+
     References:
 
     [1] Bartolucci C, Passini E, Hyttinen J, Paci M & Severi S (2020).
@@ -127,13 +130,10 @@ i_ion = (+ ina.INa
          + inal.INaL
          + ito.Ito
          + ical.ICaL
-         + ical.ICaNa
-         + ical.ICaK
          + ikr.IKr
          + iks.IKs
          + ik1.IK1
-         + inaca.INaCa
-         + inacass.INaCa_ss
+         + inacass.INaCa_total
          + inak.INaK
          + inab.INab
          + ikb.IKb
@@ -482,17 +482,19 @@ PhiNa =  V * FFRT * (0.75 * Na_ss * exp(V * FRT) - 0.75 * Na_o) / (exp(V * FRT) 
 PhiK = V * FFRT * (0.75 * K_ss * exp(V * FRT) - 0.75 * K_o) / (exp(V * FRT) - 1)
     in [mC/L]
 # Current
-ICaLnp = PCa * PhiCa * (O + OCa)
+ICaLCa_np = PCa * PhiCa * (O + OCa)
     in [A/F]
-ICaNanp = PNa * PhiNa * (O + OCa)
+ICaLNa_np = PNa * PhiNa * (O + OCa)
     in [A/F]
-ICaKnp = PK * PhiK * (O + OCa)
+ICaLK_np = PK * PhiK * (O + OCa)
     in [A/F]
-ICaK = (icalp.ICaKp * camk.f + ICaKnp * (1 - camk.f))
+ICaLCa = (icalp.ICaLCa_p * camk.f + ICaLCa_np * (1 - camk.f))
     in [A/F]
-ICaL = (icalp.ICaLp * camk.f + ICaLnp * (1 - camk.f))
+ICaLNa = (icalp.ICaLNa_p * camk.f + ICaLNa_np * (1 - camk.f))
     in [A/F]
-ICaNa = (icalp.ICaNap * camk.f + ICaNanp * (1 - camk.f))
+ICaLK = (icalp.ICaLK_p * camk.f + ICaLK_np * (1 - camk.f))
+    in [A/F]
+ICaL = ICaLCa + ICaLNa + ICaLK
     in [A/F]
 
 #
@@ -536,11 +538,11 @@ dot(CCa) = beta * OCa + psi * I2Ca - (omega + alpha) * CCa + r_up * C - r_down *
 OCa = 1 - CCa - I1Ca - I2Ca - C - I1 - I2 - O
 # Current
 fp = 1.1
-ICaLp = fp * ical.PCa * ical.PhiCa * (O + OCa)
+ICaLCa_p = fp * ical.PCa * ical.PhiCa * (O + OCa)
     in [A/F]
-ICaNap = fp * ical.PNa * ical.PhiNa * (O + OCa)
+ICaLNa_p = fp * ical.PNa * ical.PhiNa * (O + OCa)
     in [A/F]
-ICaKp = fp * ical.PK * ical.PhiK * (O + OCa)
+ICaLK_p = fp * ical.PK * ical.PhiK * (O + OCa)
     in [A/F]
 
 #
@@ -822,6 +824,8 @@ JncxCa = E2 * k2 - E1 * k1
 INaCa_ss = 0.2 * inaca.fNaCa * inaca.gNaCa * allo * (JncxNa + 2 * JncxCa)
     in [A/F]
     desc: Sodium/Calcium exchange current into the T-Tubule subspace
+INaCa_total = inaca.INaCa + INaCa_ss
+    in [A/F]
 
 #
 # INaK: Sodium/potassium ATPase current
@@ -1074,7 +1078,7 @@ INa_tot = ina.INa + inal.INaL + inab.INab + 3 * inaca.INaCa + 3 * inak.INaK
 dot(Na_i) = -INa_tot * AFC / vmyo + diff.JdiffNa * vss / vmyo
     desc: Intracellular potassium concentration
     in [mM]
-INa_ss_tot = ical.ICaNa + 3 * inacass.INaCa_ss
+INa_ss_tot = ical.ICaLNa + 3 * inacass.INaCa_ss
     in [A/F]
 dot(Na_ss) = -INa_ss_tot * AFC / vss - diff.JdiffNa
     in [mM]
@@ -1094,7 +1098,7 @@ IK_tot = (
     - 2 * inak.INaK
 )
     in [A/F]
-IK_ss_tot = ical.ICaK
+IK_ss_tot = ical.ICaLK
     in [A/F]
 dot(K_i) = -(IK_tot + stimulus.i_stim) * AFC / vmyo + diff.JdiffK * vss / vmyo
     desc: Intracellular potassium concentration
@@ -1137,7 +1141,7 @@ dot(Ca_i) = buff * (-ICa_tot * AFC / (2 * vmyo) - serca.Jup * vsr / vmyo + serca
     in [mM]
     desc: Intracellular calcium concentration
     buff = 1 / (1 + cmdnmax * kmcmdn / (kmcmdn + Ca_i)^2 + trpnmax * kmtrpn / (kmtrpn + Ca_i)^2)
-ICa_ss_tot = ical.ICaL - 2 * inacass.INaCa_ss
+ICa_ss_tot = ical.ICaLCa - 2 * inacass.INaCa_ss
     in [A/F]
 dot(Ca_ss) = buff * (-ICa_ss_tot * AFC / (2 * vss) + ryr.Jrel * vsr / vss - diff.Jdiff)
     in [mM]

@@ -1,6 +1,6 @@
 [[model]]
 name: ellinwood-2017
-version: 20240813
+version: 20240904
 mmt_authors: Michael Clerx
 desc: """
     The 2017 model of the human atrial AP by Ellinwood et al. [1, 2].
@@ -29,7 +29,7 @@ desc: """
         Fibrillation. Circulation Research, 109(9), 1055-1066.
         https://doi.org/10.1161/CIRCRESAHA.111.253955
 
-    [4] Morotti, S., McCulloch, A. D., Bers, D. M., Edwards, A. G., 
+    [4] Morotti, S., McCulloch, A. D., Bers, D. M., Edwards, A. G.,
         & Grandi, E. (2016) Journal of Molecular and Cellular Cardiology
         https://doi.org/10.1016/j.yjmcc.2015.07.030
 
@@ -138,7 +138,7 @@ i_diff = 0 [A/F]
 i_stim = engine.pace * amplitude
     in [A/F]
     label stimulus_current
-amplitude = -36 [A/F]
+amplitude = -19 [A/F] * 2
     in [A/F]
 
 #
@@ -431,8 +431,8 @@ kp = 1 / (1 + exp(7.488 - V / 5.98 [mV]))
 #
 [ikach]
 use membrane.V, mode.ACh
-I_KAch = if(ACh == 0 [mM], 0 [A/F],
-            1 / (1 + (0.03 [mM] / ACh)^2.1) * (0.08 [mS/uF] + 0.4 [mS/uF] / (1 + exp((V + 91 [mV]) / 12 [mV]))) * (V - rev.EK))
+IKACh = if(ACh == 0 [mM], 0 [A/F],
+           1 / (1 + (0.03 [mM] / ACh)^2.1) * (0.08 [mS/uF] + 0.4 [mS/uF] / (1 + exp((V + 91 [mV]) / 12 [mV]))) * (V - rev.EK))
     in [A/F]
 
 #
@@ -913,7 +913,7 @@ dot(Na_i) = J_Na_slmyo / Vmyo * (Na_sl - Na_i)
 # Potassium concentration
 #
 [potassium]
-I_K_tot = ito.Ito + ikr.IKr + iks.IKs + ik1.IK1 - 2 * inak.INaK + ical.ICaL_K + ikp.IKp + ikur.IKur + ikach.I_KAch
+I_K_tot = ito.Ito + ikr.IKr + iks.IKs + ik1.IK1 - 2 * inak.INaK + ical.ICaL_K + ikp.IKp + ikur.IKur + ikach.IKACh
     in [A/F]
 
 [[protocol]]

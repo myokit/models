@@ -1,19 +1,20 @@
 [[model]]
 name: iyer-2004
-version: 20230208
+version: 20240904
 mmt_authors: Michael Clerx
 desc: """
     The 2004 model of the human left-ventricular AP by Iyer et al. [1].
 
-    The stimulus current was set to -100A/F for 0.5ms, as in the paper.
-
-    This implementation is based on the CellML model [2] and the original
-    fortran code. It was checked against the original code by comparing the
+    This implementation is based on the CellML version by Steven Niederer [2]
+    and the original fortran code. It was checked against the original code by comparing the
     calculated derivatives, which matched to within machine precision.
 
     The formulation for ical.y.tau used in this file is the one from the code,
     which differs slightly from the version in the paper (which is used in the
     updated CellML file).
+    
+    The stimulus was set to 0.5ms and approximately twice the minimum level for
+    depolarisation.
 
     [1] Iyer, V., Mazhari, R., & Winslow, R. L. (2004). A computational model
         of the human left-ventricular epicardial myocyte. Biophysical Journal,
@@ -190,7 +191,7 @@ i_ion = (
 [stimulus]
 i_stim = engine.pace * amplitude
     in [A/F]
-amplitude = -100 [A/F]
+amplitude = -46 [A/F] * 2
     in [A/F]
 
 #
@@ -1101,7 +1102,7 @@ dot(Ki) = -(ikr.IKr + iks.IKs + ik1.IK1 + ical.ICaK + stimulus.i_stim - 2 * inak
 
 [[protocol]]
 # Level  Start    Length   Period   Multiplier
-1        10       0.5      1000     0
+1        50       0.5      1000     0
 
 [[script]]
 import matplotlib.pyplot as plt

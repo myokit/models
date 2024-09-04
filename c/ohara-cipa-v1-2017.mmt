@@ -1,6 +1,6 @@
 [[model]]
 name: dutta-2017
-version: 20240903
+version: 20240904
 mmt_authors: Michael Clerx
 display_name: O'Hara-CiPA-v1, 2017
 desc: """
@@ -18,10 +18,13 @@ desc: """
      - Conductances for INaL, ICaL, IKs, and IK1 were rescaled, as described
        in [1].
 
-    This Myokit implementation includes a further two corrections to INaK, as 
+    This Myokit implementation includes a further two corrections to INaK, as
     documented in [7]. Compared to the CellML [5], it uses a simpler fix for
     discontinuities in the phiCaL parameters, and it has a more readable
     notation for the IKr model.
+
+    The stimulus was set to 0.5ms and approximately twice the threshold for
+    depolarisation.
 
     References:
 
@@ -55,7 +58,7 @@ desc: """
     [5] https://models.cellml.org/e/4e8/ohara_rudy_cipa_v1_2017.cellml/view
 
     [6] https://github.com/FDA/CiPA/blob/master/AP_simulation/models/newordherg_qNet.c
-    
+
     [7] https://docs.google.com/document/d/111fqNzQGvGAjB_PrkvejEhzqwROrR6czz_OBz7Ep-iM
 
 """
@@ -144,7 +147,7 @@ i_ion = (
 [stimulus]
 i_stim = engine.pace * amplitude
     in [A/F]
-amplitude = -80 [A/F]
+amplitude = -58 [A/F] * 2
     in [A/F]
 
 #

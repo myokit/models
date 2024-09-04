@@ -1,6 +1,6 @@
 [[model]]
 name: sampson-2010
-version: 20240807
+version: 20240904
 mmt_authors: Michael Clerx
 desc: """
     The 2010 model of the human Purkinje cell AP by Sampson et al. [1].
@@ -9,6 +9,9 @@ desc: """
     authors as supplement to [1]. It was checked against the original code by
     comparing the calculated derivatives (which matched to within machine
     precision).
+
+    The stimulus was set to 0.5ms and approximately half the depolarisation
+    threshold.
 
     [1] Sampson, K. J., Iyer, V., Marks, A. R., & Kass, R. S. (2010). A
         computational model of Purkinje fibre single cell electrophysiology:
@@ -131,25 +134,31 @@ pace = 0
 # Appendix page 24
 #
 [membrane]
+use stimulus.i_stim
+dot(V) = -(i_ion + i_diff + i_stim)
+    in [mV]
+    desc: Membane potential
+    label membrane_potential
 i_ion = a1 + a2 + a3
     in [A/F]
-a1 = nav15.INa + nav11.INa1 + ical.ICa + icat.I + ical.ICaK + ikr.IKr + iks.IKs + ihcn.IHCN
-    in [A/F]
-a2 = ik1.IK1 + inaca.INaCa + inak.INaK + ito.Ito1 + isus.Isus
-    in [A/F]
-a3 = ipca.IpCa
-    in [A/F]
-dot(V) = -(i_ion + i_diff + i_stim)
-    desc: membane potential
-    in [mV]
-    label membrane_potential
+    a1 = nav15.INa + nav11.INa1 + ical.ICa + icat.I + ical.ICaK + ikr.IKr + iks.IKs + ihcn.IHCN
+        in [A/F]
+    a2 = ik1.IK1 + inaca.INaCa + inak.INaK + ito.Ito1 + isus.Isus
+        in [A/F]
+    a3 = ipca.IpCa
+        in [A/F]
 i_diff = 0 [A/F]
     in [A/F]
     bind diffusion_current
+
+#
+# Stimulus current
+#
+[stimulus]
 i_stim = engine.pace * amplitude
     in [A/F]
-    amplitude = -100 [A/F]
-        in [A/F]
+amplitude = -30 [A/F] * 2
+    in [A/F]
 
 #
 # Nav1.5 current
@@ -934,7 +943,7 @@ dot(Nai) = - a1 * INa_tot
 [potassium]
 use cell.a1, cell.a2
 IK_tot = (ikr.IKr + iks.IKs + ik1.IK1 + ical.ICaK + (2 * ihcn.IHCN / 3)
-          + isus.Isus + membrane.i_stim - 2 * inak.INaK + ito.Ito1)
+          + isus.Isus + stimulus.i_stim - 2 * inak.INaK + ito.Ito1)
     in [A/F]
 dot(Ki) = - a1 * IK_tot
     desc: intracellular K+ concentration
@@ -1141,7 +1150,7 @@ Cao = 2 [mM] : extracellular Ca2+ concentration
 
 [[protocol]]
 # Level  Start    Length   Period   Multiplier
-1        0        0.5      1000     0
+1        50       0.5      1000     0
 
 [[script]]
 import myokit

@@ -1,6 +1,6 @@
 [[model]]
 name: nygren-1998
-version: 20240813
+version: 20240904
 mmt_authors: Michael Clerx
 desc: """
     Model of the human atrial action potential by Nygren et al. [1, 2], based
@@ -15,7 +15,7 @@ desc: """
     thesis [2] and a recreation of the paper's Figure 8. For Idi, the CellML
     corrected an obvious sign error in the paper's equations.
 
-    In this Myokit implementation, the stimulus was set to 0.5 [ms] and
+    In this Myokit implementation, the stimulus was set to 0.5 ms and
     approximately twice the threshold value for depolarisation.
 
     In addition, as suggested in [5], two measures were taken to stabilise the
@@ -28,8 +28,8 @@ desc: """
         Research, 82, 63-81.
         https://doi.org/10.1161/01.RES.82.1.63
 
-    [2] Nygren, A. (1998) Mechanisms of repolarization and conduction in a 
-        mathematical model of electrophysiological responses in the human 
+    [2] Nygren, A. (1998) Mechanisms of repolarization and conduction in a
+        mathematical model of electrophysiological responses in the human
         atrium. Diss., Rice University.
         https://hdl.handle.net/1911/19297.
 
@@ -40,7 +40,7 @@ desc: """
 
     [4] https://models.physiomeproject.org/exposure/ad761ce160f3b4077bbae7a004c229e3
 
-    [5] Jacquemet, V. (2007) Steady-state solutions in mathematical models of 
+    [5] Jacquemet, V. (2007) Steady-state solutions in mathematical models of
         atrial cell electrophysiology and their stability. Mathematical
         Biosciences 208, 241–269.
         https://doi.org/10.1016/j.mbs.2006.10.007
@@ -212,7 +212,7 @@ INa = PNa * m^3 * (0.9 * h1 + 0.1 * h2) * Nac * V * FFRT * (exp((V - rev.ENa) * 
 #
 # L-type calcium current
 # Page 64, Table 7
-# 
+#
 # Note: The value for kCa given in the paper is 0.25mM, but the CellML file and
 # several published implementations use 0.025mM. The PhD thesis [2] similarly
 # uses 0.025mM.
@@ -572,7 +572,7 @@ dot(Cac) = (Cab - Cac) / tau_Ca + (ical.ICaL + ibca.IBCa + icap.ICaP - 2 * inaca
 
 [[protocol]]
 # Level  Start    Length   Period   Multiplier
-1        0.1      0.0005   1        0
+1        0.05     0.0005   1        0
 
 [[script]]
 import matplotlib.pyplot as plt

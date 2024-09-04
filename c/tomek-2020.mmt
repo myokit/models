@@ -1,7 +1,7 @@
 [[model]]
 name: tomek-2020
 mmt_authors: Michael Clerx
-version: 20240903
+version: 20240904
 desc: """
     The Tomek et al. "ToRORd-dynCL" model of the human ventricular action
     potential [1], based on the earlier model without dynamic chloride [2],
@@ -14,10 +14,10 @@ desc: """
     calculated derivatives against those from the author-provided CellML and
     matlab code: it matched to within machine precision. After verification,
     the fixes to INaK desribed in [6] were applied.
-    
+
     The stimulus was set to 1Hz pacing for 0.5ms, at approximately two times
-    the minimum amplitude needed to elicit an AP.
-    
+    the minimum amplitude needed to elicit three successive APs.
+
     References:
 
     [1] Tomek, J., Bueno-Orovio, A., & Rodriguez, B. (2020) ToR-ORd-dynCl: an
@@ -143,7 +143,7 @@ i_ion = (
 [stimulus]
 i_stim = engine.pace * amplitude
     in [A/F]
-amplitude = 2 * -53 [A/F]
+amplitude = -53 [A/F] * 2
     in [A/F]
 
 #
@@ -1131,7 +1131,7 @@ f = 1 / (1 + KmCaMK / CaMK_active)
 
 [[protocol]]
 # Level  Start    Length   Period   Multiplier
-1        10       0.5      1000     0
+1        50       0.5      1000     0
 
 [[script]]
 import matplotlib.pyplot as plt
@@ -1161,7 +1161,7 @@ for mode, label in modes.items():
     s.reset()
     s.pre(100 * 1000)
     d = s.run(1000, log=['engine.time', 'membrane.V', 'calcium.Ca_i'])
-    
+
     ax0.plot(d.time(), d['membrane.V'], label=label)
     ax1.plot(d.time(), d['calcium.Ca_i'])
 

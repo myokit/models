@@ -1,21 +1,24 @@
 [[model]]
 name: aguilar-2017
-version: 20240816
+version: 20240904
 mmt_authors: Michael Clerx
 desc: """
     Model of the human atrial action potential by Aguilar et al. [1], based on
     the model by Courtemanche et al. [2] and including the IKACh current
     described in [3].
-    
+
     This Myokit implementation is based on the CellML code for the Courtemanche
     model [4], but with IKur and IKAch equations from [1] and [2] added in. No
     source model was available to very against numerically.
-    
+
+    The stimulus was set to 0.5 [ms] and approximately twice the threshold
+    value for depolarisation.
+
     [1] Aguilar, M., Feng, J., Vigmond, E. J., Comtois, P., & Nattel, S. (2017)
         Rate-Dependent Role of IKur in Human Atrial Repolarization and Atrial
         Fibrillation Maintenance. Biophysical Journal 112, 1997-2010.
         https://doi.org/10.1016/j.bpj.2017.03.022
-    
+
     [2] Courtemanche, M., Ramirez, R. J., & Nattel, S. (1998) Ionic mechanisms
         underlying human atrial action potential properties: insights from a
         mathematical model. American Journal of Physiology - Heart and
@@ -23,11 +26,11 @@ desc: """
         https://doi.org/10.1152/ajpheart.1998.275.1.H301
 
     [3] Kneller, J., Zou, R., Vigmond, E. J., Wang, Z., Leon, L. J., & Nattel,
-        S. (2002) Cholinergic Atrial Fibrillation in a Computer Model of a 
-        Two-Dimensional Sheet of Canine Atrial Cells With Realistic Ionic 
+        S. (2002) Cholinergic Atrial Fibrillation in a Computer Model of a
+        Two-Dimensional Sheet of Canine Atrial Cells With Realistic Ionic
         Properties. Circulation Research, 90:e73-e87.
-        https://doi.org/10.1161/01.RES.0000019783.88094.BA    
-    
+        https://doi.org/10.1161/01.RES.0000019783.88094.BA
+
     [4] https://models.cellml.org/exposure/0e03bbe01606be5811691f9d5de10b65
 
 """
@@ -66,7 +69,7 @@ dot(V) = -(I_ion + I_diff + stimulus.I_stim)
     in [mV]
     label membrane_potential
 I_ion = (
-        + ina.I_Na
+        + ina.INa
         + ik1.IK1
         + ito.Ito
         + ikur.IKur
@@ -113,7 +116,7 @@ pace = 0
 [phys]
 R = 8.3143 [J/mol/K]
     in [J/mol/K]
-    desc: 
+    desc:
 T = 310 [K]
     in [K]
     desc: Temperature
@@ -179,7 +182,7 @@ KQ10 = 3
 #
 [sodium]
 use phys.F, geom.V_i, geom.Cm
-dot(Nai) = (-3 * inak.INaK - (3 * inaca.INaCa + ib.IbNa + ina.I_Na)) * Cm / (V_i * F)
+dot(Nai) = (-3 * inak.INaK - (3 * inaca.INaCa + ib.IbNa + ina.INa)) * Cm / (V_i * F)
     in [mM]
     label Na_i
 
@@ -274,10 +277,10 @@ dot(j) = (inf - j) / tau
     tau = 1 / (alpha + beta)
         in [ms]
     inf = alpha / (alpha + beta)
-g_Na = 7.8 [nS/pF]
+gNa = 7.8 [nS/pF]
     in [nS/pF]
     desc: Maximal INa conductance
-I_Na = g_Na * m^3 * h * j * (V - nernst.ENa)
+INa = gNa * m^3 * h * j * (V - nernst.ENa)
     in [A/F]
     label I_Na
 
@@ -457,7 +460,7 @@ ICaL = gCaL * d * f * fCa * (V - ECaL)
 
 #
 # Acetylcholine-activated potassium current
-# 
+#
 # From [3], without changes.
 #
 [ikach]
@@ -585,7 +588,7 @@ dot(v) = (inf - v) / tau
         in [ms]
     inf = 1 - (1 + exp(-(Fn - 0.2 * c1) / c2)) ^ (-1)
 dot(w) = (inf - w) / tau
-    tau = 6 [ms*mV] * if(abs(V - 7.9 [mV]) < 1e-6 [mV], 
+    tau = 6 [ms*mV] * if(abs(V - 7.9 [mV]) < 1e-6 [mV],
             2 / 13 [mV],
             (1 - exp(-(V - 7.9 [mV]) / 5 [mV])) / ((1 + 0.3 * exp(-(V - 7.9 [mV]) / 5 [mV])) * (V - 7.9 [mV]))
         )
