@@ -451,6 +451,7 @@ dot(i) = (inf - i) / tau
 
 gKur = 0.006398 [nS/pF] * 0.9 * if(af.af == 1, 0.5, 1)
     in [nS/pF]
+    label g_Kur
 IKur = Cm * gKur * (4.5128 + 1.899769 / (1 + exp((V - 20.5232 [mV]) / -8.26597 [mV]))) * (1 - BO - BC) * a * i * (V - nernst.EK)
     in [pA]
 

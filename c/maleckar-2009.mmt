@@ -276,6 +276,7 @@ dot(i) = (inf - i) / tau
         in [s]
 gKur = 2.25 [nS]
     in [nS]
+    label g_Kur
 IKur = gKur * a * i * (V - rev.EK)
     in [pA]
 
@@ -292,6 +293,7 @@ dot(pa) = (inf - pa) / tau
 pi = 1 / (1 + exp((V + 55 [mV]) / 24 [mV]))
 gKr = 0.5 [nS]
     in [nS]
+    label g_Kr
 IKr = gKr * pa * pi * (V - rev.EK)
     in [pA]
 

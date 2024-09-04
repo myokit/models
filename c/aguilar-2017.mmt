@@ -359,9 +359,11 @@ dot(uis) = (inf - uis) / tau
     inf = 1 / (1 + exp((V + 5 [mV]) / 5 [mV]))
     tau = 5800 [ms] / (1 + exp((V + 80 [mV]) / -11 [mV]))
         in [ms]
-gKur = 0.005 [nS/pF] + 0.05 [nS/pF] / (1 + exp((V - 15 [mV]) / -13 [mV]))
+gKur_base = 0.005 [nS/pF]
     in [nS/pF]
-    desc: Maximal IKur conductance
+    label g_Kur
+gKur = gKur_base * (1 + 10 / (1 + exp((V - 15 [mV]) / -13 [mV])))
+    in [nS/pF]
 IKur = gKur * ua^3 * uif * uis * (V - nernst.EK)
     in [A/F]
     label I_Kur

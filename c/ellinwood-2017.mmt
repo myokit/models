@@ -470,6 +470,7 @@ gKur = gKur_base * (1 - 0.5 * mode.AF) * (1 + 2 * mode.ISO)
     in [mS/uF]
 gKur_base = 0.045 [mS/uF] * 1.36
     in [mS/uF]
+    label g_Kur
 a = 2.65 [1/ms] * exp((V - 75.9 [mV]) / 70 [mV])
     in [1/ms]
 b = 2.65 [1/ms] * exp((V - 75.9 [mV]) / 70 [mV]) * exp(-(V + 20.9 [mV]) / 10 [mV]) / (1 + 0.3 * exp(-(V + 20.9 [mV]) / 10 [mV]))

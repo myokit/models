@@ -433,6 +433,7 @@ dot(s) = (inf - s) / tau
         in [ms]
 gKur = (1 - 0.5 * cell.AF) * 0.045 [mS/uF]  # Corresponds to LA Grandi parameters
     in [mS/uF]
+    label g_Kur
 IKur = gKur * r * s * (V - nernst.EK)
     in [A/F]
     label I_Kur

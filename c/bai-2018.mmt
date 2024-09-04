@@ -259,8 +259,10 @@ dot(s) = (inf - s) / tau
 use membrane.V, nernst.EK
 IKur = gKur * x * y * (V - EK)
     in [A/F]
+    label I_Kur
 gKur = 0.045 [mS/uF]
     in [mS/uF]
+    label g_Kur
 dot(x) = (inf - x) / tau
     inf = 1 / (1 + exp((V + 6 [mV]) / -8.6 [mV]))
     tau = 9 [ms] / (1 + exp((V + 6 [mV]) / 12 [mV])) + 0.5 [ms]

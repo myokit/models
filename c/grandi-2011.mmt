@@ -419,6 +419,7 @@ gKur = gKur_base * (1 - 0.5 * mode.AF) * (1 + 2 * mode.ISO) * (1 + 0.2 * mode.RA
     in [mS/uF]
 gKur_base = 0.045 [mS/uF]
     in [mS/uF]
+    label g_Kur
 dot(r) = (inf - r) / tau
     inf = 1 / (1 + exp((V + 6 [mV]) / -8.6 [mV]))
     tau = 9 [ms] / (1 + exp((V + 5 [mV]) / 12 [mV])) + 0.5 [ms]

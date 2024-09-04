@@ -14,6 +14,8 @@
 - `g_CaL`, a variable that can be scaled up and down to scale `I_CaL`.
 - `I_Kr`, the rapid delayed rectifier potassium current.
 - `g_Kr`, a variable that can be scaled up or down to scale `I_Kr`.
+- `I_Kur`, the ultra-rapid potassium or sustained outward current.
+- `g_Kur`, a variable that can be scaled up or down to scale `I_Kur`.
 
 - `Ca_i`, the bulk cytosolic calcium concentration
 - `K_o`, the external (bulk, buffer, not cleft) potassium concentration
