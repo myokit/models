@@ -1,11 +1,12 @@
 [[model]]
 name: noble-1962
-version: 20230202
+version: 20240904
 mmt_authors: Michael Clerx
+display_name: Noble, 1962
 desc: """
     The 1962 model of the AP in Purkinje fibers by Denis Noble [1].
 
-    Adapted from  CellML version.
+    Adapted from the CellML version by Catherine LLoyd.
 
     References :
 
@@ -14,44 +15,8 @@ desc: """
         of Physiology, 160(2), 317-352.
         https://doi.org/10.1113/jphysiol.1962.sp006849
 
-    Original CellML metadata follows below:
-    ---------------------------------------
+    [2] https://models.physiomeproject.org/e/2a6
 
-    Noble Purkinje Fibre Model 1962
-    Catherine Lloyd
-    Auckland Bioengineering Institute, The University of Auckland
-
-    Model Status
-    This CellML model runs in COR, JSim and OpenCell to recreate the published
-    results. The units have been checked and they are consistent.
-
-    Model Structure
-
-    In 1962, Denis Noble published one of the first mathematical models of a
-    cardiac cell.  By adapting the equations of the original Hodgkin-Huxley
-    squid axon model (1952), Noble described the long lasting action and
-    pace-maker potentials of the Purkinje fibres of the heart.  The
-    potassium-current equations differ from those of Hodgkin and Huxley in that
-    the potassium ions are assumed to flow through two types of channel in the
-    membrane.  By contrast, the sodium current equations are very similar to
-    those of Hodgkin and Huxley. The main failure of the Noble (1962) model is
-    that it only includes one voltage gated inward current, INa.  Calcium
-    currents had not yet been discovered, but there was a clue in the model
-    that something was missing.  The only way the model could be made to work
-    was to greatly extend the voltage range of the sodium current by reducing
-    the voltage dependence of the sodium activation process.  In effect the
-    sodium current was made to serve the function of both the sodium and the
-    calcium channels as far as the plateau is concerned.  There was a clear
-    experimental prediction: either sodium channels in the heart are
-    quantitatively different from those in neurons, or other inward
-    current-carrying channels must exist.  Both predictions are correct.
-
-    The original paper reference is cited below:
-
-    A Modification of the Hodgkin-Huxley Equations Applicable to Purkinje Fibre
-    Action and Pacemaker Potentials, Noble, D. 1962
-    Journal of Physiology, 160, 317-352.
-    PubMed ID: 14480151
     """
 # Initial values
 membrane.V = -87.0

@@ -75,6 +75,7 @@ def test(path):
         'mmt_authors',
         'version',
         'desc',
+        'display_name',
     ]
     for tag in tags:
         if tag not in m.meta:
