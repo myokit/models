@@ -302,10 +302,11 @@ KmNaip = 11 [mM]
 #
 [ikr]
 use membrane.V
-IKr = gKr * x * r * (V - rev.EK)
+IKr = gKr * sqrt(ion.K_o / 5.4 [mM]) * x * r * (V - rev.EK)
     in [A/F]
-gKr = 0.035 [mS/uF] * sqrt(ion.K_o / 5.4 [mM])
+gKr = 0.035 [mS/uF]
     in [mS/uF]
+    label g_Kr
 dot(x) = (inf - x) / tau
     inf = 1 / (1 + exp(-(V + 10 [mV]) / 5 [mV]))
     tau = (+ 550 [ms] / (1 + exp((-22 [mV] - V) / 9 [mV])) * 6 / (1 + exp((V + 11 [mV]) / 9 [mV]))

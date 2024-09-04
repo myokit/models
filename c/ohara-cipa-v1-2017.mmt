@@ -611,6 +611,7 @@ dot(Cbound) = -(r3 * Cbound - Kt * Obound) - (r3 * Cbound - Kt * IObound)
 fKr = piecewise(cell.mode == 0, 1, cell.mode == 1, 1.3, 0.8)
 gKr =  4.65854545454545618e-2 [mS/uF]
     in [mS/uF]
+    label g_Kr
 IKr = fKr * gKr * sqrt(extra.K_o / 5.4 [mM]) * O * (V - rev.EK)
     in [A/F]
 

@@ -130,6 +130,7 @@ i_ion = (ina.INa + inal.INaL
          + inaca.INaCa + inacass.INaCa_ss
          + inak.INaK + inab.INab + ipca.IpCa + icab.ICab)
     in [A/F]
+    label cellular_current
 
 #
 # Stimulus current
@@ -423,6 +424,7 @@ r = 1 / (1 + exp((V + 55 [mV]) / (0.32 * 75 [mV]))) * 1 / (1 + exp((V - 10 [mV])
     desc: Instantaneous IKr inactivation
 gKr = 0.0342 [mS/uF]
     in [mS/uF]
+    label g_Kr
 IKr = gKr * sqrt(extra.K_o / 5.4 [mM]) * x * r * (V - rev.E_K)
     in [A/F]
 

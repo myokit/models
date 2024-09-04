@@ -550,6 +550,7 @@ dot(I) = alpha_C2ToI * C1 + alpha_i * O - (beta_ItoC2 + beta_i) * I
 fKr = piecewise(cell.mode == 0, 1, cell.mode == 1, 1.3, 0.8)
 gKr = 0.0321 [mS/uF]
     in [mS/uF]
+    label g_Kr
 IKr = fKr * gKr * sqrt(extra.K_o / 5 [mM]) * O * (V - rev.EK)
     in [A/F]
 

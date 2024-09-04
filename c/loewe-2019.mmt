@@ -1,6 +1,6 @@
 [[model]]
 name: loewe-2019
-version: 20240903
+version: 20240904
 mmt_authors: Michael Clerx
 display_name: Loewe et al., 2019
 desc: """
@@ -9,8 +9,8 @@ desc: """
 
     This Myokit implementation is based on the CellML code by Axel Loewe [4].
     Two errors in the CellML file were corrected before import. The Myokit
-    implementation has extensive reformatting and unit corrections, and 
-    includes a small offset in IKACh to avoid divide-by-zero errors, as 
+    implementation has extensive reformatting and unit corrections, and
+    includes a small offset in IKACh to avoid divide-by-zero errors, as
     suggested by Alan Fabbri. It was tested against the original CellML by
     comparing the calculated derivatives, which matched to within machine
     precision.
@@ -102,6 +102,7 @@ i_tot = (+ if.If
          + isk.ISK
     )
     in [nA]
+    label cellular_current
 
 #
 # Acetylcholine
@@ -314,10 +315,11 @@ dot(r) = (inf - r) / tau
 #
 [ikr]
 use membrane.V
-gKr = 4.989099e-3 [uS] * sqrt(extra.K_o / 5.4 [mM])
-    in [uS]
-IKr = gKr * (0.9 * paf + 0.1 * pas) * piy * (V - rev.E_K)
+IKr = gKr * sqrt(extra.K_o / 5.4 [mM]) * (0.9 * paf + 0.1 * pas) * piy * (V - rev.E_K)
     in [nA]
+gKr = 4.989099e-3 [uS]
+    in [uS]
+    label g_Kr
 a_inf = 1 / (1 + exp(-(V + 10.0144 [mV]) / 7.6607 [mV]))
 dot(paf) = (a_inf - paf) / tau
     tau = 1 [s] / (30 * exp(V / 10 [mV]) + exp(-V / 12 [mV]))

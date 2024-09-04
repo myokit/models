@@ -91,6 +91,7 @@ i_ion = (+ ina.INa
          + inab.INab
         )
     in [A/F]
+    label cellular_current
 
 #
 # Stimulus current
@@ -196,10 +197,11 @@ inf = alpha / (alpha + beta)
 #
 [ikr]
 use membrane.V, nernst.EK
-IKr = gKr * xr1 * xr2 * (V - EK)
+IKr = gKr * sqrt(extra.Ko / 5.4 [mM]) * xr1 * xr2 * (V - EK)
     in [A/F]
-gKr = 0.1989 [mS/uF] * sqrt(extra.Ko / 5.4 [mM])    # Rescaled
+gKr = 0.1989 [mS/uF]    # Rescaled
     in [mS/uF]
+    label g_Kr
 dot(xr1) = (inf - xr1) / tau
     inf = 1 / (1 + exp((-26 [mV] - V) / 7 [mV]))
     tau = 1 [ms] * alpha * beta

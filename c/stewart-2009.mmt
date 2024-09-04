@@ -16,7 +16,7 @@ desc: """
       with links to the relevant document section.
     In addition, incorrect units in F, R, Cm, gCaL, Vc, Vss, and Vsr were
     corrected.
-    
+
     The stimulus was set to 0.5ms and approximately twice the threshold for
     (immediate) depolarisation.
 
@@ -97,6 +97,7 @@ dot(V) = -(i_ion + i_stim + i_diff)
     label membrane_potential
 i_ion = sodium.INa_tot + potassium.IK_tot + calcium.ICa_tot
     in [A/F]
+    label cellular_current
 i_diff = 0 [A/F]
     in [A/F]
     bind diffusion_current
@@ -297,6 +298,7 @@ dot(Xr2) = (xr2_inf - Xr2) / tau_xr2
     xr2_inf = 1 / (1 + exp((V + 88 [mV]) / 24 [mV]))
 g_Kr = 0.0918 [mS/uF]
     in [mS/uF]
+    label g_Kr
 i_Kr = g_Kr * sqrt(extra.K_o / 5.4 [mM]) * Xr1 * Xr2 * (V - nernst.E_K)
     in [A/F]
 

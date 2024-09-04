@@ -515,6 +515,7 @@ fKr = piecewise(cell.mode == 0, 1, cell.mode == 1, 1.3, 0.8)
 gKr = 0.046 [mS/uF]
     in [mS/uF]
     desc: Maximum conductance of IKr
+    label g_Kr
 IKr = fKr * gKr * sqrt(extra.K_o / 5.4 [mM]) * x * r * (V - rev.EK)
     desc: Rapid delayed potassium current
     in [A/F]

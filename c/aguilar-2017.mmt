@@ -392,6 +392,7 @@ dot(xr) = (inf - xr) / tau
 gKr = 0.029411765 [nS/pF] # Extra digits 11765 from CellML file
     in [nS/pF]
     desc: Maximal IKr conductance
+    label g_Kr
 IKr = gKr * xr * (V - nernst.EK) / (1 + exp((V + 15 [mV]) / 22.4 [mV]))
     in [A/F]
     label I_Kr

@@ -350,9 +350,10 @@ dot(x) = (inf - x) / tau
            + 230 [ms] / (1 + exp((V + 40 [mV]) / 20 [mV])))
         in [ms]
 r = 1 / (1 + exp((V + 74 [mV]) / 24 [mV]))
-gKr = 0.035 [mS/uF] * sqrt(ion.K_o / 5.4 [mM])
+gKr = 0.035 [mS/uF]
     in [mS/uF]
-IKr = gKr * x * r * (V - nernst.EK)
+    label g_Kr
+IKr = gKr * sqrt(ion.K_o / 5.4 [mM]) * x * r * (V - nernst.EK)
     in [A/F]
     label I_Kr
 

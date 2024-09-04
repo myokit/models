@@ -138,6 +138,7 @@ i_ion = (
         + icap.ICap
     )
     in [pA]
+    label cellular_current
 dot(V) = -(i_ion + i_stim + i_diff) / cell.Cm
     in [mV]
     label membrane_potential
@@ -315,6 +316,7 @@ dot(xr) = (inf - xr) / tau
     inf = 1 / (1 + exp((V + 14.1 [mV]) / -6.5 [mV]))
 gKr = 0.8 * 0.029411765 [nS/pF]
     in [nS/pF]
+    label g_Kr
 IKr = Cm * fKr * gKr * xr * (V - nernst.EK) / (1 + exp((V + 15 [mV]) / 22.4 [mV]))
     in [pA]
 

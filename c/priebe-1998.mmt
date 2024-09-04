@@ -241,6 +241,7 @@ i_Kr = g_Kr_max * xr * rik * (V - rev.E_K)
     in [A/F]
 g_Kr_max = 0.015 [mS/uF]
     in [mS/uF]
+    label g_Kr
 dot(xr) = alpha * (1 - xr) - beta * xr
     alpha = 0.005 [1/ms] * exp(0.0005266 [1/mV] * (V + 4.067 [mV])) / (1 + exp(-0.1262 [1/mV] * (V + 4.067 [mV])))
         in [1/ms]

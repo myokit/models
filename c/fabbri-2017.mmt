@@ -1,6 +1,6 @@
 [[model]]
 name: fabbri-2017
-version: 20240903
+version: 20240904
 mmt_authors: Michael Clerx, Aditi Agrawal
 display_name: Fabbri et al., 2017
 desc: """
@@ -97,6 +97,7 @@ i_tot = (
         + ikur.IKur
     )
     in [nA]
+    label cellular_current
 
 #
 # Acetylcholine
@@ -302,6 +303,7 @@ dot(r) = (inf - r) / tau
 use membrane.V
 gKr = 0.00424 [uS]
     in [uS]
+    label g_Kr
 IKr = gKr * (0.9 * paf + 0.1 * pas) * piy * (V - rev.E_K)
     in [nA]
 a_inf = 1 / (1 + exp(-(V + 10.0144 [mV]) / 7.6607 [mV]))

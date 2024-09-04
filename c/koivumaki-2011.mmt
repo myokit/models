@@ -73,7 +73,6 @@ calcium.CaSR2 =  6.10104205027038882e-01
 calcium.CaSR3 =  5.90926659120631581e-01
 calcium.CaSR4 =  5.72078107967216365e-01
 
-
 #
 # External variables
 #
@@ -113,7 +112,6 @@ i_diff = 0 [pA]
     in [pA]
     bind diffusion_current
 
-
 #
 # Stimulus current
 #
@@ -127,7 +125,6 @@ amplitude = 2 * -2943 [pA]
         Under baseline conditions, at 1Hz with a 0.5ms stimulus, -2943 pA is
         approximately the smallest value that triggers three successive APs.
         """
-
 
 #
 # Fast sodium current
@@ -151,7 +148,6 @@ PNa = 0.0018 [nL/s]
 INa = PNa * m^3 * (0.9 * h1 + 0.1 * h2) * extra.Nao * V * F * FRT * (exp((V - nernst.ENa) * FRT) - 1) / (exp(V * FRT) - 1)
     in [pA]
     label I_Na
-
 
 #
 # L-type calcium current
@@ -184,7 +180,6 @@ ICaL = gCaL * d * fca * f1 * f2 * (V - ECa_app)
     in [pA]
     label I_CaL
 
-
 #
 # Transient outward potassium current
 #
@@ -205,7 +200,6 @@ gt = 1.09 * 7.5 [nS]
 It = gt * r * s * (V - nernst.EK)
     in [pA]
     label I_to
-
 
 #
 # Ultra-rapid potassium current (IKur or Isus)
@@ -243,7 +237,6 @@ gKs = 1 [nS]
 IKs = gKs * n * (V - nernst.EK)
     in [pA]
 
-
 #
 # Rapid delayed-rectifier potassium current
 #
@@ -256,10 +249,10 @@ dot(pa) = (inf - pa) / tau
 pi = 1 / (1 + exp((V + 55 [mV]) / 24 [mV]))
 gKr = 0.5 [nS]
     in [nS]
+    label g_Kr
 IKr = gKr * pa * pi * (V - nernst.EK)
     in [pA]
     label I_Kr
-
 
 #
 # Hyperpolarisation-activated potassium current
@@ -280,7 +273,6 @@ IfK  = gIf * y * ((1 - 0.2677) * (V - nernst.EK))
 If = IfK + IfNa
     in [pA]
 
-
 #
 # Inward-rectifier potassium current
 # Note: The factor 0.90 is due to Koivumaki et al.
@@ -294,7 +286,6 @@ IK1 = gK1 * (extra.Ko * 1[1/mM])^0.4457 * (V - EK) / (1 + exp(1.5 * (V - EK + 3.
     in [pA]
     label I_K1
 
-
 #
 # Background sodium current
 #
@@ -304,7 +295,6 @@ gNab = 0.060599 [nS]
 INab = gNab * (membrane.V - nernst.ENa)
     in [pA]
 
-
 #
 # Background calcium current
 #
@@ -313,7 +303,6 @@ gCab = 0.0952 [nS]
     in [nS]
 ICab = gCab * (membrane.V - nernst.ECa)
     in [pA]
-
 
 #
 # Sodium-potassium pump
@@ -330,7 +319,6 @@ INaKmax = 70.8253 [pA]
 INaK = INaKmax * Ko / (Ko + kNaKK) * Nass^1.5 / (Nass^1.5 + kNaKNa^1.5) * (V + 150 [mV]) / (V + 200 [mV])
     in [pA]
     label I_NaK
-
 
 #
 # Sodium-calcium exchanger
@@ -349,7 +337,6 @@ INaCa = kNaCa * (exp(gam * V * FRT) * Nass^3 * Cao - exp((gam - 1) * V * FRT) * 
     in [pA]
     label I_NaCa
 
-
 #
 # Calcium pump
 #
@@ -360,7 +347,6 @@ ICaPmax = 2 [pA]
     in [pA]
 ICaP = ICaPmax * calcium.Cass / (kCaP + calcium.Cass)
     in [pA]
-
 
 #
 # External concentrations
@@ -374,7 +360,6 @@ Ko = 5.4 [mM]
     in [mM]
     label K_o
 
-
 #
 # Reversal potentials
 #
@@ -386,7 +371,6 @@ EK  = RTF * log(extra.Ko / potassium.Ki)
     in [mV]
 ECa = RTF * log(extra.Cao / calcium.Cass) / 2
     in [mV]
-
 
 #
 # Physical constants
@@ -402,7 +386,6 @@ RTF = R * T / F
     in [mV]
 FRT = 1 / RTF
     in [1/mV]
-
 
 #
 # Cell geometry
@@ -494,7 +477,6 @@ xj_nj_Nai = 0.02 [um] / 2 + 2 * dx
     in [um]
     desc: diffusion distance from center of junct to center of njunct (between 2nd and 3rd njunct)
 
-
 #
 # Sodium concentrations
 #
@@ -529,7 +511,6 @@ betaNass = 1 / (1 + BNa * KdBNa / (Nass + KdBNa)^2)
 dot(Nass) = betaNass * (-JNa / cell.Vss - i_ss / (cell.Vss * phys.F))
     in [mM]
 
-
 #
 # Potassium concentration
 #
@@ -548,7 +529,6 @@ i_tot = (
 dot(Ki) = -i_tot / (cell.Vcytosol * phys.F)
     in [mM]
     label K_i
-
 
 #
 # Calcium concentrations
@@ -717,7 +697,6 @@ dot(a3) = 0.5 * (-J_SERCASR3 + J_bulkSERCA3) / cell.Vnonjunct3
     in [mM]
 dot(ass) = 0.5 * (-J_SERCASRss + J_bulkSERCAss) / cell.Vss
     in [mM]
-
 
 #
 # Ryanodine receptors

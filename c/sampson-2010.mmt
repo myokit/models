@@ -142,6 +142,7 @@ dot(V) = -(i_ion + i_diff + i_stim)
     label membrane_potential
 i_ion = a1 + a2 + a3
     in [A/F]
+    label cellular_current
     a1 = nav15.INa + nav11.INa1 + ical.ICa + icat.I + ical.ICaK + ikr.IKr + iks.IKs + ihcn.IHCN
         in [A/F]
     a2 = ik1.IK1 + inaca.INaCa + inak.INaK + ito.Ito1 + isus.Isus
@@ -453,6 +454,7 @@ dot(I) = a1 - a2
     desc: HERG channel state I1(Inactivated)
 GKr = 0.0383724 [mS/uF] : peak IKr conductance
     in [mS/uF]
+    label g_Kr
 fKo = sqrt(extra.Ko / 4 [mM])
 IKr = GKr * fKo * O * (V - nernst.EK)
     desc: rapid activating delayed rectifier K+ current

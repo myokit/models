@@ -1,6 +1,6 @@
 [[model]]
 name: fink-2008
-version: 20240903
+version: 20240904
 mmt_authors: Michael Clerx, Chon Lok Lei
 display_name: Fink et al., 2008
 desc: """
@@ -9,8 +9,8 @@ desc: """
 
     (Note that there is a 2006 model accompanying a publication with a similar
     name.)
-    
-    In this Myokit implementation, the stimulus was set to 0.5ms and 
+
+    In this Myokit implementation, the stimulus was set to 0.5ms and
     approximately twice the threshold for depolarisation.
 
     Adapted from a CellML implementation by Catherine Lloyd [3].
@@ -29,7 +29,7 @@ desc: """
         https://doi.org/10.1152/ajpheart.00109.2006
 
     [3] https://models.physiomeproject.org/exposure/eeb81adc372c2f172399ec7160b0331e
-    
+
     """
 # Initial values
 membrane.V    = -86.45
@@ -77,17 +77,17 @@ pace = 0
 dot(V) = -(i_ion + stimulus.i_stim)
     in [mV]
     label membrane_potential
-i_ion = (+ ik1.i_K1 
-         + ito.i_to 
-         + ikr.i_Kr 
-         + iks.i_Ks 
-         + ical.i_CaL 
-         + inak.i_NaK 
-         + ina.i_Na 
-         + inab.i_b_Na 
-         + inaca.i_NaCa 
-         + icab.i_b_Ca 
-         + ipk.i_p_K 
+i_ion = (+ ik1.i_K1
+         + ito.i_to
+         + ikr.i_Kr
+         + iks.i_Ks
+         + ical.i_CaL
+         + inak.i_NaK
+         + ina.i_Na
+         + inab.i_b_Na
+         + inaca.i_NaCa
+         + icab.i_b_Ca
+         + ipk.i_p_K
          + ipca.i_p_Ca)
     in [A/F]
     label cellular_current
@@ -246,6 +246,7 @@ xK1_inf = phi * rec1 + (1 - phi) * rec2
 use membrane.V
 g_Kr_0 = 0.024 [mS/uF]
     in [mS/uF]
+    label g_Kr
 g_Kr = g_Kr_0 * (phys.T / 35 [K] - 55 / 7)
     in [mS/uF]
 i_Kr = g_Kr * sqrt(ion.K_o / 5.4 [mM]) * Or4 * (V - rev.E_K)
