@@ -9,8 +9,8 @@ desc: """
     matlab code [3]. It was checked against the original code numerically
     by comparing the calculated derivatives.
 
-    The stimulus was set to 1ms at -40 [A/F] and the model was paced towards a
-    state state at 1Hz.
+    In this Myokit implementation, the stimulus was set to 0.5 [ms] and
+    approximately twice the threshold value for depolarisation.
 
     [1] Grandi, E., Pasqualini, F. S., & Bers, D. M. (2010). A novel
         computational model of the human ventricular action potential and Ca
@@ -106,7 +106,7 @@ i_ion = I_Na_tot + I_Cl_tot + I_Ca_tot + potassium.I_K_tot
 [stimulus]
 i_stim = engine.pace * amplitude
     in [A/F]
-amplitude = -40 [A/F]
+amplitude = -38 [A/F] * 2
     in [A/F]
 
 
@@ -844,10 +844,9 @@ dot(Na_i) = J_Na_slmyo / Vmyo * (Na_sl - Na_i)
 I_K_tot = ito.Ito + ikr.IKr + iks.IKs + ik1.IK1 - 2 * inak.INaK + ical.ICaL_K + ikp.IKp
     in [A/F]
 
-
 [[protocol]]
 # Level  Start    Length   Period   Multiplier
-1        100      1        1000     0
+0.5      50       1        1000     0
 
 [[script]]
 import matplotlib.pyplot as plt
