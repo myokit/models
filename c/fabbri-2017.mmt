@@ -1,6 +1,6 @@
 [[model]]
 name: fabbri-2017
-version: 20240821
+version: 20240903
 mmt_authors: Michael Clerx, Aditi Agrawal
 display_name: Fabbri et al., 2017
 desc: """
@@ -81,9 +81,7 @@ time = 0 [s] bind time
 # Membrane potential
 #
 [membrane]
-C = 5.7e-5 [uF]
-    in [uF]
-dot(V) = -i_tot / C
+dot(V) = -i_tot / cell.C
     in [mV]
 i_tot = (
         + if.If
@@ -119,6 +117,9 @@ iso = 0
 # Cell geometry
 #
 [cell]
+C = 5.7e-5 [uF]
+    in [uF]
+    label membrane_capacitance
 L = 67 [um]
     in [um]
 R = 3.9 [um]
@@ -217,9 +218,7 @@ use membrane.V, phys.RTF
 use calcium.Ca_sub, sodium.Na_i, potassium.K_i
 use extra.Ca_o, extra.Na_o, extra.K_o
 dot(d) = (inf - d) / tau
-    inf = 1 / (1 + exp(-(V + 16.4508 [mV] - iso_shift) / (k * (1 + iso_slope / 100))))
-        k = 4.3371 [mV]
-            in [mV]
+    inf = 1 / (1 + exp(-(V + 16.4508 [mV] - iso_shift) / (4.3371 [mV] * (1 + iso_slope / 100))))
         iso_shift = piecewise(iso.iso > 0, -8 [mV], 0 [mV])
             in [mV]
         iso_slope = piecewise(iso.iso > 0, -27, 0)
@@ -236,7 +235,7 @@ dot(d) = (inf - d) / tau
 dot(f) = (inf - f) / tau
     tau = 0.001 [s/ms] * (44.3 [ms] + 230 [ms] * exp(-((V + 36 [mV]) / 10 [mV])^2))
         in [s]
-    inf = 1 / (1 + exp((V + 37.4 [mV]) / (5.3 [mV])))
+    inf = 1 / (1 + exp((V + 37.4 [mV]) / 5.3 [mV]))
 dot(fCa) = (inf - fCa) / tau
     inf = Km / (Km + calcium.Ca_sub)
     tau = 0.001 [s/ms] * inf / alpha
@@ -326,15 +325,15 @@ gKs = 0.00065 [uS] * if(iso.iso > 0, 1.2, 1)
     in [uS]
 IKs = gKs * (V - rev.E_Ks) * n^2
     in [nA]
-Iso_shift = if(iso.iso > 0, -14 [mV], 0 [mV])
+iso_shift = if(iso.iso > 0, -14 [mV], 0 [mV])
     in [mV]
 dot(n) = (inf - n) / tau
-    inf = sqrt(1 / (1 + exp(-(V + 0.6383 [mV] - Iso_shift) / 10.7071 [mV])))
+    inf = sqrt(1 / (1 + exp(-(V + 0.6383 [mV] - iso_shift) / 10.7071 [mV])))
     tau = 1 / (alpha + beta)
         in [s]
-    alpha = 28 [1/s] / (1 + exp(-(V - 40 [mV] - Iso_shift) / 3 [mV]))
+    alpha = 28 [1/s] / (1 + exp(-(V - 40 [mV] - iso_shift) / 3 [mV]))
         in [1/s]
-    beta = 1 [1/s] * exp(-(V - Iso_shift - 5 [mV]) / 25 [mV])
+    beta = 1 [1/s] * exp(-(V - iso_shift - 5 [mV]) / 25 [mV])
         in [1/s]
 
 #
@@ -429,8 +428,9 @@ INaK_max = 0.08105 [nA]
 # Sodium-calcium exchanger
 #
 [inaca]
-use extra.Na_o, extra.Ca_o
-use membrane.V
+use membrane.V, phys.RTF
+use extra.Na_o, sodium.Na_i
+use extra.Ca_o, calcium.Ca_sub
 K_NaCa = 3.343 [nA]
     in [nA]
 INaCa = K_NaCa * r
@@ -442,16 +442,16 @@ x2 = k32 * k43 * (k14 + k12) + k41 * k12 * (k34 + k32)
 x3 = k14 * k43 * (k23 + k21) + k12 * k23 * (k43 + k41)
 x4 = k23 * k34 * (k14 + k12) + k14 * k21 * (k34 + k32)
 # Rates
-di = 1 + calcium.Ca_sub / Kci * (1 + exp(-Qci * V / phys.RTF) + sodium.Na_i / Kcni) + sodium.Na_i / K1ni * (1 + sodium.Na_i / K2ni * (1 + sodium.Na_i / K3ni))
-do = 1 + Ca_o / Kco * (1 + exp(Qco * V / phys.RTF)) + extra.Na_o / K1no * (1 + Na_o / K2no * (1 + Na_o / K3no))
-k12 = calcium.Ca_sub / Kci * exp(-Qci * V / phys.RTF) / di
-k21 = Ca_o / Kco * exp(Qco * V / phys.RTF) / do
-k23 = Na_o / K1no * Na_o / K2no * (1 + Na_o / K3no) * exp(-Qn * V / (2 * phys.RTF)) / do
+di = 1 + Ca_sub / Kci * (1 + exp(-Qci * V / phys.RTF) + Na_i / Kcni) + Na_i / K1ni * (1 + Na_i / K2ni * (1 + Na_i / K3ni))
+do = 1 + Ca_o / Kco * (1 + exp(Qco * V / phys.RTF)) + Na_o / K1no * (1 + Na_o / K2no * (1 + Na_o / K3no))
+k12 = Ca_sub / Kci * exp(-Qci * V / RTF) / di
+k21 = Ca_o / Kco * exp(Qco * V / RTF) / do
+k23 = Na_o / K1no * Na_o / K2no * (1 + Na_o / K3no) * exp(-Qn * V / (2 * RTF)) / do
 k32 = exp(Qn * V / (2 * phys.RTF))
 k34 = Na_o / (K3no + Na_o)
-k43 = sodium.Na_i / (K3ni + sodium.Na_i)
-k14 = sodium.Na_i / K1ni * sodium.Na_i / K2ni * (1 + sodium.Na_i / K3ni) * exp(Qn * V / (2 * phys.RTF)) / di
-k41 = exp(-Qn * V / (2 * phys.RTF))
+k43 = Na_i / (K3ni + Na_i)
+k14 = Na_i / K1ni * Na_i / K2ni * (1 + Na_i / K3ni) * exp(Qn * V / (2 * RTF)) / di
+k41 = exp(-Qn * V / (2 * RTF))
 Qci = 0.1369
 Qco = 0
 Qn = 0.4315
@@ -594,8 +594,7 @@ dot(Ca_i) = (caflux.JCa_dif * vsub - caflux.Jup * vnsr) / vi - (cabuf.CM_tot * c
 # Intracellular sodium concentration
 #
 [sodium]
-use cell.vi, cell.vsub
-dot(Na_i) = (1 - clamp) * -INa_tot / ((vi + vsub) * phys.F)
+dot(Na_i) = (1 - clamp) * -INa_tot / ((cell.vi + cell.vsub) * phys.F)
     in [mM]
 INa_tot = ina.INa + if.IfNa + ical.IsiNa + 3 * inak.INaK + 3 * inaca.INaCa
     in [nA]
