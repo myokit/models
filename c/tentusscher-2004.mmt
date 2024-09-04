@@ -12,7 +12,7 @@ desc: """
     This implementation is based on the CellML version on PMR by
     Catherine Lloyd [2], but with substantial rewrites and including the
     unit fixes described in [3].
-    
+
     The stimulus current was set to 0.5ms and approximately twice the threshold
     for depolarisation.
 
@@ -25,7 +25,7 @@ desc: """
 
     [3] Clerx, M., Barral, Y., Agrawal, A. & Mirams, G. R. (2020)
         TNNP unit fixes
-        https://models.cellml.org/workspace/604/file/de5a4e600b57c8b9b0bd477695648c82351bc6dd/TNNP_unit_fixes.pdf   
+        https://models.cellml.org/workspace/604/file/de5a4e600b57c8b9b0bd477695648c82351bc6dd/TNNP_unit_fixes.pdf
 
     """
 # Initial values (ordered as in the original code)
@@ -260,10 +260,10 @@ use phys.FRT, phys.FFRT
 use extra.Cao, calcium.Cai
 ICaL = gCaL * d * f * fCa * 4 * V * FFRT * (Cai * exp(2 * V * FRT) - 0.341 * Cao) / (exp(2 * V * FRT) - 1)
     in [A/F]
-    label ICaL
+    label I_CaL
 gCaL = 0.175 [L/F/s]
     in [L/F/s]
-    label gCaL
+    label g_CaL
 dot(d) = (inf - d) / tau
     inf = 1 / (1 + exp((-5 [mV] - V) / 7.5 [mV]))
     tau = 1 [ms] * (alpha * beta + gamma)

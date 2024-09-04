@@ -243,7 +243,6 @@ use membrane.V
 gNa = 23 [mS/uF]
     in [mS/uF]
 dot(m) = (inf - m) / tau
-    label ina_m
     alpha = if(V == -47.13 [mV], 3.2 [1/ms], 0.32 [1/mV/ms] * (V + 47.13 [mV]) / (1 - exp(-0.1 [1/mV] * (V + 47.13 [mV]))))
         in [1/ms]
     beta = 0.08 [1/ms] * exp(-V / 11 [mV])
@@ -257,7 +256,6 @@ dot(h) = (inf - h) / tau
     beta = if(V < -40 [mV], 3.56 [1/ms] * exp(0.079 [1/mV] * V) + 310000 [1/ms] * exp(0.35 [1/mV] * V), 1 / (0.13 [ms] * (1 + exp((V + 10.66 [mV]) / -11.1 [mV]))))
         in [1/ms]
     inf = alpha / (alpha + beta)
-        label ina_h_inf
     tau = 1/ (alpha + beta)
         in [ms]
 dot(j) = (inf - j) / tau
@@ -266,7 +264,6 @@ dot(j) = (inf - j) / tau
     beta = if(V < -40 [mV], 0.1212 [1/ms] * exp(-0.01052 [1/mV] * V) / (1+ exp(-0.1378 [1/mV] * (V + 40.14 [mV]))), 0.3 [1/ms] * exp(-2.535e-07 [1/mV] * V) / (1 + exp(-0.1 [1/mV] * (V + 32[mV]))))
         in [1/ms]
     inf = alpha / (alpha + beta)
-        label ina_j_inf
     tau = 1/ (alpha + beta)
         in [ms]
 INa_jn = junc.Fjn * gNa * m^3 * h * j * (V - nernst.ENa_jn)
@@ -519,7 +516,7 @@ IClB = gClB * (membrane.V - nernst.ECl)
 use membrane.V
 use phys.F, phys.FRT, phys.Q
 scaling = 1
-    label I_CaL_scaling
+    label g_CaL
 pNa = scaling * (1 - 0.5 * cell.AF) * 0.75e-8 [cm/s]
     in [cm/s]
 pCa = scaling * (1 - 0.5 * cell.AF) * 2.7e-4 [cm/s]

@@ -442,7 +442,7 @@ use ion.K_i, ion.K_o
 use cell.fjn_CaL, cell.fsl_CaL
 ICaL = ICaL_Ca + ICaL_Na + ICaL_K
     in [A/F]
-    label ICaL
+    label I_CaL
 ICaL_Ca = ICaL_Ca_jn + ICaL_Ca_sl
     in [A/F]
 ICaL_Ca_jn = fjn_CaL * ibarca_jn * d * f * (1 - fCa_jn) * Q
@@ -459,7 +459,7 @@ ICaL_K = ibark * d * f * (fjn_CaL * (1 - fCa_jn) + cell.fsl_CaL * (1 - fCa_sl)) 
     in [A/F]
 # Permeability
 scale = 1
-    label gCaL
+    label g_CaL
 PCa = scale * 2.7e-4 [L/F/ms]
     in [L/F/ms]
 PNa = scale * 0.75e-8 [L/F/ms]

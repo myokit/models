@@ -475,7 +475,7 @@ PhiK = if(abs(vf) < 1e-6,
     in [mC/L]
 PCa_base = 0.0001 [L/F/ms]
     in [L/F/ms]
-    label gCaL
+    label g_CaL
 PCa = PCa_base * piecewise(cell.mode == 0, 1, cell.mode == 1, 1.2, 2.5) * 1.007
     in [L/F/ms]
 PNa = 0.00125 * PCa
@@ -499,7 +499,7 @@ ICaLK = g * PK * PhiK
     desc: K-component of L-type calcium current
 ICaL_tot = ICaLCa + ICaLK + ICaLNa
     in [A/F]
-    label ICaL
+    label I_CaL
 
 #
 # IKr: Rapid delayed rectifier potassium current

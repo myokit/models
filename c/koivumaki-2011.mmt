@@ -136,12 +136,10 @@ amplitude = 2 * -2943 [pA]
 use membrane.V
 use phys.FRT, phys.F
 dot(m) = (inf - m) / tau
-    label ina_m
     inf = 1 / (1 + exp((V + 27.12 [mV]) / -8.21 [mV]))
     tau = 0.000042 [s] * exp(-((V + 25.57 [mV]) / 28.8 [mV])^2) + 0.000024 [s]
         in [s]
 h_inf = 1 / (1 + exp((V + 63.6 [mV]) / 5.3 [mV]))
-    label ina_h12_inf
 dot(h1) = (h_inf - h1) / tau
     tau = 0.03 [s] / (1 + exp((V + 35.1 [mV]) / 3.2 [mV])) + 0.0003 [s]
         in [s]

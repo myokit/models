@@ -847,7 +847,7 @@ use extra.Cao, extra.Ko
 # Total current
 ICaL = ICa + ICaK
     in [A/F]
-    label ICaL
+    label I_CaL
 # Calcium component
 ICa = ICamax * y * O
     in [A/F]
@@ -858,7 +858,7 @@ ICaK = PKprime * O * y * VFFRT * (Ki * exp(VFRT) - Ko) / (exp(VFRT) - 1)
     in [A/F]
 # Permeability
 Pscale = 7
-    label gCaL
+    label g_CaL
 PCa = Pscale * 0.0002469 [L/F/s]
     in [L/F/s]
 PK = Pscale * 4.574e-7 [L/F/s]

@@ -246,7 +246,6 @@ dot(m) = (inf - m) / tau
     inf = 1 / (1 + exp(-(56.86 [mV] + V) / 9.03 [mV]))^2
     tau = 0.1292 [ms] * exp(-((V + 45.79 [mV]) / 15.54 [mV])^2) + 0.06487 [ms] * exp(-((V - 4.823 [mV]) / 51.12 [mV])^2)
         in [ms]
-    label ina_m
 dot(h) = (inf - h) / tau
     a = if(V >= -40 [mV], 0 [1/ms],
             0.057 [1/ms] * exp(-(V + 80 [mV]) / 6.8 [mV]))
@@ -258,7 +257,6 @@ dot(h) = (inf - h) / tau
     tau = 1 / (a + b)
         in [ms]
     inf = 1 / (1 + exp((V + 71.55 [mV]) / 7.43 [mV]))^2
-        label ina_h_inf
 dot(j) = (inf - j) / tau
     a = if(V >= -40 [mV], 0 [1/ms], (
                 (-2.5428e4 [1/mV/ms] * exp(0.2444 [1/mV] * V) - 6.948e-6 [1/mV/ms] * exp(-0.04391 [1/mV] * V))
@@ -272,7 +270,6 @@ dot(j) = (inf - j) / tau
     tau = 1 / (a + b)
         in [ms]
     inf = 1 / (1 + exp((V + 71.55 [mV]) / 7.43 [mV]))^2
-        label ina_j_inf
 
 #
 # Late sodium current
@@ -503,7 +500,7 @@ ICaL_K = ibark * d * f * (fjn_CaL * (1 - fCa_jn) + cell.fsl_CaL * (1 - fCa_sl)) 
     in [A/F]
 # Permeability
 scaling = 1
-    label I_CaL_scaling
+    label g_CaL
 PCa = scaling * (1 + 0.5 * ISO) * (1 - 0.5 * AF) * 2.7e-4 [L/F/ms]
     in [L/F/ms]
 PNa = scaling * (1 + 0.5 * ISO) * (1 - 0.5 * AF) * 0.75e-8 [L/F/ms]
