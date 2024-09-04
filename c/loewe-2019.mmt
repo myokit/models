@@ -38,41 +38,41 @@ desc: """
 
 """
 # Initial values
-membrane.V     = -4.61899e-2
-ina.m          = 0.3777047
-ina.h          = 5.202002e-3
-ical.d         = 1.402299e-3
-ical.f         = 0.9951828
-ical.fCa       = 0.7820265
-icat.d         = 0.192108
-icat.f         = 3.746741e-2
-if.y           = 0.0103301
-ikur.r         = 9.059024e-3
-ikur.s         = 0.8655135
-ito.q          = 0.4735559
-ito.r          = 1.245706e-2
-ikr.pas        = 0.3450797
-ikr.paf        = 8.344498e-3
-ikr.piy        = 0.7369347
-iks.n          = 0.1057902
-ikach.a        = 2.818459e-3
-isk.x          = 6.776939e-2
-carel.r        = 0.9004965
-carel.o        = 1.750009e-8
-carel.i        = 1.880657e-9
-carel.ri       = 9.677266e-2
-sodium.Na_i    = 6.084085
-potassium.K_i  = 139.1382
-calcium.Ca_i   = 1.267046e-4
-calcium.Ca_sub = 8.595877e-5
-calcium.Ca_nsr = 0.669119
-calcium.Ca_jsr = 0.5869378
-cabuf.fTC      = 0.0246504
-cabuf.fTMC     = 0.329845
-cabuf.fTMM     = 0.5920168
-cabuf.fCMi     = 0.2776014
-cabuf.fCMs     = 0.206602
-cabuf.fCQ      = 0.1878388
+membrane.V     = -4.52152666345842107e+01
+ina.m          =  4.05795736803741036e-01
+ina.h          =  4.15631234207036650e-03
+ical.d         =  1.65490333114705346e-03
+ical.f         =  9.94791459987946936e-01
+ical.fCa       =  7.81483799161739379e-01
+icat.d         =  2.21167406625770752e-01
+icat.f         =  2.90923040356268481e-02
+if.y           =  9.76242251269023899e-03
+ikur.r         =  1.01482492408745822e-02
+ikur.s         =  8.59562225634144195e-01
+ito.q          =  4.53999745318837966e-01
+ito.r          =  1.32810460784622934e-02
+ikr.pas        =  3.38452932941540940e-01
+ikr.paf        =  9.46153526888397767e-03
+ikr.piy        =  7.25782703136441665e-01
+iks.n          =  1.10727297134826361e-01
+ikach.a        =  2.78846394174841203e-03
+isk.x          =  8.73417840189858255e-03
+carel.r        =  9.06692115701602241e-01
+carel.o        =  1.95347397181143131e-08
+carel.i        =  1.95143170045826165e-09
+carel.ri       =  9.05770421926518632e-02
+sodium.Na_i    =  6.08365347187375605e+00
+potassium.K_i  =  1.39119295792670215e+02
+calcium.Ca_i   =  1.26040984133384519e-04
+calcium.Ca_sub =  8.83701734870580622e-05
+calcium.Ca_nsr =  6.92765930720284140e-01
+calcium.Ca_jsr =  6.07752218376001352e-01
+cabuf.fTC      =  2.45215396484080202e-02
+cabuf.fTMC     =  3.27608214730476632e-01
+cabuf.fTMM     =  5.93994615904874124e-01
+cabuf.fCMi     =  2.76534923786126541e-01
+cabuf.fCMs     =  2.11145418077580194e-01
+cabuf.fCQ      =  1.93207269404047061e-01
 
 
 #
@@ -88,6 +88,7 @@ time = 0 [s] bind time
 [membrane]
 dot(V) = -i_tot / cell.C
     in [mV]
+    label membrane_potential
 i_tot = (+ if.If
          + ikr.IKr
          + iks.IKs
