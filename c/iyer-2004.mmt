@@ -1,6 +1,6 @@
 [[model]]
 name: iyer-2004
-version: 20240904
+version: 20241128
 mmt_authors: Michael Clerx
 display_name: Iyer et al., 2004
 desc: """
@@ -279,7 +279,7 @@ a = 1.40042625477401
 Q = 1.38862291252871
     desc: temperature scaling factor
 # Common terms
-KTH = phys.k * T / phys.h
+KTH = k * T / h
     in [1/ms]
 T = 294.16 [K]
     in [K]
@@ -306,7 +306,7 @@ delta2 = Q * KTH * exp(-55700.6624658307 [J/mol] / RT + -130.639 [J/mol/K] / R +
     in [1/ms]
 epsilon = Q * KTH * exp(-85800.3675578326 [J/mol] / RT + 70.078 [J/mol/K] / R)
     in [1/ms]
-omega = Q * KTH * exp(-121955.166154864 [J/mol] / RT + 225.175 [J/mol/K] / phys.R)
+omega = Q * KTH * exp(-121955.166154864 [J/mol] / RT + 225.175 [J/mol/K] / R)
     in [1/ms]
 rho = Q * KTH * exp(-147813.990005035 [J/mol] / RT + 338.915 [J/mol/K] / R + 2.1360043702126 * V / RTF)
     in [1/ms]
