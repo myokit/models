@@ -1,0 +1,145 @@
+[[model]]
+name: hodgkin-1952-original
+version: 20250205
+mmt_authors: Michael Clerx
+display_name: Hodgkin & Huxley 1952, original conventions
+desc: """
+    Myokit implementation of the 1952 model by Hodgkin and Huxley of the
+    action potential measured in the giant axon of Loligo forbesii [1].
+       
+    This implementation uses the original sign convention (where inward
+    currents are positive) and expresses voltages as relative to the resting
+    potential.
+        
+    Parameters used in this implementation are taken from the "value chosen"
+    column of Table 3 in [1]. Note that the original publication also provides
+    a mean and experimental ranges for these parameters.
+       
+    [1] Hodgkin, A. L., & Huxley, A. F. (1952) A quantitative description of
+        membrane current and its application to conductance and excitation in
+        nerve. Journal of Physiology, 117, 500-544.
+        https://doi.org/10.1113/jphysiol.1952.sp004764
+    
+    """
+# Initial values, determined by setting V=0 and letting the simulation run
+# without a stimulus
+membrane.V = 0 [mV]
+ina.m      = 0.0529
+ina.h      = 0.596
+ik.n       = 0.318
+
+#
+# Simulation variables
+#
+[engine]
+time = 0 [ms] in [ms] bind time
+pace = 0 bind pace
+
+#
+# Membrane potential
+# Equations 1 and 2
+#
+[membrane]
+dot(V) = -1 / Cm * (ina.INa + ik.IK + ileak.Ileak + stimulus.Istim)
+    in [mV]
+    desc: The membrane potential relative to the resting potential, Vr.
+Cm = 1 [uF/cm^2]
+    in [uF/cm^2]
+    desc: The membrane capacity per unit area, see Table 3.
+
+[stimulus]
+Istim = engine.pace * amplitude
+    in [uA/cm^2]
+amplitude = 20 [uA/cm^2]
+    in [uA/cm^2]
+    desc: """
+        Stimulus amplitude, set to achieve a nice action potential when using
+        a 0.5ms stimulus.
+        """
+
+#
+# Sodium current
+# Equations 14-16, 20, 21, 23, 24.
+#
+[ina]
+use membrane.V
+dot(m) = a * (1 - m) - b * m
+    a = 0.1 [1/ms/mV] * (V + 25 [mV]) / (exp((V + 25 [mV]) / 10 [mV]) - 1)
+        in [1/ms]
+    b = 4 [1/ms] * exp(V / 18 [mV])
+        in [1/ms]
+dot(h) = a * (1 - h) - b * h
+    a = 0.07 [1/ms] * exp(V / 20 [mV])
+        in [1/ms]
+    b = 1 [1/ms] / (exp((V + 30 [mV]) / 10 [mV]) + 1)
+        in [1/ms]
+ENa = -115 [mV]
+    in [mV]
+    desc: Sodium reversal potential relative to Vr, see Table 3.
+g = 120 [mS/cm^2]
+    in [mS/cm^2]
+    desc: Maximum conductance of INa, see Table 3.
+INa = g * m^3 * h * (V - ENa)
+    in [uA/cm^2]
+
+#
+# Potassium current
+# Equations 6, 7, 12, 13.
+#
+[ik]
+use membrane.V
+dot(n) = a * (1 - n) - b * n
+    a = 0.01 [1/ms/mV] * (V + 10 [mV]) / (exp((V + 10 [mV]) / 10 [mV]) - 1)
+        in [1/ms]
+    b = 0.125 [1/ms] * exp(V / 80 [mV])
+        in [1/ms]
+EK = 12 [mV]
+    in [mV]
+    desc: Potassium reversal potential relative to Vr, see Table 3.
+g = 36 [mS/cm^2]
+    in [mS/cm^2]
+    desc: Maximum conductance of IK, see Table 3.
+IK = g * n^4 * (V - EK)
+    in [uA/cm^2]
+
+#
+# "Leak" current, described as "due to chloride and other ions".
+# Equation 26.
+#
+[ileak]
+use membrane.V
+g = 0.3 [mS/cm^2]
+    in [mS/cm^2]
+    desc: Maximum conductance of "leak" current, see Table 3.
+Eleak = -10.613 [mV]
+    in [mV]
+    desc: """
+        Leak current reversal potential relative to Vr, see Table 3.
+        This value was chosen by H & H to assure that dV/dt = 0 at V = Vr.
+        With Myokit's numerics, a better value would have been around 10.599
+        """        
+Ileak = g * (V - Eleak)
+    in [uA/cm^2]
+
+[[protocol]]
+# Level  Start    Length   Period   Multiplier
+1        5        0.5      30     0
+
+[[script]]
+import myokit
+import matplotlib.pyplot as plt
+
+# Create and run a simulation
+m = get_model()
+p = get_protocol()
+s = myokit.Simulation(m, p)
+d = s.run(35)
+
+# Display the results
+fig = plt.figure()
+ax = fig.add_subplot()
+ax.set_xlabel('Time (ms)')
+ax.set_ylabel('V relative to Vr')
+ax.plot(d.time(), d['membrane.V'])
+plt.show()
+
