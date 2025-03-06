@@ -1,14 +1,15 @@
 [[model]]
 name: iyer-2004
-version: 20241128
+version: 20250306
 mmt_authors: Michael Clerx
 display_name: Iyer et al., 2004
 desc: """
     The 2004 model of the human left-ventricular AP by Iyer et al. [1].
 
     This implementation is based on the CellML version by Steven Niederer [2]
-    and the original fortran code. It was checked against the original code by comparing the
-    calculated derivatives, which matched to within machine precision.
+    and the original fortran code. It was checked against the original code by 
+    comparing the calculated derivatives, which matched to within machine
+    precision.
 
     The formulation for ical.y.tau used in this file is the one from the code,
     which differs slightly from the version in the paper (which is used in the
@@ -85,73 +86,73 @@ desc: """
     87, 1507-1525. PubMed ID: 15345532
     """
 # Initial values (table 4, 1Hz)
-membrane.V    = -9.06575592899999947e1
-sodium.Nai    =  9.79830416200000087
-potassium.Ki  =  1.25558943200000002e2
-calcium.Cai   =  8.60119201599999941e-5
-calcium.CaNSR =  2.85529491500000010e-1
-calcium.CaSS  =  1.42021524500000006e-4
-calcium.CaJSR =  2.85223944600000001e-1
-ryr.C1        =  4.44803894600000027e-1
-ryr.O1        =  6.60178328700000033e-4
-ryr.C2        =  5.54535923999999958e-1
-ryr.O2        =  3.97392005999999971e-9
-ical.C0       =  8.62193405400000001e-1
-ical.C1       =  1.14139821100000000e-2
-ical.C2       =  5.66632522499999978e-5
-ical.C3       =  1.25021356999999990e-7
-ical.C4       =  1.03442674800000000e-10
-ical.O        =  7.75798156300000011e-12
-ical.CCa0     =  1.19854708099999999e-1
-ical.CCa1     =  6.34679430199999988e-3
-ical.CCa2     =  1.26032648799999987e-4
-ical.CCa3     =  1.11231523799999993e-6
-ical.CCa4     =  3.68131589199999984e-9
-ical.y        =  9.99715707400000042e-1
-troponin.H    =  9.77215248100000045e-1
-troponin.L    =  8.04658497299999970e-2
-itof.C0       =  9.51372135099999960e-1
-itof.C1       =  2.66828808899999999e-2
-itof.C2       =  2.80638035800000001e-4
-itof.C3       =  1.31183757899999993e-6
-itof.O        =  2.29955624000000007e-9
-itof.CI0      =  1.51302520400000001e-2
-itof.CI1      =  5.44296460100000042e-3
-itof.CI2      =  9.91837335900000059e-4
-itof.CI3      =  9.51438605700000064e-5
-itof.OI       =  2.74267738199999992e-6
-itos.C0       =  5.97709976500000018e-1
-itos.C1       =  1.73099052799999986e-1
-itos.C2       =  1.88107238599999997e-2
-itos.C3       =  9.16070134999999951e-4
-itos.O        =  1.97554135699999997e-5
-itos.CI0      =  3.53908434600000016e-2
-itos.CI1      =  5.42882435300000039e-3
-itos.CI2      =  2.28785886899999999e-2
-itos.CI3      =  3.23380000300000012e-2
-itos.OI       =  1.13408205799999995e-1
-ikr.C1        =  9.96697338000000044e-1
-ikr.C2        =  4.34087964799999976e-4
-ikr.C3        =  7.63409975500000055e-5
-ikr.O         =  9.51178911299999993e-6
-ikr.I         =  1.53334700699999995e-6
-iks.C0        =  9.64560629499999989e-1
-iks.C1        =  3.54261356799999982e-2
-iks.O1        =  2.49171069599999984e-7
-iks.O2        =  1.29854782200000006e-5
-ina.na1       =  1.43757564899999996e-1
-ina.na2       =  4.17776207999999982e-2
-ina.na3       =  4.55289836399999995e-3
-ina.na4       =  2.20520742999999995e-4
-ina.na5       =  4.00526648400000040e-6
-ina.O1        =  1.57442748999999985e-8
-ina.O2        =  2.85660717899999982e-9
-ina.na8       =  4.74995000800000011e-1
-ina.na9       =  2.70721409700000026e-1
-ina.na10      =  5.78612005700000001e-2
-ina.na11      =  5.49629227900000003e-3
-ina.na12      =  1.95787451900000006e-4
-ina.na13      =  4.17679396000000000e-4
+membrane.V    = -9.065755930e1
+sodium.Nai    =  9.798304162
+potassium.Ki  =  1.255589432e2
+calcium.Cai   =  8.601192016e-5
+calcium.CaNSR =  2.855294915e-1
+calcium.CaSS  =  1.420215245e-4
+calcium.CaJSR =  2.852239446e-1
+ryr.C1        =  4.448038946e-1
+ryr.O1        =  6.601783287e-4
+ryr.C2        =  5.545359240e-1
+ryr.O2        =  3.973920060e-9
+ical.C0       =  8.621934054e-1
+ical.C1       =  1.141398211e-2
+ical.C2       =  5.666325225e-5
+ical.C3       =  1.250213570e-7
+ical.C4       =  1.034426748e-10
+ical.O        =  7.757981563e-12
+ical.CCa0     =  1.198547081e-1
+ical.CCa1     =  6.346794302e-3
+ical.CCa2     =  1.260326488e-4
+ical.CCa3     =  1.112315238e-6
+ical.CCa4     =  3.681315892e-9
+ical.y        =  9.997157074e-1
+troponin.H    =  9.772152481e-1
+troponin.L    =  8.046584973e-2
+itof.C0       =  9.513721351e-1
+itof.C1       =  2.668288089e-2
+itof.C2       =  2.806380358e-4
+itof.C3       =  1.311837579e-6
+itof.O        =  2.299556240e-9
+itof.CI0      =  1.513025204e-2
+itof.CI1      =  5.442964601e-3
+itof.CI2      =  9.918373359e-4
+itof.CI3      =  9.514386057e-5
+itof.OI       =  2.742677382e-6
+itos.C0       =  5.977099765e-1
+itos.C1       =  1.730990528e-1
+itos.C2       =  1.881072386e-2
+itos.C3       =  9.160701350e-4
+itos.O        =  1.975541357e-5
+itos.CI0      =  3.539084346e-2
+itos.CI1      =  5.428824353e-3
+itos.CI2      =  2.287858869e-2
+itos.CI3      =  3.233800003e-2
+itos.OI       =  1.134082058e-1
+ikr.C1        =  9.966973380e-1
+ikr.C2        =  4.340879648e-4
+ikr.C3        =  7.634099755e-5
+ikr.O         =  9.511789113e-6
+ikr.I         =  1.533347007e-6
+iks.C0        =  9.645606295e-1
+iks.C1        =  3.542613568e-2
+iks.O1        =  2.491710696e-7
+iks.O2        =  1.298547822e-5
+ina.na1       =  1.437575649e-1
+ina.na2       =  4.177762080e-2
+ina.na3       =  4.552898364e-3
+ina.na4       =  2.205207430e-4
+ina.na5       =  4.005266484e-6
+ina.O1        =  1.574427490e-8
+ina.O2        =  2.856607179e-9
+ina.na8       =  4.749950008e-1
+ina.na9       =  2.707214097e-1
+ina.na10      =  5.786120057e-2
+ina.na11      =  5.496292279e-3
+ina.na12      =  1.957874519e-4
+ina.na13      =  4.176793960e-4
 
 [engine]
 time = 0 [ms]
