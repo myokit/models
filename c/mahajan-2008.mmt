@@ -3,12 +3,12 @@ name: mahajan-shiferaw 2008
 version: 20251006
 mmt_authors: Michael Clerx
 display_name: Mahajan-Shiferaw 2008
-documentation: """
+desc: """
     The 2008 model of the rabbit ventricular AP by Mahajan and Shiferaw et al.
     (shared first authors) [1].
 
     This model inherits several currents from Shannon et al. [2], but uses the
-    calcium handling (and subspaces) from [3], and has a new ICaL formulation, 
+    calcium handling (and subspaces) from [3], and has a new ICaL formulation,
     based on rabbit myocyte data at body temperature.
 
     This implementation is based on the CellML version in PMR [4]. It was
@@ -415,7 +415,7 @@ cstar = 90 [uM]
         in [uM]
 Qr0 = piecewise(
         Ca_JSR > 50 [uM] and Ca_JSR < cstar, (Ca_JSR - 50 [uM]) / 1 [ms],
-        Ca_JSR >= cstar, av * Ca_JSR + bv, 
+        Ca_JSR >= cstar, av * Ca_JSR + bv,
         0 [uM/ms])
     in [uM/ms]
     av = 11.3 [1/ms]
