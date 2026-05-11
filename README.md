@@ -1,5 +1,7 @@
 [![Syntax tests](https://github.com/myokit/models/actions/workflows/syntax-test.yml/badge.svg)](https://github.com/myokit/models/actions/workflows/syntax-test.yml)
 
+_This is a collection of Myokit models for downloading. For a bigger list of cardiac models, see the [model list](https://github.com/myokit/model-list)_
+
 # Michael's (mostly) curated models
 
 This repository contains partially curated Myokit (`.mmt`) implementations of cardiac electrophysiology models (and a few other ones).
