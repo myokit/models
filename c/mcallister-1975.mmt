@@ -1,0 +1,257 @@
+[[model]]
+name: mcallister-1975
+version: 20261021
+mmt_authors: Michael Clerx
+display_name: McAllister et al., 1975
+desc: """
+    The 1975 model of the (mammalian) cardiac Purkinje fiber by McAllister,
+    Noble, and Tsien [1].
+    
+    The equations in this implementation are taken from [1], and are annotated
+    with the tables and pages of origin. Note however, that the standardised
+    equations in Table 1A are rearranged from those given in the text. Here,
+    the versions from the text are used as these are slightly more 
+    computationally efficient and thus likely to be closer to the original
+    implementation. A second piece of evidence comes from the value of
+    alpha-bar-f in Table 1A, which is out by a factor 10 and with which the
+    model fails to repolarise.
+    
+    Following the second procedure described on page 25, all initial values 
+    were set to their steady-state value at -80mV.
+    
+    The alternative equation for Iqr [2] is not included in this 
+    implementation.
+    
+    [1] McAllister, R.E., Noble, D., Tsien, R.W. (1975). Reconstruction of the
+        electrical activity of cardiac Purkinje fibres. Journal of Physiology,
+        251, 1-59. 
+        https://doi.org/10.1113/jphysiol.1975.sp011080
+        
+    [2] Fozzard, H.A., Hiraoka, M. (1973) The positive dynamic current and its
+        inactivation properties in cardiac Purkinje fibres. Journal of
+        Physiology, 234, 569-586.
+        https://doi.org/10.1113/jphysiol.1973.sp010361
+
+    """
+# Initial values
+membrane.V = -80
+ina.m      =  1.97860961712872062e-02
+ina.h      =  8.47513379011160306e-01
+isi.d      =  2.13485334091044997e-03
+isi.f      =  9.24019377041520595e-01
+ik2.s      =  2.41521034401785156e-01
+ix1.x1     =  8.89891700286887279e-03
+ix2.x2     =  7.00098280841391374e-07
+iqr.q      =  2.20623052026584924e-06
+iqr.r      =  4.99135377611098163e-01
+
+#
+# Simulation engine variables
+#
+[engine]
+time = 0 [ms]
+    in [ms]
+    bind time
+
+#
+# Membrane potential
+#
+[membrane]
+dot(V) = -i_ion / C
+    in [mV]
+i_ion = (
+        + ina.INa 
+        + isi.Isi 
+        + ik2.IK2 
+        + ix1.Ix1 
+        + ix2.Ix2 
+        + iqr.Iqr 
+        + ik1.IK1 
+        + inab.INaB 
+        + iclb.IClB)
+    in [uA/cm^2]
+C = 10 [uF/cm^2]
+    in [uF/cm^2]
+
+#
+# Excitatory sodium current, INa
+# Table 1A, Equations 5 to 10
+#
+[ina]
+use membrane.V
+INa = gNa * m^3 * h * (V - rev.ENa)
+    in [uA/cm^2]
+gNa = 150 [mS/cm^2]
+    in [mS/cm^2]
+dot(m) = alpha * (1 - m) - beta * m
+    alpha = (V + 47 [mV]) / (1 - exp(-(V + 47 [mV]) / 10 [mV])) * 1 [1/mV/ms]
+        in [1/ms]
+    beta = 40 [1/ms] * exp(-0.056 [1/mV] * (V + 72 [mV]))
+        in [1/ms]
+        note: CellML uses 40 * exp(-0.056 * (V + 72))
+dot(h) = alpha * (1 - h) - beta * h
+    alpha = 0.0085 [1/ms] * exp(-0.184 [1/mV] * (V + 71 [mV]))
+        in [1/ms]
+    beta = 2.5 [1/ms] / (1 + exp(-0.082 [1/mV] * (V + 10 [mV])))
+        in [1/ms]
+
+#
+# The secondary inward current, Isi
+# Table 1A, Equations 12 to 17. 
+# The "prime" term is absent from Table 1A but given on page 14.
+#
+[isi]
+use membrane.V
+Isi = gsi * d * f * (V - Esi) + gsi_prime * d_prime * (V - Esi)
+    in [uA/cm^2]
+gsi = 0.8 [mS/cm^2]
+    in [mS/cm^2]
+Esi = 70 [mV]
+    in [mV]
+dot(d) = alpha * (1 - d) - beta * d
+    alpha = 0.002 [1/mV/ms] * (V + 40 [mV]) / (1 - exp((V + 40 [mV]) / -10 [mV]))
+        in [1/ms]
+    beta = 0.02 [1/ms] * exp(-0.0888 [1/mV] * (V + 40 [mV]))
+        in [1/ms]
+dot(f) = alpha * (1 - f) - beta * f
+    alpha = 0.000987 [1/ms] * exp(-0.04 [1/mV] * (V + 60 [mV]))
+        in [1/ms]
+        note: The for alpha-bar-f in Table 1A is out by a factor 1A.
+    beta = 0.02 [1/ms] / (1 + exp(-0.087 [1/mV] * (V + 26 [mV])))
+        in [1/ms]
+gsi_prime = 0.04 [mS/cm^2]
+    in [mS/cm^2]
+d_prime = 1 / (1 + exp(-0.15 [1/mV] * (V + 40 [mV])))
+
+#
+# The pacemaker potassium current, IK2
+# Table 1B, Equations 18-
+#
+[ik2]
+use membrane.V
+IK2 = IK2_bar * s
+    in [uA/cm^2]
+IK2_bar = 2.8 [uA/cm^2] * (exp(0.04 [1/mV] * (V - EK2)) - 1) / (
+            exp(0.08 [1/mV] * (V + 60 [mV])) + exp(0.04 [1/mV] * (V + 60 [mV])))
+    in [uA/cm^2]
+EK2 = -110 [mV]
+    in [mV]
+dot(s) = alpha * (1 - s) - beta * s
+    alpha = 0.001 [1/mV/ms] * (V + 52 [mV]) / (1 - exp(-0.2 [1/mV] * (V + 52 [mV])))
+        in [1/ms]
+    beta = 5e-5 [1/ms] * exp(-0.067 [1/mV] * (V + 52 [mV]))
+        in [1/ms]
+#
+# The first plateau potassium current, Ix1
+# Table 1B, Equation 22
+#
+[ix1]
+use membrane.V
+Ix1 = x1 * Ix1_bar
+    in [uA/cm^2]
+Ix1_bar = 1.2 [uA/cm^2] * (exp(0.04 [1/mV] * (V - Ex2)) - 1) / exp(0.04 [1/mV] * (V + 45 [mV]))
+    in [uA/cm^2]
+Ex2 = -95 [mV]
+    in [mV]
+dot(x1) = alpha * (1 - x1) - beta * x1
+    alpha = 5e-4 [1/ms] * exp((V + 50 [mV]) / 12.1 [mV]) / (1 + exp((V + 50 [mV]) / 17.5 [mV]))
+        in [1/ms]
+    beta = 0.0013 [1/ms] * exp((V + 20 [mV]) / -16.67 [mV]) / (1 + exp((V + 20 [mV]) / -25 [mV]))
+        in [1/ms]
+
+#
+# The second plateau potassium current, Ix2
+# Table 1B, Equation 23
+#
+[ix2]
+use membrane.V
+Ix2 = x2 * Ix2_bar
+    in [uA/cm^2]
+Ix2_bar = 25 [uA/cm^2] + 0.385 [uA/mV/cm^2] * V
+    in [uA/cm^2]
+    notec: Reverses at approx -65 mV
+dot(x2) = alpha * (1 - x2) - beta * x2
+    alpha = 1.27e-4 [1/ms] / (1 + exp(-(V + 19 [mV]) / 5 [mV]))
+        in [1/ms]
+    beta = 3e-4 [1/ms] * exp((V + 20 [mV]) / -16.67 [mV]) / (1 + exp((V + 20 [mV]) / -25 [mV]))
+        in [1/ms]
+
+#
+# The transient chloride current, Iqr
+# Table 1A, Equations 24, 25, 25, 26 [sic], 5 [sic]
+#
+[iqr]
+use membrane.V
+Iqr = gqr * q * r * (V - rev.ECl)
+    in [uA/cm^2]
+gqr = 2.5 [mS/cm^2]
+    in [mS/cm^2]
+dot(q) = alpha * (1 - q) - beta * q
+    alpha = 0.008 [1/mV/ms] * V / (1 - exp(-0.1 [1/mV] * V))
+        in [1/ms]
+    beta = 0.08 [1/ms] * exp(-0.0888 [1/mV] * V)
+        in [1/ms]
+dot(r) = alpha * (1 - r) - beta * r
+    alpha = 0.00018 [1/ms] * exp(-0.04 [1/mV] * (V + 80 [mV]))
+        in [1/ms]
+    beta = 0.02 [1/ms] / (1 + exp(-0.087 [1/mV] * (V + 26 [mV])))
+        in [1/ms]
+
+#
+# Outward background current, IK1
+# Equation 29
+#
+[ik1]
+use membrane.V
+IK1 = ik2.IK2_bar / 2.8 + 0.2 [mS/cm^2] * (V - EK1) / (1 - exp(-0.04 [1/mV] * (V - EK1)))
+    in [uA/cm^2]
+EK1 = -30 [mV]
+    in [mV]
+
+#
+# Inward bacground current, INa,b
+# Equation 30
+#
+[inab]
+INaB = gNaB * (membrane.V - rev.ENa)
+    in [uA/cm^2]
+gNaB = 0.105 [mS/cm^2]
+    in [mS/cm^2]
+
+#
+# Inward bacground current, INa,b
+# Equation 31
+#  
+[iclb]
+IClB = gClB * (membrane.V - rev.ECl)
+    in [uA/cm^2]
+gClB = 0.01 [mS/cm^2]
+    in [mS/cm^2]
+
+#
+# Shared reversal potentials
+# Table 1A
+#
+[rev]
+ENa = 40 [mV]
+    in [mV]
+ECl = -70 [mV]
+    in [mV]
+
+[[script]]
+import matplotlib.pyplot as plt
+import myokit
+
+# Get model and protocol, create simulation
+m = get_model()
+p = get_protocol()
+s = myokit.Simulation(m, p)
+
+# Run simulation
+d = s.run(3000)
+
+# Display the results
+plt.figure()
+plt.plot(d.time(), d['membrane.V'])
+plt.show()
+
