@@ -17,7 +17,8 @@ desc: """
     model fails to repolarise.
     
     Following the second procedure described on page 25, all initial values 
-    were set to their steady-state value at -80mV.
+    were set to their steady-state value at -80mV. The model was then allowed
+    to run for several beats, and the final state used as initial conditions.
     
     The alternative equation for Iqr [2] is not included in this 
     implementation.
@@ -34,16 +35,16 @@ desc: """
 
     """
 # Initial values
-membrane.V = -80
-ina.m      =  1.97860961712872062e-02
-ina.h      =  8.47513379011160306e-01
-isi.d      =  2.13485334091044997e-03
-isi.f      =  9.24019377041520595e-01
-ik2.s      =  2.41521034401785156e-01
-ix1.x1     =  8.89891700286887279e-03
-ix2.x2     =  7.00098280841391374e-07
-iqr.q      =  2.20623052026584924e-06
-iqr.r      =  4.99135377611098163e-01
+membrane.V = -8.18565263386027908e+01
+ina.m      =  1.56089653194481631e-02
+ina.h      =  9.05799041091026713e-01
+isi.d      =  1.56455440360171705e-03
+isi.f      =  7.22217819838729014e-01
+ik2.s      =  8.07797296769950157e-01
+ix1.x1     =  3.79145503211745782e-02
+ix2.x2     =  2.21036163930993616e-02
+iqr.q      =  1.59082958066755516e-06
+iqr.r      =  1.02446923133802603e-01
 
 #
 # Simulation engine variables
