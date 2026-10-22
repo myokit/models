@@ -1,11 +1,11 @@
 [[model]]
-name: difrancesco-1985-s
+name: difrancesco-1985
 version: 20261022
 mmt_authors: Michael Clerx
-display_name: DiFrancesco & Noble 1985, original units
+display_name: DiFrancesco & Noble 1985
 desc: """
-    DiFrancesco-Noble (Mammalian) Purkinje Fibre Model 1985, in the original
-    units.
+    DiFrancesco-Noble model of the (mammalian) Purkinje fibre AP, 1985, in the
+    original units.
 
     This implementation uses the equations from the paper, with the corrections
     from the appendix to [2] and from [3] (which was based on the Oxsoft HEART
@@ -14,6 +14,9 @@ desc: """
     The initial values are mostly from [2], with some gates set to the
     approximate value at Vr. The initial value for V is set for easy comparison
     with [3].
+    
+    The model was checked by comparing the calculated derivatives against those
+    of the CellML implementation [3].
 
     [1] DiFrancesco, D., & Noble, D. (1985) A model of cardiac electrical
         activity incorporating ionic pumps and concentrations changes. Phil.
@@ -418,7 +421,8 @@ Vup = 0.05 * cell.Vi
 #
 # Potassium concentrations
 # Page 372, Equations 60 to 64
-# Including corrections from [2] in the equation for K_c and value of P
+# Including corrections from [2] in the equation for Ki and value of P
+# The second correction to "Equation (63)" in [2] was applied to Ki
 # As suggested in [2], Ito is included in the total K current.
 # For Kc, we have used equation 63
 #
@@ -433,7 +437,7 @@ IK_tot = (
     in [nA]
 dot(Kc) = -P * (Kc - Ko) + IK_tot / (cell.Ve * phys.F)
     in [mM]
-dot(Ki) = IK_tot / (cell.Vi * phys.F)
+dot(Ki) = -IK_tot / (cell.Vi * phys.F)
     in [mM]
 Ko = 4 [mM]
     in [mM]
