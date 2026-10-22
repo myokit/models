@@ -1,0 +1,510 @@
+[[model]]
+name: difrancesco-1985-s
+version: 20261022
+mmt_authors: Michael Clerx
+display_name: DiFrancesco & Noble 1985, original units
+desc: """
+    DiFrancesco-Noble (Mammalian) Purkinje Fibre Model 1985, in the original
+    units.
+
+    This implementation uses the equations from the paper, with the corrections
+    from the appendix to [2] and from [3] (which was based on the Oxsoft HEART
+    code).
+
+    The initial values are mostly from [2], with some gates set to the
+    approximate value at Vr. The initial value for V is set for easy comparison
+    with [3].
+
+    [1] DiFrancesco, D., & Noble, D. (1985) A model of cardiac electrical
+        activity incorporating ionic pumps and concentrations changes. Phil.
+        Trans. R. Soc. Lond. B 307, 353-398.
+        https://doi.org/10.1098/rstb.1985.0001
+
+    [2] Earm, Y. E., & Noble, D. (1990) A model of the single atrial cell:
+        relation between calcium current and calcium release. Proc. R. Soc.
+        Lond. B 240, 83-96.
+        https://doi.org/10.1098/rspb.1990.0028
+
+    [3] CellML implementation of DiFrancesco-Noble 1985, by Catherine Lloyd and
+        Penny Noble.
+        https://models.cellml.org/exposure/91d93b61d7da56b6baf1f0c4d88ecd77
+
+    """
+# Initial values
+membrane.V     = -87
+if.y           =  0.2
+ik.x           =  0.01
+ito.r          =  1
+ina.m          =  0.01
+ina.h          =  0.8
+isi.d          =  5e-3
+isi.f          =  1
+isi.f2         =  1
+sodium.Nai     =  8
+calcium.Cai    =  5e-5
+calcium.Ca_up  =  2
+calcium.Ca_rel =  1
+calcium.p      =  1
+potassium.Kc   =  4
+potassium.Ki   =  140
+
+#
+# External variables
+#
+[engine]
+time = 0 [s]
+    in [s]
+    bind time
+pace = 0 bind pace
+
+#
+# Membrane potential
+# Page 359, Equations 1 to 2
+#
+[membrane]
+use stimulus.i_stim
+dot(V) = -(i_ion + i_stim) / C
+    in [mV]
+    label membrane_potential
+i_ion = (
+        + if.If
+        + ik.IK
+        + ik1.IK1
+        + ito.Ito
+        + inab.INaB
+        + inak.INaK
+        + inaca.INaCa
+        + icab.ICaB
+        + ina.INa
+        + isi.Isi
+        )
+    in [nA]
+C = 0.0756 [uF]
+    in [uF]
+
+#
+# Stimulus current (not used by default)
+#
+[stimulus]
+i_stim = engine.pace * amplitude
+    in [nA]
+amplitude = -250 [nA]
+    in [nA]
+
+#
+# Hyperpolarising-activated current, If
+# Page 359, Equations 3 to 7
+# Includes corrections from [2] in the equations for alpha and beta
+# Includes a correction from [3] in the equation for beta
+# As in [3], the y-gate was shifted by -10mV
+#
+[if]
+use membrane.V
+use potassium.Kc
+If = IfNa + IfK
+    in [nA]
+IfK = y * Kc / (Kc + Kmf) * gK * (V - rev.EK)
+    in [nA]
+IfNa = y * Kc / (Kc + Kmf) * gNa * (V - rev.ENa)
+    in [nA]
+gK = 3 [uS]
+    in [uS]
+gNa = 3 [uS]
+    in [uS]
+Kmf = 45 [mM]
+    in [mM]
+dot(y) = alpha * (1 - y) - beta * y
+    E = V + 52 [mV] - 10 [mV]
+        in [mV]
+    alpha = 0.05 [1/s] * exp(-0.067 [1/mV] * E)
+        in [1/s]
+    beta = if(abs(E) < 1e-6 [mV], 2.5 [1/s],
+              1 [1/s/mV] * E / (1 - exp(-0.2 [1/mV] * E)))
+        in [1/s]
+
+#
+# Time-dependent (delayed) potassium current, IK
+# Page 360, Equations 8 to 12
+# Includes a correction from [2] in the equation for IK
+#
+[ik]
+use membrane.V
+IK = IK_max * x * (potassium.Ki - potassium.Kc * exp(-V * phys.FRT)) / 140 [mM]
+    in [nA]
+IK_max = 180 [nA]
+    in [nA]
+dot(x) = alpha * (1 - x) - beta * x
+    alpha = 0.5 [1/s] * exp(0.0826 [1/mV] * (V + 50 [mV])) / (1 + exp(0.057 [1/mV] * (V + 50 [mV])))
+        in [1/s]
+    beta  = 1.3 [1/s] * exp(-0.06 [1/mV] * (V + 20 [mV])) / (1 + exp(-0.04 [1/mV] * (V + 20 [mV])))
+        in [1/s]
+
+#
+# Time independent (background) potassium current, IK1
+# Page 361, Equation 13
+#
+[ik1]
+use membrane.V
+use potassium.Kc, rev.EK
+IK1 = gK1 * Kc / (Kc + Km1) * (V - EK) / (1 + exp((V - EK + 10 [mV]) * 2 * phys.FRT))
+    in [nA]
+Km1 = 210 [mM]
+    in [mM]
+gK1 = 920 [uS]
+    in [uS]
+
+#
+# Transient outward current, Ito
+# Page 362, Equations 14 to
+# Includes a correction from [2] in the equation for xK and xCa
+# Includes a correction from [3] in the equation for xK
+# In addition, the "Ko" in the paper is interpreted as Kc
+#
+[ito]
+use membrane.V
+use potassium.Kc, potassium.Ki, calcium.Cai
+Ito = gto * xK * xCa * q * r * d
+    in [nA]
+gto = 0.28 [uS]
+    in [uS]
+d = (V + 10 [mV]) / (1 - exp(-0.2 [1/mV] * (V + 10 [mV])))
+    in [mV]
+q = (Ki * exp(0.5 * V * phys.FRT) - Kc * exp(-0.5 * V * phys.FRT)) * 1 [1/mM]
+    note: The 0.02 in the paper is approximately equal to 0.5 / RTF
+dot(r) = alpha * (1 - r) - beta * r
+    alpha = 0.033 [1/s] * exp(-V / 17 [mV])
+        in [1/s]
+    beta = 33 [1/s] / (1 + exp((V + 10 [mV]) / -8 [mV]))
+        in [1/s]
+xK = 0.2 + Kc / (Kmto + Kc)
+xCa = Cai / (Kact4 + Cai)
+Kmto = 10 [mM]
+    in [mM]
+Kact4 = 0.0005 [mM]
+    in [mM]
+
+#
+# Background sodium current, Ib,Na (here renamed INaB)
+# Page 363, Equation 19
+# This implementation usses Equation 19 rather than 20
+#
+[inab]
+INaB = gNab * (membrane.V - rev.ENa)
+    in [nA]
+gNab = 0.18 [uS]
+    in [uS]
+
+#
+# Sodium-potassium exchange pump current, Ip (here renamed INaK)
+# Page 364, Equation 21
+#
+[inak]
+use potassium.Kc, sodium.Nai
+INaK = INaK_max * Kc / (KmK + Kc) * Nai / (KmNa + Nai)
+    in [nA]
+INaK_max = 125 [nA]
+    in [nA]
+KmK = 1 [mM]
+    in [mM]
+KmNa = 40 [mM]
+    in [mM]
+
+#
+# Sodium-calcium exchange current, INaCa
+# Page 364, Equation 26
+# Includes a correction from [2], and an additional term "d" from [3]
+# This implementation uses the second formulation (Equation 26)
+#
+[inaca]
+use calcium.Cai, calcium.Cao
+use sodium.Nai, sodium.Nao
+INaCa = kNaCa * a / (c * d)
+    in [nA]
+a = exp(y * VFRT) * Nai^3 * Cao - exp((y - 1) * VFRT) * Nao^3 * Cai
+    in [mM^4]
+c = (1 [mM^4] + dNaCa * (Cai * Nao^3 + Cao * Nai^3))
+    in [mM^4]
+d = 1 + Cai / 0.0069 [mM]
+kNaCa = 0.02 [nA]
+    in [nA]
+dNaCa = 0.001
+y = 0.5
+VFRT = membrane.V * phys.FRT
+
+#
+# Background calcium current, ib,Ca (here renamed ICaB)
+# Page 366, Equation 27
+#
+[icab]
+use membrane.V
+ICaB = gCab * (V - rev.ECa)
+    in [nA]
+gCab = 0.02 [uS]
+    in [uS]
+
+#
+# Fast sodium current, INa
+# Page 366, Equations 28 to 36
+# Includes corrections from [2] in alpha-m and beta-h
+#
+# The current is assumed to be 12% potassium, although this is not taken into
+# account for the concentration updates (see page 369).
+#
+[ina]
+use membrane.V
+INa = gNa * m^3 * h * (V - Emh)
+    in [nA]
+gNa = 750 [uS]
+    in [uS]
+dot(m) = alpha * (1 - m) - beta * m
+    alpha = if(abs(V + 41 [mV]) < 1e-6 [mV], 2000 [1/s],
+               200 [1/s/mV] * (V + 41 [mV]) / (1 - exp(-0.1 [1/mV] * (V + 41 [mV]))))
+        in [1/s]
+    beta = 8000 [1/s] * exp(-0.056 [1/mV] * (V + 66 [mV]))
+        in [1/s]
+dot(h) = alpha * (1 - h) - beta * h
+    alpha = 20 [1/s] * exp(-0.125 [1/mV] * (V + 75 [mV]))
+        in [1/s]
+    beta = 2000 [1/s] / (1 + 320 * exp(-0.1 [1/mV] * (V + 75 [mV])))
+        in [1/s]
+Emh = phys.RTF * log((sodium.Nao + 0.12 * potassium.Kc) / (sodium.Nai + 0.12 * potassium.Ki))
+    in [mV]
+    desc: Reversal potential for INa, assuming a fraction is carried by potassium
+
+#
+# Second inward current, Isi (here renamed ICaF)
+# Page 367, Equations 37 to 47
+# Includes a correction from [2] in the equations for the Isi components
+# The value for Psi was taken from [2]
+# As in [3], the d-gate was shifted by -5mV and alpha-f2 was set to 5/s.
+# As in [3], and as suggested in [1], a sodium component is added
+# As in [1], we include only ICa,f in Isi
+#
+[isi]
+use membrane.V
+use phys.FRT
+use calcium.Cai, calcium.Cao
+use potassium.Ki, potassium.Kc
+use sodium.Nai, sodium.Nao
+Isi = IsiCa + IsiK + IsiNa
+    in [nA]
+IsiCa = PsiCa * d * f * f2
+    in [nA]
+IsiK = PsiK * d * f * f2
+    in [nA]
+IsiNa = PsiNa * d * f * f2
+    in [nA]
+PsiCa = 4 * Psi * Esi * FRT * (
+            Cai * exp(100 [mV] * FRT) - Cao * exp(-2 * Esi * FRT)
+        ) / (1 - exp(-2 * Esi * FRT))
+    in [nA]
+PsiK = 0.01 * Psi * Esi * FRT * (
+            Ki * exp(50 [mV] * FRT) - Kc * exp(-Esi * FRT)
+        ) / (1 - exp(-Esi * FRT))
+    in [nA]
+PsiNa = 0.01 * Psi * Esi * FRT * (
+            Nai * exp(50 [mV] * FRT) - Nao * exp(-Esi * FRT)
+        ) / (1 - exp(-Esi * FRT))
+    in [nA]
+Esi = V - 50 [mV]
+    in [mV]
+Psi = 15 [nA/mM]
+    in [nA/mM]
+dot(d) = alpha * (1 - d) - beta * d
+    E = V + 24 [mV] - 5 [mV]
+        in [mV]
+    alpha = if(abs(E) < 1e-6 [mV], 120 [1/s],
+               30 [1/mV/s] * E / (1 - exp(E / -4 [mV])))
+        in [1/s]
+    beta = if(abs(E) < 1e-6 [mV], 120 [1/s],
+              12 [1/mV/s] * E / (exp(E / 10 [mV]) - 1))
+        in [1/s]
+dot(f) = alpha * (1 - f) - beta * f
+    E = V + 34 [mV]
+        in [mV]
+    alpha = if(abs(E) < 1e-6 [mV], 25 [1/s],
+               6.25 [1/mV/s] * E / (exp(E / 4 [mV]) - 1))
+        in [1/s]
+    beta = 50 [1/s] / (1 + exp((V + 34 [mV]) / -4 [mV]))
+        in [1/s]
+dot(f2) = alpha * (1 - f2) - beta * f2
+    alpha = 5 [1/s]
+        in [1/s]
+    beta = alpha * Cai / 0.001 [mM]
+        in [1/s]
+
+#
+# Intracellular sodium concentration
+# Page 369, Equation 48
+# The value for Nao is given on page 365
+#
+[sodium]
+INa_tot = (
+        + ina.INa
+        + inab.INaB
+        + if.IfNa
+        + isi.IsiNa
+        + 3 * inak.INaK
+        + 3 * inaca.INaCa)
+    in [nA]
+dot(Nai) = -INa_tot / (cell.Vi * phys.F)
+    in [mM]
+Nao = 140 [mM]
+    in [mM]
+
+#
+# Intracellular calcium concentration
+# Page 370, Equations 49 to 58
+# The value for Cao is given on page 365
+# As suggested in [2], the value for beta-up is set to zero
+# Similar to [3], the equations for alpha-up, tr, and rel have been merged into
+# the currents iup, itr and irel.
+# The values for the various constants are scatted throughout the text on pages
+# 370 to 372.
+#
+[calcium]
+use membrane.V
+use phys.F
+use cell.Vi
+dot(Ca_up) = (iup - itr) / (2 * Vup * F)
+    in [mM]
+dot(Ca_rel) = (itr - irel) / (2 * Vrel * F)
+    in [mM]
+dot(Cai) = -ICa_tot / (2 * Vi * F)
+    in [mM]
+ICa_tot = (
+        + isi.IsiCa
+        + icab.ICaB
+        - 2 * inaca.INaCa
+        + iup
+        - irel)
+    in [nA]
+Cao = 2 [mM]
+    in [mM]
+dot(p) = alpha * (1 - p) - beta * p
+    E = V + 34 [mV]
+        in [mV]
+    alpha = if(abs(E) < 1e-6 [mV], 2.5 [1/s],
+               0.625 [1/mV/s] * E / (exp(E / 4 [mV]) - 1))
+        in [1/s]
+    beta = 5 [1/s] / (1 + exp((V + 34 [mV]) / -4 [mV]))
+        in [1/s]
+iup = 2 * F * Vi / (tau_up * Ca_up_max) * Cai * (Ca_up_max - Ca_up)
+    in [nA]
+    desc: Ca uptake into sarcoplasmic reticulum
+Ca_up_max = 5 [mM]
+    in [mM]
+itr = 2 * F * Vrel / tau_rep * p * (Ca_up - Ca_rel)
+    in [nA]
+    desc: Ca transferred into releasable form
+irel = 2 * F * Vrel / tau_rel * Ca_rel * Cai2 / (Cai2 + KmCa2)
+    in [nA]
+    desc: Ca release
+Cai2 = Cai * Cai
+    in [mM^2]
+KmCa2 = (0.001 [mM])^2
+    in [mM^2]
+tau_up = 0.025 [s]
+    in [s]
+tau_rep = 2 [s]
+    in [s]
+tau_rel = 0.05 [s]
+    in [s]
+Vrel = 0.02 * cell.Vi
+    in [uL]
+Vup = 0.05 * cell.Vi
+    in [uL]
+
+#
+# Potassium concentrations
+# Page 372, Equations 60 to 64
+# Including corrections from [2] in the equation for K_c and value of P
+# As suggested in [2], Ito is included in the total K current.
+# For Kc, we have used equation 63
+#
+[potassium]
+IK_tot = (
+        + ik1.IK1
+        + ik.IK
+        + if.IfK
+        + isi.IsiK
+        + ito.Ito
+        - 2 * inak.INaK)
+    in [nA]
+dot(Kc) = -P * (Kc - Ko) + IK_tot / (cell.Ve * phys.F)
+    in [mM]
+dot(Ki) = IK_tot / (cell.Vi * phys.F)
+    in [mM]
+Ko = 4 [mM]
+    in [mM]
+    desc: Bulk (extracellular) potassium concentration
+P = 0.7 [1/s]
+    in [1/s]
+
+#
+# Reversal potentials
+#
+[rev]
+EK = phys.RTF * log(potassium.Kc / potassium.Ki)
+    in [mV]
+ENa = phys.RTF * log(sodium.Nao / sodium.Nai)
+    in [mV]
+ECa = 0.5 * phys.RTF * log(calcium.Cao / calcium.Cai)
+    in [mV]
+
+#
+# Physical constants
+# Set to same values as [3] for easy comparison
+#
+[phys]
+F = 9.64853415e4 [C/mol]
+    in [C/mol]
+R = 8314.472 [mJ/mol/K]
+    in [mJ/mol/K]
+T = 310 [K]
+    in [K]
+RTF = R * T / F
+    in [mV]
+FRT = F / (R * T)
+    in [1/mV]
+
+#
+# Cell geometry (a tube)
+# Page 358 and 372
+# Includes a correction from [2] in the equation for V and the value of Vecs,
+# and a further correction of equation 61 (Vi).
+# The length and radius of the preparation are found on page 358 of [1]
+# Compared to [3], the units for l and r and for all volumes are corrected.
+#
+[cell]
+pi = 3.141592654  # Same as in CellML, for easy comparison
+l = 2 [mm]
+    in [mm]
+r = 0.05 [mm]
+    in [mm]
+V = pi * l * r^2
+    in [uL]
+Vecs = 0.1
+    desc: The ratio of extracellular to intracellular space in the preparation
+Vi = V * (1 - Vecs)
+    in [uL]
+Ve = V * Vecs
+    in [uL]
+
+[[script]]
+import matplotlib.pyplot as pl
+import myokit
+
+# Get model and protocol, create simulation
+m = get_model()
+p = get_protocol()
+s = myokit.Simulation(m, p)
+
+# Run simulation
+d = s.run(10)
+
+# Display the results
+pl.figure()
+pl.plot(d.time(), d['membrane.V'])
+pl.show()
+
