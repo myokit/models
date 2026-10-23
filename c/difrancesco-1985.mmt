@@ -1,22 +1,23 @@
 [[model]]
 name: difrancesco-1985
-version: 20261022
+version: 20261023
 mmt_authors: Michael Clerx
 display_name: DiFrancesco & Noble 1985
 desc: """
-    DiFrancesco-Noble model of the (mammalian) Purkinje fibre AP, 1985, in the
-    original units.
-
-    This implementation uses the equations from the paper, with the corrections
-    from the appendix to [2] and from [3] (which was based on the Oxsoft HEART
-    code).
+    The 1985 model of the action potential in a mammalian Purkinje fibre
+    preparation, by DiFrancesco and Noble [1].
+    
+    This implementation uses the original units and is based on the equations
+    from the paper [1], corrections listed in [2], and a comparison with the
+    CellML code [3] (which was based on the Oxsoft HEART code).
 
     The initial values are mostly from [2], with some gates set to the
     approximate value at Vr. The initial value for V is set for easy comparison
     with [3].
     
     The model was checked by comparing the calculated derivatives against those
-    of the CellML implementation [3].
+    of the CellML implementation [3]. For the initial conditions, they match
+    exactly.
 
     [1] DiFrancesco, D., & Noble, D. (1985) A model of cardiac electrical
         activity incorporating ionic pumps and concentrations changes. Phil.
