@@ -1,30 +1,35 @@
 [[model]]
-name: livshitz-2007
-version: 20240904
+name: livshitz-2007-lrd
+version: 20261024
 mmt_authors: Michael Clerx
-display_name: Livshitz & Rudy 2007
+display_name: Livshitz & Rudy 2007 (LRd)
 desc: """
-    The 2007 update by Livshitz & Rudy [1] of the canine ventricular AP model
-    by Hund & Rudy [2].
+    The 2007 update by Livshitz & Rudy [1] of the guinea ventricular AP model
+    by Luo & Rudy [2, 3].
+    
+    Note that the paper updates two models. This file implements the guinea pig
+    model.
 
-    This implementation is based on the code for the original matlab code
-    provided by the authors [3]. It was checked against the original code by
+    This implementation was checked against the original matlab code [4] by
     comparing the calculated derivatives.
 
     References:
 
-    [1] Livshitz, L. M., & Rudy, Y (2007). Regulation of Ca2+ and electrical
+    [1] Livshitz, L. M., & Rudy, Y. (2007). Regulation of Ca2+ and electrical
         alternans in cardiac myocytes: Role of CaMKII and repolarizing
         currents. American Journal of Physiology. Heart and Circulatory
         Physiology, 292(6), H2854-H2866.
         https://doi.org/10.1152/ajpheart.01347.2006
 
-    [2] Hund, T. J., & Rudy, Y. (2004). Rate dependence and regulation of
-        action potential and calcium transient in a canine cardiac ventricular
-        cell model. Circulation, 110(20), 3168-3174.
-        https://doi.org/10.1161/01.cir.0000147231.69595.d3
+    [2] Faber, G. M., & Rudy, Y. (2000) Action Potential and Contractility
+        Changes in [Na]i Overloaded Cardiac Myocytes: A Simulation Study
+        Biophysical Journal, 78 2392-2404.
 
-    [3] Matlab code found in Livshitz_LRd_CaMKII_2007.zip downloaded from
+    [3] Luo, C. H., Rudy Y. (1994) A dynamic model of the cardiac ventricular
+        action potential. I. Simulations of ionic currents and concentration
+        changes. Circulation Research, 74 1071-1096.
+    
+    [4] Matlab code found in Livshitz_LRd_CaMKII_2007.zip downloaded from
         http://rudylab.wustl.edu/research/cell/code/AllCodes.html
 
     """
@@ -33,7 +38,7 @@ membrane.V   = -8.9930e+01
 ina.h        =  9.9500e-01
 ina.m        =  6.7598e-04
 ina.j        =  9.9648e-01
-ical.d       =  0           # -2.5662e-32 in original code
+ical.d       =  0
 ical.f       =  9.9983e-01
 ikr.xr       =  1.0907e-04
 calcium.cat  =  1.5447e-02  # Unbuffered
@@ -388,7 +393,7 @@ ik_total = (
 # Internal Calcium concentration & buffering
 #
 [calcium]
-dot(cat) = -ica_total * phys.AFC * v1 + (nsr.ileak - nsr.iup) * v2 + (over.over + irel.irel) * v3
+dot(cat) = -ica_total * phys.AFC * v1 + (nsr.ileak - nsr.iup) * v2 + irel.irel * v3
     in [mM]
     v1 = 0.5 / cell.vmyo
         in [1/uL]
@@ -483,12 +488,6 @@ inf = -ical.ical * alpha / (1 + (kinf / jsr.jsr) ^ qn)
 tau = beta / (1 + 0.0123 [mM] / jsr.jsr)
     in [ms]
 dot(irel) = (inf - irel) / tau
-    in [mM/ms]
-
-
-# Called "over", originally a state variable with dot(over) = 0
-[over]
-over = 1.1376e-19 [mM/ms]
     in [mM/ms]
 
 [[protocol]]
