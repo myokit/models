@@ -1,11 +1,18 @@
 [[model]]
 name: beeler-1977
-version: 20240904
+version: 20261117
 mmt_authors: Michael Clerx
 display_name: Beeler & Reuter 1977
 desc: """
     The 1977 model of the AP in mammalian ventricular myocardial fibers by
     Beeler and Reuter [1].
+
+    This Myokit implementation is based on the equations in the original paper.
+    The calcium concentration was scaled from M to mM, and the rate equations
+    were slightly rearranged (but otherwise identical to the published ones).
+    
+    The stimulus was set to approximately twice the amplitude needed to achieve
+    depolarisation with a 1ms pulse.
 
     References:
 
@@ -16,14 +23,14 @@ desc: """
 
     """
 # Initial values:
-membrane.V  = -84.622
-calcium.Cai = 2e-7
+membrane.V  = -84.35
 ina.m       = 0.01
 ina.h       = 0.99
-ina.j       = 0.98
-isi.d       = 0.003
-isi.f       = 0.99
-ix1.x1      = 0.0004
+ina.j       = 0.97
+is.d        = 0.003
+is.f        = 1
+ix1.x1      = 0.03
+calcium.Cai = 1.8e-4
 
 #
 # Simulation variables
@@ -36,7 +43,7 @@ pace = 0
     bind pace
 
 #
-# Membrane potential
+# Membrane potential. Equation 8.
 #
 [membrane]
 C = 1 [uF/cm^2]
@@ -44,7 +51,7 @@ C = 1 [uF/cm^2]
 dot(V) = -(1/C) * (i_ion + stimulus.i_stim)
     in [mV]
     label membrane_potential
-i_ion = ik1.IK1 + ix1.Ix1 + ina.INa + isi.Isi
+i_ion = ik1.IK1 + ix1.Ix1 + ina.INa + is.Is
     in [uA/cm^2]
     label cellular_current
 
@@ -54,99 +61,95 @@ i_ion = ik1.IK1 + ix1.Ix1 + ina.INa + isi.Isi
 [stimulus]
 i_stim = engine.pace * amplitude
     in [uA/cm^2]
-amplitude = -25 [uA/cm^2]
+amplitude = -50 [uA/cm^2]
     in [uA/cm^2]
 
 #
-# Fast sodium current
+# Time-independent outward potassium current. Equation 2.
+#
+[ik1]
+use membrane.V
+IK1 = 0.35 [uA/cm^2] * (
+        4 * (exp(0.04 [1/mV] * (V + 85 [mV])) - 1)
+            / (exp(0.08 [1/mV] * (V + 53 [mV])) + exp(0.04 [1/mV] * (V + 53 [mV])))
+        + 0.2 [1/mV] * (V + 23 [mV])
+            / (1 - exp(-0.04 [1/mV] * (V + 23 [mV]))))
+    in [uA/cm^2]
+
+#
+# Time-dependent outward current. Equations 3 & 4.
+#
+[ix1]
+use membrane.V
+Ix1 = x1 * 0.8 [uA/cm^2] * (exp(0.04 [1/mV] * (V + 77 [mV])) - 1) / exp(0.04 [1/mV] * (V + 35 [mV]))
+    in [uA/cm^2]
+dot(x1) = alpha * (1 - x1) - beta * x1
+    alpha = 0.0005 [1/ms] * exp(0.083 [1/mV] * (V + 50 [mV])) / (1 + exp(0.057 [1/mV] * (V + 50 [mV])))
+        in [1/ms]
+    beta  = 0.0013 [1/ms] * exp(-0.06 [1/mV] * (V + 20 [mV])) / (1 + exp(-0.04 [1/mV] * (V + 20 [mV])))
+        in [1/ms]
+
+#
+# Excitatory inward sodium current. Equation 5.
 #
 [ina]
-use membrane.V as V
+use membrane.V
+INa = (gNaBar * m^3 * h * j + gNaC) * (V - ENa)
+    in [uA/cm^2]
 gNaBar = 4 [mS/cm^2]
     in [mS/cm^2]
 gNaC = 0.003 [mS/cm^2]
     in [mS/cm^2]
 ENa = 50 [mV]
     in [mV]
-INa = (gNaBar * m^3 * h * j + gNaC) * (V - ENa)
-    in [uA/cm^2]
-    desc: The excitatory inward sodium current
-dot(m) =  alpha * (1 - m) - beta * m
+dot(m) = alpha * (1 - m) - beta * m
     alpha = 1 [1/mV/ms] * (V + 47 [mV]) / (1 - exp(-0.1 [1/mV] * (V + 47 [mV])))
         in [1/ms]
-    beta  = 40 [1/ms] * exp(-0.056 [1/mV] * (V + 72 [mV]))
+    beta = 40 [1/ms] * exp(-0.056 [1/mV] * (V + 72 [mV]))
         in [1/ms]
-dot(h) =  alpha * (1 - h) - beta * h
+dot(h) = alpha * (1 - h) - beta * h
     alpha = 0.126 [1/ms] * exp(-0.25 [1/mV] * (V + 77 [mV]))
         in [1/ms]
-    beta  = 1.7 [1/ms] / (1 + exp(-0.082 [1/mV] * (V + 22.5 [mV])))
+    beta = 1.7 [1/ms] / (1 + exp(-0.082 [1/mV] * (V + 22.5 [mV])))
         in [1/ms]
-dot(j) =  alpha * (1 - j) - beta * j
+dot(j) = alpha * (1 - j) - beta * j
     alpha = 0.055 [1/ms] * exp(-0.25 [1/mV] * (V + 78 [mV])) / (1 + exp(-0.2 [1/mV] * (V + 78 [mV])))
         in [1/ms]
-    beta  = 0.3 [1/ms] / (1 + exp(-0.1 [1/mV] * (V + 32 [mV])))
+    beta = 0.3 [1/ms] / (1 + exp(-0.1 [1/mV] * (V + 32 [mV])))
         in [1/ms]
 
 #
-# Slow/secondary inward current (ICaL)
+# Secondary or slow inward current. Equations 6 & 7.
 #
-[isi]
-use membrane.V as V
+[is]
+use membrane.V
+Is = gsBar * d * f * (V - Es)
+    in [uA/cm^2]
 gsBar = 0.09 [mS/cm^2]
     in [mS/cm^2]
-Es = -82.3 [mV] - 13.0287 [mV] * log(calcium.Cai * 1 [L/mol])
+Es = -82.3 [mV] - 13.0287 [mV] * log(calcium.Cai / 1000 [mM])
     in [mV]
-Isi = gsBar * d * f * (V - Es)
-    in [uA/cm^2]
 dot(d) =  alpha * (1 - d) - beta * d
-    alpha = 0.095 [1/ms] * exp(-0.01 [1/mV] * (V + -5 [mV])) / (exp(-0.072 [1/mV] * (V + -5 [mV])) + 1)
+    alpha = 0.095 [1/ms] * exp(-0.01 [1/mV] * (V - 5 [mV])) / (1 + exp(-0.072 [1/mV] * (V - 5 [mV])))
         in [1/ms]
-    beta  = 0.07 [1/ms] * exp(-0.017 [1/mV] * (V + 44 [mV])) / (exp(0.05 [1/mV] * (V + 44 [mV])) + 1)
+    beta  = 0.07 [1/ms] * exp(-0.017 [1/mV] * (V + 44 [mV])) / (1 + exp(0.05 [1/mV] * (V + 44 [mV])))
         in [1/ms]
 dot(f) = alpha * (1 - f) - beta * f
-    alpha = 0.012 [1/ms] * exp(-0.008 [1/mV] * (V + 28 [mV])) / (exp(0.15 [1/mV] * (V + 28 [mV])) + 1)
+    alpha = 0.012 [1/ms] * exp(-0.008 [1/mV] * (V + 28 [mV])) / (1 + exp(0.15 [1/mV] * (V + 28 [mV])))
         in [1/ms]
-    beta  = 0.0065 [1/ms] * exp(-0.02 [1/mV] * (V + 30 [mV])) / (exp(-0.2 [1/mV] * (V + 30 [mV])) + 1)
+    beta  = 0.0065 [1/ms] * exp(-0.02 [1/mV] * (V + 30 [mV])) / (1 + exp(-0.2 [1/mV] * (V + 30 [mV])))
         in [1/ms]
 
 #
-# Intracellular (bulk) calcium
+# Intracellular calcium concentration. Equation 9.
 #
 [calcium]
-dot(Cai) = -1e-7 [mol/uC/cm] * isi.Isi + 0.07 [1/ms] * (1e-7 [mol/L] - Cai)
-    in [mol/L]
-
-#
-# Inward rectifier current (IK1)
-#
-[ik1]
-use membrane.V as V
-IK1 = 0.35 [uA/cm^2] * (
-        4 * (exp(0.04 [1/mV] * (V + 85 [mV])) - 1)
-        / (exp(0.08 [1/mV] * (V + 53 [mV])) + exp(0.04 [1/mV] * (V + 53 [mV])))
-        + 0.2 [1/mV] * (V + 23 [mV])
-        / (1 - exp(-0.04 [1/mV] * (V + 23 [mV])))
-    )
-    in [uA/cm^2]
-
-#
-# "A voltage- and time-dependent outward current, primarily carried by
-# potassium ions"
-#
-[ix1]
-use membrane.V as V
-Ix1 = x1 * 0.8 [uA/cm^2] * (exp(0.04 [1/mV] * (V + 77 [mV])) - 1) / exp(0.04 [1/mV] * (V + 35 [mV]))
-    in [uA/cm^2]
-    desc: """"""
-dot(x1) = alpha * (1 - x1) - beta * x1
-    alpha = 0.0005 [1/ms] * exp(0.083 [1/mV] * (V + 50 [mV])) / (exp(0.057 [1/mV] * (V + 50 [mV])) + 1)
-        in [1/ms]
-    beta  = 0.0013 [1/ms] * exp(-0.06 [1/mV] * (V + 20 [mV])) / (exp(-0.04 [1/mV] * (V + 333 [mV])) + 1)
-        in [1/ms]
+dot(Cai) = -1e-4 [mol/mC/cm] * is.Is + 0.07 [1/ms] * (1e-4 [mM] - Cai)
+    in [mM]
 
 [[protocol]]
 # Level  Start    Length   Period   Multiplier
-1.0      100      2        1000     0
+1.0      100      1        1000     0
 
 [[script]]
 import matplotlib.pyplot as plt
